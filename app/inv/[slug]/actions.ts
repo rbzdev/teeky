@@ -13,7 +13,7 @@ export type RsvpDecision = 'ACCEPTED' | 'DECLINED'
  * Minimal RSVP action stub. In the future, link a Guest by token/email and update status.
  */
 export async function rsvpInvitation(slug: string, decision: RsvpDecision) {
-  // TODO: Persist guest response when token/email flow is implemented
+  // TODO: Persist guest response when token/email flow is implemented 
   console.log('RSVP:', { slug, decision })
 
   // Revalidate the public page to reflect any server-side derived changes
