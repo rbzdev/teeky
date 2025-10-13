@@ -1,0 +1,83 @@
+// Prisma schema for MongoDB
+// Datasource & generator
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "prisma/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// Models
+model User {
+  id          String       @id @default(uuid()) @map("_id")
+  email       String       @unique
+  phone       String?      @unique
+  firstName   String
+  lastName    String
+  password    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  roles       String[]     @default([])
+  invitations Invitation[]
+}
+
+/// Invitation (event) hosted by a User and having many Guests
+model Invitation {
+  id            String               @id @default(uuid()) @map("_id")
+  hostId        String
+  host          User                 @relation(fields: [hostId], references: [id])
+  title         String
+  hostManName   String?
+  hostWomanName String?
+  description   String?
+  location      String?
+  coordinate    String[] // optional semantics handled by empty array
+  slug          String               @unique
+  startsAt      DateTime
+  endsAt        DateTime?
+  theme         String?
+  visibility    InvitationVisibility @default(PRIVATE)
+  status        InvitationStatus     @default(DRAFT)
+  guests        Guest[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@index([hostId])
+  @@index([status])
+  @@index([visibility])
+}
+
+/// Guest invited to an Invitation
+model Guest {
+  id           String     @id @default(uuid()) @map("_id")
+  invitationId String
+  invitation   Invitation @relation(fields: [invitationId], references: [id])
+  name         String
+  email        String?
+  phone        String?
+  slug         String
+  status       String
+  token        String     @unique
+  respondedAt  DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([invitationId, phone])
+  @@index([status])
+}
+
+// Enums reflecting domain state machines
+enum InvitationVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+enum InvitationStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
