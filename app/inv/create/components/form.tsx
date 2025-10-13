@@ -255,12 +255,12 @@ export default function CreateInvitationForm() {
             <div className="grid gap-2 sm:gap-6 grid-cols-2">
                 <div className="flex flex-col">
                     <label htmlFor="mr" className="text-xs font-medium">Monsieur *</label>
-                    <Input id="mr" name="hostManName" required placeholder="Olivier" defaultValue={draft.hostManName} onChange={e => update('hostManName', e.target.value)} />
+                    <Input id="mr" name="hostManName" required placeholder="Le marié" defaultValue={draft.hostManName} onChange={e => update('hostManName', e.target.value)} />
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="mme" className="text-xs font-medium">Madame *</label>
-                    <Input id="mme" name="hostWomanName" required placeholder="Ruth" defaultValue={draft.hostWomanName} onChange={e => update('hostWomanName', e.target.value)} />
+                    <Input id="mme" name="hostWomanName" required placeholder="La mariée" defaultValue={draft.hostWomanName} onChange={e => update('hostWomanName', e.target.value)} />
                 </div>
             </div>
 
