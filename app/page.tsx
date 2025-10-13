@@ -99,8 +99,8 @@ export default function Home() {
               <div className="w-full">
                 <InvitationModelRenderer
                   model="classic"
-                  hostManName="Alex"
-                  hostWomanName="Sophie"
+                  hostManName="Jacques"
+                  hostWomanName="Christine"
                   description="Rejoignez-nous pour une célébration chaleureuse."
                   location="Le Jardin des Arts, Marseille"
                   startsAt={new Date('2025-06-21T16:00:00')}
@@ -113,8 +113,8 @@ export default function Home() {
             <div className="w-full">
               <InvitationModelRenderer
                 model="minimalist"
-                hostManName="Alex"
-                hostWomanName="Sophie"
+                hostManName="Teddy"
+                hostWomanName="Gloria"
                 description="Rejoignez-nous pour une célébration chaleureuse."
                 location="Le Jardin des Arts, Marseille"
                 startsAt={new Date('2025-06-21T16:00:00')}
@@ -127,8 +127,8 @@ export default function Home() {
             <div className="w-full">
               <InvitationModelRenderer
                 model="elegant"
-                hostManName="Alex"
-                hostWomanName="Sophie"
+                hostManName="Mr"
+                hostWomanName="Madame Rubuz"
                 description="Rejoignez-nous pour une célébration chaleureuse."
                 location="Le Jardin des Arts, Marseille"
                 startsAt={new Date('2025-06-21T16:00:00')}
