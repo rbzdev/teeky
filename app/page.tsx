@@ -73,7 +73,7 @@ export default function Home() {
                         hostManName="Alex"
                         hostWomanName="Sophie"
                         description="Rejoignez-nous pour une célébration chaleureuse."
-                        location="Le Jardin des Arts, Marseille"
+                        location="1234, Avenue des événements, Lubumbashi"
                         startsAt={new Date('2025-06-21T16:00:00')}
                       />
                     </div>
@@ -93,7 +93,7 @@ export default function Home() {
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Modèles</h2>
           <p className="text-sm text-muted-foreground">Aperçu rapide des thèmes disponibles.</p>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-4xl border bg-card p-2 shadow-sm">
             <div className="w-full">
               <div className="w-full">
@@ -116,7 +116,7 @@ export default function Home() {
                 hostManName="Teddy"
                 hostWomanName="Gloria"
                 description="Rejoignez-nous pour une célébration chaleureuse."
-                location="Le Jardin des Arts, Marseille"
+                location="0001, Blvd de la République, Kinshasa"
                 startsAt={new Date('2025-06-21T16:00:00')}
               />
             </div>
@@ -130,7 +130,7 @@ export default function Home() {
                 hostManName="Mr"
                 hostWomanName="Madame Rubuz"
                 description="Rejoignez-nous pour une célébration chaleureuse."
-                location="Le Jardin des Arts, Marseille"
+                location="321, Main street, Lusaka"
                 startsAt={new Date('2025-06-21T16:00:00')}
               />
             </div>
