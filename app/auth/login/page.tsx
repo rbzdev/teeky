@@ -1,5 +1,6 @@
 import LoginForm from './components/loginForm'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 export default function LoginPage() {
 	return (
@@ -9,7 +10,9 @@ export default function LoginPage() {
 					<h1 className="text-2xl font-semibold tracking-tight">Connexion</h1>
 					<p className="text-sm text-muted-foreground">Accédez à votre espace</p>
 				</div>
-				<LoginForm />
+				<Suspense fallback={<div className="animate-pulse h-32 bg-gray-200 rounded"></div>}>
+					<LoginForm />
+				</Suspense>
 				<p className="text-center text-xs text-muted-foreground">Pas de compte ?{' '}
 					<Link href="/auth/register" className="underline hover:text-foreground">Inscrivez-vous</Link>
 				</p>
