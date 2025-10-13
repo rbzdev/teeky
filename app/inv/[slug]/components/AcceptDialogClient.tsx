@@ -35,8 +35,8 @@ export default function AcceptDialogClient({ onSubmit }: AcceptDialogClientProps
                 </DialogDescription>
                 <form
                     action={async (formData) => {
+                        setSubmitting(true)
                         try {
-                            setSubmitting(true)
                             await onSubmit(formData)
                             toast.success("Merci de votre présence");
                             setOpen(false)

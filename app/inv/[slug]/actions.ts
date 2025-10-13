@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma/client'
-import type { Prisma } from '@prisma/client'
+// import type { Prisma } from '@prisma/client'
 import crypto from 'node:crypto'
 
 import { randomSlug } from '@/lib/utils'
@@ -54,7 +54,7 @@ export async function confirmInvitation(slug: string, data: { fullName: string; 
           slug: guestSlug,
           token,
           respondedAt: new Date(),
-        } as unknown as Prisma.GuestUncheckedCreateInput
+        } 
         await prisma.guest.create({ data: createData, select: { id: true } })
       }
       revalidatePath(`/inv/${slug}`)
@@ -81,7 +81,7 @@ export async function confirmInvitation(slug: string, data: { fullName: string; 
       slug: guestSlug,
       token,
       respondedAt: new Date(),
-    } as unknown as Prisma.GuestUncheckedCreateInput
+    } 
     await prisma.guest.create({ data: createData, select: { id: true } })
   }
   revalidatePath(`/inv/${slug}`)

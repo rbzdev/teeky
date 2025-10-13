@@ -59,7 +59,7 @@ model Guest {
   email        String?
   phone        String?
   slug         String
-  status       GuestStatus @default(PENDING)
+  status       String
   token        String      @unique
   respondedAt  DateTime?
   createdAt    DateTime    @default(now())
@@ -79,10 +79,4 @@ enum InvitationStatus {
   DRAFT
   ACTIVE
   ARCHIVED
-}
-
-enum GuestStatus {
-  PENDING
-  ACCEPTED
-  DECLINED
 }
