@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import { Toaster } from 'sonner'
+
+// Components
+import { ThemeProvider } from "@/components/theme-provider";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +16,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +36,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} font-sans antialiased`}
       >
-        {children}
+        <ThemeProvider attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          
+        >
+          {children}
+
+          <div className="absolute left-4 top-2 border rounded-[11px] p-2 flex items-center justify-center bg-white/80 dark:bg-neutral-800/80 backdrop-blur">
+            <AnimatedThemeToggler duration={900} />
+          </div>
+          <Toaster position="top-right" richColors />
+        </ThemeProvider>
       </body>
     </html>
   );
