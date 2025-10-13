@@ -57,7 +57,7 @@ export async function createInvitation(payload: CreateInvitationPayload) {
         location: location,
         coordinate: coordinate || [],
         startsAt: starts,
-        theme: (theme as InvitationModelKey) || 'minimalist',
+        theme: (theme as InvitationModelKey) || 'classic',
         visibility: "PRIVATE",
         slug,
       },

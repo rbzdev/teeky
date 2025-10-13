@@ -31,7 +31,7 @@ export default function ElegantInvitationModel(props: ElegantInvitationProps) {
     const timeText = formatTime(startsAtDate)
 
     return (
-        <div className="relative overflow-hidden rounded-2xl border bg-background shadow-sm scale-75 sm:scale-none ">
+        <div className="relative overflow-hidden rounded-2xl border bg-background shadow-sm sm:scale-none ">
             {/* Decorative gradient header */}
             <div className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_0%,theme(colors.red.200/.5),transparent_60%),linear-gradient(to_bottom_right,theme(colors.amber.100/.5),transparent)] dark:bg-[radial-gradient(70%_50%_at_50%_0%,theme(colors.neutral.800/.8),transparent_60%),linear-gradient(to_bottom_right,theme(colors.neutral.900/.6),transparent)]" />
             <Icon icon="game-icons:butterfly-flower" className="absolute top-4 right-4 size-20 text-muted-foreground/30 rotate-[15deg] scale-[2]" />
@@ -41,24 +41,29 @@ export default function ElegantInvitationModel(props: ElegantInvitationProps) {
             <div className="p-8 md:p-10 ">
                 <header className="text-center space-y-4">
                     <p className="text-[11px] tracking-[0.2em] text-muted-foreground uppercase">Invitation</p>
-                    <h2 className="font-serif text-3xl md:text-4xl tracking-tight">
-                        <span className="font-semibold">{couple}</span>
+
+                    {/* Couple Name */}
+                    <h2 className="font-serif text-lg md:text-4xl tracking-tight">
+                        <span className="font-semibold text-orange-500 ">{couple}</span>
                     </h2>
                     <div className="mx-auto h-px w-32 bg-gradient-to-r from-transparent via-border to-transparent" />
                 </header>
 
-                <section className="mt-6 grid gap-6 text-center">
-                    <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                <section className=" md:mt-6 grid gap-6 text-center">
+                    {/* Description */}
+                    <p className="mx-auto max-w-2xl text-sm leading-relaxed text-black/60 dark:text-white/70">
                         {props.description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."}
                     </p>
 
-                    <div className="mx-auto inline-flex items-center gap-3 rounded-full border bg-card/70 px-4 py-2 text-sm shadow-sm backdrop-blur">
+                    {/* Date & Time */}
+                    <div className="mx-auto inline-flex items-center gap-3 rounded-full border bg-card/70 py-1 px-2 md:px-4 md:py-2 text-sm shadow-sm backdrop-blur">
                         <span className="font-medium">{dateText}</span>
                         <span className="text-muted-foreground">•</span>
                         <span className="text-muted-foreground">{timeText}</span>
                     </div>
 
-                    <div className="flex justify-center items-start gap-2">
+                    {/* Location */}
+                    <div className="flex justify-center items-start gap-1">
                         <Icon icon="fluent:location-28-regular" className="size-5 text-muted-foreground" />
                         <p className="text-sm max-w-[90%]">{props.location || "Lieu de l'événement"}</p>
                     </div>

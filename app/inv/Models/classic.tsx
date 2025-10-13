@@ -33,30 +33,33 @@ export default function ClassicInvitationModel(props: ClassicProps) {
     const timeText = formatTime(startsAtDate)
 
     return (
-        <div className="relative overflow-hidden rounded-3xl border shadow-sm bg-gradient-to-br from-amber-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 w-[650px] sm:w-[850px] ">
+        <div className="relative overflow-hidden rounded-3xl border shadow-sm bg-gradient-to-br from-amber-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 ">
             {/* Crest / monogram */}
-            <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                <div className="h-10 w-10 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-lg ring-4 ring-amber-100 dark:ring-neutral-800">
-                    <Icon icon="solar:heart-broken-linear" className="size-6 rotate-180" />
+            <div className="absolute top-1 left-1/2 -translate-x-1/2">
+                <div className="p-1 md:p-2 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-lg ring-4 ring-amber-100 dark:ring-neutral-800">
+                    <Icon icon="solar:heart-bold-duotone" className="size-4 " />
                 </div>
             </div>
 
             <div className="p-8 md:p-10">
                 <header className="text-center space-y-2">
                     <p className="text-[11px] tracking-[0.25em] text-muted-foreground uppercase">Invitation</p>
-                    <h2 className={`${dancing.className} text-4xl md:text-5xl font-normal tracking-tight`}>{couple}</h2>
+                    {/* Couple */}
+                    <h2 className={`${dancing.className} text-2xl md:text-5xl font-normal tracking-tight`}>{couple}</h2>
                     <p className={`${cookie_font.className} text-sm text-muted-foreground`}>{props.title || ''}</p>
                     <div className="mx-auto mt-2 h-px w-28 bg-gradient-to-r from-transparent via-border to-transparent" />
                 </header>
 
-                <section className="mt-7 grid gap-5 text-center">
-                    <p className={`${cookie_font.className} mx-auto max-w-2xl text-[20px] leading-5 text-black/60 dark:text-white/60`}>
+                <section className="mt-4 md:mt-7 grid gap-5 text-center">
+
+                    {/* Description */}
+                    <p className={`${cookie_font.className} mx-auto max-w-2xl text-md md:text-[20px] leading-5 text-black/60 dark:text-white/60`}>
                         {props.description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."}
                     </p>
 
                     {/* Date & time pill */}
-                    <div className="mx-auto inline-flex items-center gap-3 rounded-full border bg-card/70 px-4 py-2 text-sm shadow-sm backdrop-blur">
-                        <span className={` ${cookie_font.className} inline-flex items-center gap-1 text-xl `}>
+                    <div className="mx-auto inline-flex items-center gap-3 rounded-full border bg-card/70 px-2 py-1 md:px-4 md:py-2 text-sm shadow-sm backdrop-blur">
+                        <span className={` ${cookie_font.className} inline-flex items-center gap-1 text-lg md:text-xl `}>
                             <Icon icon="solar:calendar-outline" className="size-4 text-muted-foreground" />
                             {dateText}
                         </span>
@@ -71,12 +74,14 @@ export default function ClassicInvitationModel(props: ClassicProps) {
                     <div className="mx-auto w-full max-w-xl p-1 text-sm shadow-sm">
                         <div className="flex items-start justify-center gap-1">
                             <Icon icon="fluent:location-28-regular" className="mt-0.5 size-5 text-muted-foreground" />
-                            <p className={`${cookie_font.className} max-w-[92%] text-lg text-black/80 dark:text-white/60 `}>{props.location || "Lieu de l'événement"}</p>
+                            <p className={`${cookie_font.className} max-w-[92%] text-md md:text-lg text-black/80 dark:text-white/60 `}>
+                                {props.location || "Lieu de l'événement"}
+                            </p>
                         </div>
                     </div>
                 </section>
 
-                <footer className="mt-8 text-center">
+                <footer className="mt-2 md:mt-8 text-center">
                     <p className="text-[10px] tracking-wide uppercase text-muted-foreground/70">RSVP prochainement</p>
                 </footer>
             </div>

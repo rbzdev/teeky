@@ -14,7 +14,7 @@ const defaultDraft: InvitationDraft = {
   startTime: "00:00",
   hasEnd: true,
   endTime: "00:00",
-  theme: 'minimalist',
+  theme: 'classic',
 }
 
 const InvitationContext = React.createContext<InvitationContextValue | undefined>(undefined)

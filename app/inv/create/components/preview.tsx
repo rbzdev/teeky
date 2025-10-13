@@ -20,7 +20,7 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
   const { draft, update } = useInvitationDraft()
   const startsAt = React.useMemo(() => composeStartsAt(draft.date, draft.startTime), [draft.date, draft.startTime])
 
-  const variantClass = variant === "inline" ? "lg:sticky lg:top-8" : ""
+  const variantClass = variant === "inline" ? "lg:sticky lg:top-8" : " "
 
   return (
     <div className={`relative ${variantClass}`}>
@@ -53,9 +53,10 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
           value={draft.theme}
           onChange={(e) => update('theme', e.target.value as InvitationModelKey)}
         >
-          <option value="minimalist">Minimalist</option>
-          <option value="elegant">Elegant</option>
+          
           <option value="classic">Classic</option>
+          <option value="elegant">Elegant</option>
+          <option value="minimalist">Minimalist</option>
         </select>
       </div>
 

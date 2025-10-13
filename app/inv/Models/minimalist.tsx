@@ -44,20 +44,26 @@ export default function MinimalistInvitationModel(props: MinimalistInvitationPro
 			<div className="relative p-8 flex flex-col gap-6">
 				<header className="text-center space-y-3">
 					<p className="text-xs tracking-wider text-muted-foreground uppercase">Invitation</p>
-					<h2 className="font-light text-3xl tracking-tight">
+					{/* Couple Name */}
+					<h2 className="font-light text-lg md:text-3xl tracking-tight">
 						<span className="font-semibold">{couple}</span>
 					</h2>
 					<div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 				</header>
 
 				<section className="space-y-4 text-center">
+					{/* Description */}
 					<p className="text-sm leading-relaxed text-muted-foreground">
 						{props.description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."}
 					</p>
+
+					{/* Date & Time */}
 					<div className="space-y-1">
 						<p className="font-medium text-sm">{dateText}</p>
 						<p className="text-xs text-muted-foreground">{timeText}</p>
 					</div>
+
+					{/* Location */}
 					<div className="flex justify-center items-start gap-1">
 						<Icon icon="fluent:location-28-regular" className="size-5 text-slate-400" />
 						<p className="text-sm line-clamp-2 max-w-[95%] ">{props.location || "Lieu de l'événement"}</p>

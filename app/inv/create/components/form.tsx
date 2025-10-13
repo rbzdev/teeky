@@ -89,7 +89,7 @@ export default function CreateInvitationForm() {
                 locationLng: draft.locationLng ?? null,
                 dateISO: date ? date.toISOString() : null,
                 startTime: startTime || '',
-                theme: draft.theme || 'minimalist',
+                theme: draft.theme || 'classic',
                 savedAt: Date.now(),
             }
             if (typeof window !== 'undefined') {
@@ -114,7 +114,7 @@ export default function CreateInvitationForm() {
             const parsed = JSON.parse(raw) as {
                 hostManName: string; hostWomanName: string; description: string; location: string;
                 locationLat: number | null; locationLng: number | null; dateISO: string | null; startTime: string;
-                theme?: 'minimalist' | 'elegant';
+                theme?: 'classic' | 'elegant';
                 savedAt: number;
             }
             if (!parsed?.savedAt || Date.now() - parsed.savedAt > DRAFT_TTL) {
@@ -131,7 +131,7 @@ export default function CreateInvitationForm() {
             if (typeof parsed.locationLat === 'number') update('locationLat', parsed.locationLat)
             if (typeof parsed.locationLng === 'number') update('locationLng', parsed.locationLng)
             if (parsed.startTime) { setStartTime(parsed.startTime); update('startTime', parsed.startTime) }
-            if (parsed.theme && (parsed.theme === 'minimalist' || parsed.theme === 'elegant')) {
+            if (parsed.theme && (parsed.theme === 'classic' || parsed.theme === 'elegant')) {
                 update('theme', parsed.theme)
             }
             if (parsed.dateISO) {
