@@ -8,7 +8,7 @@ import crypto from 'node:crypto'
 import { randomSlug } from '@/lib/utils'
 
 export type RsvpDecision = 'ACCEPTED' | 'DECLINED'
-
+ 
 /**
  * Minimal RSVP action stub. In the future, link a Guest by token/email and update status.
  */
