@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || process.env.APP_BASE_URL || 'http://localhost:3000'
+const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || process.env.APP_BASE_URL || 'https://teeky.vercel.app'
 const canonicalPath = '/auth/register'
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: "Créez votre compte Teeky pour gérer vos invitations en ligne, suivre les réponses (RSVP) et personnaliser vos événements.",
     images: [
       {
-        url: '/vercel.svg',
+        url: '/logo.png',
         width: 512,
         height: 512,
         alt: 'Teeky'
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Inscription - Teeky',
     description: "Créez votre compte Teeky pour gérer vos invitations en ligne, suivre les réponses (RSVP) et personnaliser vos événements.",
-    images: ['/vercel.svg'],
+    images: ['/logo.png'],
   },
   category: 'technology',
 }

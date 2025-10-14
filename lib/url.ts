@@ -19,7 +19,7 @@ export async function getAppBaseUrl(): Promise<string> {
   const h = await headers()
   const forwardedProto = h.get('x-forwarded-proto')
   const forwardedHost = h.get('x-forwarded-host')
-  const host = forwardedHost || h.get('host') || 'localhost:3000'
+  const host = forwardedHost || h.get('host') || 'https://teeky.vercel.app'
   const proto = forwardedProto || (process.env.NODE_ENV === 'development' ? 'http' : 'https')
   return `${proto}://${host}`
 }
