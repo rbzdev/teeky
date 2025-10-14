@@ -10,7 +10,7 @@ export function LoginForm() {
 	const [submitting, setSubmitting] = React.useState(false)
 	const router = useRouter()
 	const search = useSearchParams()
-	const next = search?.get('next') || '/'
+	const next = search?.get('next') || '/dashboard'
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault()
 		const form = e.currentTarget
