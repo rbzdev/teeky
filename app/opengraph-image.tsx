@@ -9,6 +9,8 @@ export const contentType = 'image/png'
 
 export default async function OGImage() {
   // For now, just render the logo centered on a subtle gradient background
+  const base ='https://teeky.vercel.app'
+  const logoUrl = new URL('/logo.png', base).toString()
   return new ImageResponse(
     (
       <div
@@ -23,7 +25,7 @@ export default async function OGImage() {
           color: '#111',
         }}
       >
-        <img src={`${process.env.NEXT_PUBLIC_APP_BASE_URL || ''}/logo.png`} alt="Teeky" style={{ height: 180, width: 180, borderRadius: 24 }} />
+        <img src={logoUrl} alt="Teeky" style={{ height: 180, width: 180, borderRadius: 24 }} />
       </div>
     ),
     size,

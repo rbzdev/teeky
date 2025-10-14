@@ -4,7 +4,8 @@
 generator client {
   provider = "prisma-client-js"
   output   = "prisma/client"
-}
+    binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  }
 
 datasource db {
   provider = "mongodb"
