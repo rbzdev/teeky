@@ -30,7 +30,7 @@ export default function MyInvitations({
         <p className="text-sm text-muted-foreground">Connectez-vous pour voir vos invitations.</p>
       ) : invitations.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Vous n'avez pas encore créé d'invitation.{' '}
+          Vous n&apos;avez pas encore créé d&apos;invitation.
           <Link href="/inv/create" className="underline">Commencer</Link>
         </p>
       ) : (
@@ -68,6 +68,10 @@ export default function MyInvitations({
                   <Link href={`/inv/${inv.slug}`} className="text-xs underline">
                     Voir la page publique
                   </Link>
+
+                  {/* <Link href={`/inv/${inv.slug}`} className="text-xs underline">
+                    Voir les réponses
+                  </Link> */}
                 </div>
               </li>
             )
