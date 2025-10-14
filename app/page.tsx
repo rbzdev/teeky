@@ -41,8 +41,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24 lg:py-28">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
             <div className="space-y-6">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
-                Crée des invitations élégantes en quelques minutes
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-normal ">
+                Crée des invitations élégantes en quelques minutes <span className="text-primary font-bold"> gratuitement</span>
               </h1>
               <p className="text-sm text-muted-foreground max-w-prose">
                 Personnalise ton thème, partage en un lien, et suis les réponses en temps réel. Simple, rapide, sans stress.
