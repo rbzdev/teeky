@@ -1,4 +1,8 @@
 import { ImageResponse } from 'next/og'
+import * as fs from 'node:fs/promises'
+import path from 'node:path'
+
+export const runtime = 'nodejs'
 
 export const size = {
   width: 1200,
@@ -9,8 +13,18 @@ export const contentType = 'image/png'
 
 export default async function OGImage() {
   // For now, just render the logo centered on a subtle gradient background
-  const base ='https://teeky.vercel.app'
-  const logoUrl = new URL('/logo.png', base).toString()
+  // Load local logo (public/logo.png) at build time and embed as data URL to avoid external fetches
+  async function loadLogoDataUrl(): Promise<string | null> {
+    try {
+      const file = path.join(process.cwd(), 'public', 'logo.png')
+      const buf = await fs.readFile(file)
+      const base64 = buf.toString('base64')
+      return `data:image/png;base64,${base64}`
+    } catch {
+      return null
+    }
+  }
+  const logoDataUrl = await loadLogoDataUrl()
   return new ImageResponse(
     (
       <div
@@ -25,7 +39,25 @@ export default async function OGImage() {
           color: '#111',
         }}
       >
-        <img src={logoUrl} alt="Teeky" style={{ height: 180, width: 180, borderRadius: 24 }} />
+        {logoDataUrl ? (
+          <img src={logoDataUrl} alt="Teeky" width={180} height={180} style={{ borderRadius: 24 }} />
+        ) : (
+          <div
+            style={{
+              height: 180,
+              width: 180,
+              borderRadius: 24,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#111',
+              color: '#fff',
+              fontWeight: 700,
+            }}
+          >
+            Teeky
+          </div>
+        )}
       </div>
     ),
     size,
