@@ -56,6 +56,12 @@ export async function confirmInvitation(slug: string, data: { fullName: string; 
           respondedAt: new Date(),
         } 
         await prisma.guest.create({ data: createData, select: { id: true } })
+
+        // Change invitation status
+        await prisma.invitation.update({
+          where: { id: invitation.id },
+          data: { status: 'ACTIVE' },
+        })
       }
       revalidatePath(`/inv/${slug}`)
       return { ok: true }

@@ -153,6 +153,7 @@ exports.Prisma.GuestScalarFieldEnum = {
   slug: 'slug',
   status: 'status',
   token: 'token',
+  place: 'place',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

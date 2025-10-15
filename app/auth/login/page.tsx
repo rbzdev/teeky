@@ -4,16 +4,16 @@ import { Suspense } from 'react'
 
 export default function LoginPage() {
 	return (
-		<div className="min-h-screen flex  items-center justify-center px-4 py-10">
-			<div className="w-full max-w-md space-y-6 flex flex-col items-center justify-center">
-				<div className="space-y-1 text-center">
+		<div className="min-h-screen flex  items-center justify-center px-6 py-10">
+			<div className="w-full max-w-md space-y-6 flex flex-col items- justify-center ">
+				<div className="space-y-1 text-center ">
 					<h1 className="text-2xl font-semibold tracking-tight">Connexion</h1>
 					<p className="text-sm text-muted-foreground">Accédez à votre espace</p>
 				</div>
 				<Suspense fallback={<div className="animate-pulse h-32 bg-gray-200 rounded"></div>}>
 					<LoginForm />
 				</Suspense>
-				<p className="text-center text-xs text-muted-foreground">Pas de compte ?{' '}
+				<p className=" text-xs text-muted-foreground">Pas de compte ?{' '}
 					<Link href="/auth/register" className="underline hover:text-foreground">Inscrivez-vous</Link>
 				</p>
 			</div>

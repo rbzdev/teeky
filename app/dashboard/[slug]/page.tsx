@@ -7,6 +7,7 @@ import type { InvitationModelKey } from '@/lib/types/invitation'
 import type { DashboardInvitationBySlugPageProps } from '@/lib/types/invitation'
 import QrCode from './QrCode'
 import ShareActions from './ShareActions'
+import GuestList from './Guest'
 
 export default async function DashboardInvitationBySlugPage({ params }: DashboardInvitationBySlugPageProps) {
     //   const user = await getCurrentUser()
@@ -31,6 +32,20 @@ export default async function DashboardInvitationBySlugPage({ params }: Dashboar
             visibility: true,
             status: true,
             createdAt: true,
+            guests: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                    status: true,
+                    respondedAt: true,
+                    createdAt: true,
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
         },
     })
 
@@ -47,7 +62,7 @@ export default async function DashboardInvitationBySlugPage({ params }: Dashboar
     // QR value will be built inside QrCode using getAppBaseUrl
 
     return (
-        <main className="mx-auto max-w-4xl w-full p-6 space-y-6">
+        <main className="mx-auto max-w-4xl w-full p-4 sm:p-6 space-y-6">
             <header className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold">{invitation.title}</h1>
@@ -69,8 +84,11 @@ export default async function DashboardInvitationBySlugPage({ params }: Dashboar
                         startsAt={invitation.startsAt}
                     />
                     {/* QR collé en bas à droite de la carte */}
-                    <div className="absolute bottom-3 right-3">
-                        <QrCode slug={invitation.slug} size={96} />
+                    <div className="absolute bottom-3 right-3 hidden md:block">
+                        <QrCode slug={invitation.slug} size={120} />
+                    </div>
+                    <div className="absolute bottom-0 right-0 md:hidden">
+                        <QrCode slug={invitation.slug} size={78} />
                     </div>
                 </div>
 
@@ -85,6 +103,10 @@ export default async function DashboardInvitationBySlugPage({ params }: Dashboar
                 <div className="pt-2">
                     <ShareActions slug={invitation.slug} title={invitation.title} />
                 </div>
+            </section>
+
+            <section>
+                <GuestList guests={invitation.guests} invitationSlug={invitation.slug} />
             </section>
         </main>
     )

@@ -56,7 +56,7 @@ export default function AcceptDialogClient({ onSubmit }: AcceptDialogClientProps
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="phone">Numéro de téléphone</Label>
-                        <Input id="phone" name="phone" placeholder="Ex: +225 07 00 00 00" required />
+                        <Input id="phone" name="phone" placeholder="Ex: +243 07 00 00 00" required />
                     </div>
 
                     <DialogFooter>

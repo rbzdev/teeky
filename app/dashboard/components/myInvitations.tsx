@@ -2,6 +2,29 @@
 import * as React from 'react'
 import Link from 'next/link'
 
+// Components
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+// Icons
+import { Icon } from '@iconify/react'
+
+// Actions
+import { archiveInvitation, deleteInvitation, activateInvitation } from "../actions"
+
 type InvitationItem = {
   id: string
   title: string | null
@@ -20,6 +43,43 @@ export default function MyInvitations({
   user: { id: string; firstName?: string; lastName?: string } | null
   invitations: InvitationItem[]
 }) {
+  const [isPending, startTransition] = React.useTransition()
+
+  const handleActivate = (invitationId: string) => {
+    startTransition(async () => {
+      try {
+        await activateInvitation(invitationId)
+      } catch (error) {
+        console.error("Erreur lors de l'activation:", error)
+        // TODO: Afficher un toast d'erreur
+      }
+    })
+  }
+
+  const handleArchive = (invitationId: string) => {
+    startTransition(async () => {
+      try {
+        await archiveInvitation(invitationId)
+      } catch (error) {
+        console.error("Erreur lors de l'archivage:", error)
+        // TODO: Afficher un toast d'erreur
+      }
+    })
+  }
+
+  const handleDelete = (invitationId: string) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette invitation ?")) {
+      startTransition(async () => {
+        try {
+          await deleteInvitation(invitationId)
+        } catch (error) {
+          console.error("Erreur lors de la suppression:", error)
+          // TODO: Afficher un toast d'erreur
+        }
+      })
+    }
+  }
+
   return (
     <section className="rounded-lg border p-4">
       <div className="flex items-center justify-between mb-2">
@@ -52,26 +112,76 @@ export default function MyInvitations({
                     <p className="text-xs text-muted-foreground">{dateText}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-1">
-                    {inv.status ? (
-                      <span className="inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-                        {String(inv.status)}
+
+                    {inv.status && (
+                      <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] tracking-wide text-muted-foreground 
+                        ${inv.status === 'ACTIVE' ?
+                          'bg-green-500 text-white dark:text-black' :
+                          inv.status === 'DRAFT' ?
+                            'bg-orange-400/30 dark:bg-orange-300/70 text-black!' : ''}
+                         `}>
+
+                        {String(inv.status === "ACTIVE" ? "Active" : inv.status === "DRAFT" ? "Archivé" : inv.status)}
                       </span>
-                    ) : null}
-                    {inv.visibility ? (
+                    )}
+
+                    {inv.visibility && (
                       <span className="inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
                         {String(inv.visibility)}
                       </span>
-                    ) : null}
+                    )}
                   </div>
                 </div>
-                <div className="mt-3 flex items-center gap-2">
+                <div className="mt-3 flex items-center justify-between gap-2">
                   <Link href={`/inv/${inv.slug}`} className="text-xs underline">
                     Voir la page publique
                   </Link>
 
-                  {/* <Link href={`/inv/${inv.slug}`} className="text-xs underline">
-                    Voir les réponses
-                  </Link> */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-6 w-6 p-0">
+                        <span className="sr-only">Ouvrir le menu</span>
+                        <Icon icon="solar:menu-dots-bold" width="24" height="24" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild className='rounded-b-xs!'>
+
+                        <Link href={`/dashboard/${inv.slug}`}>
+                          Voir
+                        </Link>
+                      </DropdownMenuItem>
+
+
+                      {inv.status === "ARCHIVED" ? (
+                        <DropdownMenuItem
+                          onClick={() => handleActivate(inv.id)}
+                          disabled={isPending}
+                          className="rounded-xs! "
+                        >
+                          Activer
+                        </DropdownMenuItem>
+                      ) : (
+                        <DropdownMenuItem
+                          onClick={() => handleArchive(inv.id)}
+                          disabled={isPending}
+                          className="rounded-xs! "
+                        >
+                          Archiver
+                        </DropdownMenuItem>
+                      )}
+
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem
+                        className="text-destructive rounded-t-xs! "
+                        onClick={() => handleDelete(inv.id)}
+                        disabled={isPending}
+                      >
+                        Supprimer
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </li>
             )

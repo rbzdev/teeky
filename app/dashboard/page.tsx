@@ -28,7 +28,7 @@ export default async function DashboardPage() {
     : []
 
   return (
-    <main className="mx-auto max-w-4xl w-full p-6 space-y-6">
+    <main className="mx-auto max-w-4xl w-full p-2 sm:p-6 space-y-6">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Tableau de bord</h1>
@@ -40,7 +40,7 @@ export default async function DashboardPage() {
       </header>
 
       <section className="rounded-lg border p-4">
-        <h2 className="font-medium mb-2">Votre compte</h2>
+        <h2 className="font-medium mb-2">Mon compte</h2>
         {user ? (
           <ul className="text-sm space-y-1">
             <li><span className="font-medium">Email:</span> {user.email}</li>

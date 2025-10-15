@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
 import { Spinner } from "@/components/ui/spinner"
+import { Label } from "@/components/ui/label"
 
 // Client-side form logic for date/time composition
 // Build an ISO string that preserves the user's local time with timezone offset (e.g. 2025-10-10T12:00:00.000+02:00)
@@ -254,18 +255,18 @@ export default function CreateInvitationForm() {
         >
             <div className="grid gap-2 sm:gap-6 grid-cols-2">
                 <div className="flex flex-col">
-                    <label htmlFor="mr" className="text-xs font-medium">Monsieur *</label>
+                    <Label htmlFor="mr" className="text-xs font-medium">Monsieur *</Label>
                     <Input id="mr" name="hostManName" required placeholder="Le marié" defaultValue={draft.hostManName} onChange={e => update('hostManName', e.target.value)} />
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="mme" className="text-xs font-medium">Madame *</label>
+                    <Label htmlFor="mme" className="text-xs font-medium">Madame *</Label>
                     <Input id="mme" name="hostWomanName" required placeholder="La mariée" defaultValue={draft.hostWomanName} onChange={e => update('hostWomanName', e.target.value)} />
                 </div>
             </div>
 
             <div className="space-y-2">
-                <label htmlFor="description" className="text-sm font-medium">Description</label>
+                <Label htmlFor="description" className="text-sm font-medium">Description</Label>
                 <Textarea
                     id="description"
                     name="description"
@@ -278,7 +279,7 @@ export default function CreateInvitationForm() {
 
             <div className="grid gap-2 sm:gap-6 grid-cols-2">
                 <div className="space-y-2">
-                    <label htmlFor="location" className="text-sm font-medium">Lieu</label>
+                    <Label htmlFor="location" className="text-sm font-medium">Lieu</Label>
                     <div className="relative flex items-center justify-center">
                         <Input
                             id="location"
@@ -293,7 +294,7 @@ export default function CreateInvitationForm() {
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <label htmlFor="coordinate" className="text-sm font-medium">Heure</label>
+                    <Label htmlFor="coordinate" className="text-sm font-medium">Heure</Label>
                     <Input
                         type="time"
                         id="startTime"
@@ -311,7 +312,7 @@ export default function CreateInvitationForm() {
 
             <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2 col-span-2">
-                    <label className="text-sm font-medium" htmlFor="dateDisplay">Date *</label>
+                    <Label className="text-sm font-medium" htmlFor="dateDisplay">Date *</Label>
                     <div className="flex items-center gap-2 relative">
                         <Input
                             id="dateDisplay"

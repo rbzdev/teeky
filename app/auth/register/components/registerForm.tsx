@@ -6,6 +6,8 @@ import { registerAction } from '../actions'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 
 export function RegisterForm() {
   const [submitting, setSubmitting] = React.useState(false)
@@ -37,10 +39,10 @@ export function RegisterForm() {
     }
   }
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-sm w-full">
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md w-full">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label htmlFor="firstName" className="text-sm font-medium">Prénom</label>
+          <Label htmlFor="firstName" className="text-sm font-medium">Prénom</Label>
           <Input
             id="firstName"
             name="firstName"
@@ -50,7 +52,7 @@ export function RegisterForm() {
           />
         </div>
         <div className="space-y-1">
-          <label htmlFor="lastName" className="text-sm font-medium">Nom</label>
+          <Label htmlFor="lastName" className="text-sm font-medium">Nom</Label>
           <Input
             id="lastName"
             name="lastName"
@@ -61,7 +63,7 @@ export function RegisterForm() {
         </div>
       </div>
       <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium">Email</label>
+        <Label htmlFor="email" className="text-sm font-medium">Email</Label>
         <Input
           id="email"
           name="email"
@@ -71,17 +73,17 @@ export function RegisterForm() {
         />
       </div>
       <div className="space-y-1">
-        <label htmlFor="password" className="text-sm font-medium">Mot de passe</label>
+        <Label htmlFor="password" className="text-sm font-medium">Mot de passe</Label>
         <Input 
         id="password" 
         name="password" 
         type="password"
-        placeholder='● ● ● ● ● ● ● ● ● ● ● ●'
+        placeholder='● ● ● ● ● ● ● ● '
         required 
         autoComplete="new-password"
          />
       </div>
-      <Button type="submit" disabled={submitting} className="w-full">{submitting ? 'Création...' : 'Créer le compte'}</Button>
+      <Button type="submit" disabled={submitting} className="w-full">{submitting ? <div className="flex items-center gap-1"><Spinner /> <span>Création...</span></div> : 'Créer le compte'}</Button>
     </form>
   )
 }

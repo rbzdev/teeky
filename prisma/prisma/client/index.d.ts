@@ -3273,6 +3273,7 @@ export namespace Prisma {
     slug: string | null
     status: string | null
     token: string | null
+    place: string | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3287,6 +3288,7 @@ export namespace Prisma {
     slug: string | null
     status: string | null
     token: string | null
+    place: string | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -3301,6 +3303,7 @@ export namespace Prisma {
     slug: number
     status: number
     token: number
+    place: number
     respondedAt: number
     createdAt: number
     updatedAt: number
@@ -3317,6 +3320,7 @@ export namespace Prisma {
     slug?: true
     status?: true
     token?: true
+    place?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3331,6 +3335,7 @@ export namespace Prisma {
     slug?: true
     status?: true
     token?: true
+    place?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3345,6 +3350,7 @@ export namespace Prisma {
     slug?: true
     status?: true
     token?: true
+    place?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -3432,6 +3438,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place: string | null
     respondedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -3463,6 +3470,7 @@ export namespace Prisma {
     slug?: boolean
     status?: boolean
     token?: boolean
+    place?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -3480,12 +3488,13 @@ export namespace Prisma {
     slug?: boolean
     status?: boolean
     token?: boolean
+    place?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GuestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invitationId" | "name" | "email" | "phone" | "slug" | "status" | "token" | "respondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
+  export type GuestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invitationId" | "name" | "email" | "phone" | "slug" | "status" | "token" | "place" | "respondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
   export type GuestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     invitation?: boolean | InvitationDefaultArgs<ExtArgs>
   }
@@ -3504,6 +3513,7 @@ export namespace Prisma {
       slug: string
       status: string
       token: string
+      place: string | null
       respondedAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -3908,6 +3918,7 @@ export namespace Prisma {
     readonly slug: FieldRef<"Guest", 'String'>
     readonly status: FieldRef<"Guest", 'String'>
     readonly token: FieldRef<"Guest", 'String'>
+    readonly place: FieldRef<"Guest", 'String'>
     readonly respondedAt: FieldRef<"Guest", 'DateTime'>
     readonly createdAt: FieldRef<"Guest", 'DateTime'>
     readonly updatedAt: FieldRef<"Guest", 'DateTime'>
@@ -4349,6 +4360,7 @@ export namespace Prisma {
     slug: 'slug',
     status: 'status',
     token: 'token',
+    place: 'place',
     respondedAt: 'respondedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -4651,6 +4663,7 @@ export namespace Prisma {
     slug?: StringFilter<"Guest"> | string
     status?: StringFilter<"Guest"> | string
     token?: StringFilter<"Guest"> | string
+    place?: StringNullableFilter<"Guest"> | string | null
     respondedAt?: DateTimeNullableFilter<"Guest"> | Date | string | null
     createdAt?: DateTimeFilter<"Guest"> | Date | string
     updatedAt?: DateTimeFilter<"Guest"> | Date | string
@@ -4666,6 +4679,7 @@ export namespace Prisma {
     slug?: SortOrder
     status?: SortOrder
     token?: SortOrder
+    place?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4685,6 +4699,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Guest"> | string | null
     slug?: StringFilter<"Guest"> | string
     status?: StringFilter<"Guest"> | string
+    place?: StringNullableFilter<"Guest"> | string | null
     respondedAt?: DateTimeNullableFilter<"Guest"> | Date | string | null
     createdAt?: DateTimeFilter<"Guest"> | Date | string
     updatedAt?: DateTimeFilter<"Guest"> | Date | string
@@ -4700,6 +4715,7 @@ export namespace Prisma {
     slug?: SortOrder
     status?: SortOrder
     token?: SortOrder
+    place?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -4720,6 +4736,7 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Guest"> | string
     status?: StringWithAggregatesFilter<"Guest"> | string
     token?: StringWithAggregatesFilter<"Guest"> | string
+    place?: StringNullableWithAggregatesFilter<"Guest"> | string | null
     respondedAt?: DateTimeNullableWithAggregatesFilter<"Guest"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Guest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Guest"> | Date | string
@@ -4949,6 +4966,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4964,6 +4982,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -4976,6 +4995,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4990,6 +5010,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5004,6 +5025,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5016,6 +5038,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5029,6 +5052,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5329,6 +5353,7 @@ export namespace Prisma {
     slug?: SortOrder
     status?: SortOrder
     token?: SortOrder
+    place?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5343,6 +5368,7 @@ export namespace Prisma {
     slug?: SortOrder
     status?: SortOrder
     token?: SortOrder
+    place?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5357,6 +5383,7 @@ export namespace Prisma {
     slug?: SortOrder
     status?: SortOrder
     token?: SortOrder
+    place?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -5813,6 +5840,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5826,6 +5854,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -5901,6 +5930,7 @@ export namespace Prisma {
     slug?: StringFilter<"Guest"> | string
     status?: StringFilter<"Guest"> | string
     token?: StringFilter<"Guest"> | string
+    place?: StringNullableFilter<"Guest"> | string | null
     respondedAt?: DateTimeNullableFilter<"Guest"> | Date | string | null
     createdAt?: DateTimeFilter<"Guest"> | Date | string
     updatedAt?: DateTimeFilter<"Guest"> | Date | string
@@ -6075,6 +6105,7 @@ export namespace Prisma {
     slug: string
     status: string
     token: string
+    place?: string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -6087,6 +6118,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6099,6 +6131,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -6111,6 +6144,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
+    place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -63,6 +63,7 @@ model Guest {
   slug         String
   status       String
   token        String      @unique
+  place        String?
   respondedAt  DateTime?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

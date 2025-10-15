@@ -1,5 +1,6 @@
 "use client"
 
+
 import * as React from 'react'
 import { QrcodeCanvas } from 'react-qrcode-pretty'
 
@@ -10,10 +11,10 @@ export default function QrCanvas({ value, size = 160 }: { value: string; size?: 
         value={value}
         size={size}
         variant={{ eyes: 'gravity', body: 'fluid' }}
-        color={{ eyes: '#223344', body: '#335577' }}
-        padding={10}
+        color={{ eyes: '#223344', body: '#000' }}
+        padding={2}
         margin={5}
-        bgColor="#ddeeff"
+        bgColor="#fff"
         bgRounded
         divider
       />

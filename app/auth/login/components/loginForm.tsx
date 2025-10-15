@@ -2,9 +2,14 @@
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { loginAction } from '../actions'
+
+// Components
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
+
 
 export function LoginForm() {
 	const [submitting, setSubmitting] = React.useState(false)
@@ -40,9 +45,9 @@ export function LoginForm() {
 		}
 	}
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4 max-w-sm w-full">
+		<form onSubmit={handleSubmit} className="space-y-4  w-full">
 			<div className="space-y-1">
-				<label htmlFor="email" className="text-sm font-medium">Email</label>
+				<Label htmlFor="email" className="text-sm font-medium">Email</Label>
 				<Input
 					id="email"
 					name="email"
@@ -54,7 +59,7 @@ export function LoginForm() {
 				/>
 			</div>
 			<div className="space-y-1">
-				<label htmlFor="password" className="text-sm font-medium">Mot de passe</label>
+				<Label htmlFor="password" className="text-sm font-medium">Mot de passe</Label>
 				<Input
 					id="password"
 					name="password"
@@ -64,7 +69,7 @@ export function LoginForm() {
 					autoComplete="current-password"
 				/>
 			</div>
-			<Button type="submit" disabled={submitting} className="w-full">{submitting ? 'Connexion...' : 'Se connecter'}</Button>
+			<Button type="submit" disabled={submitting} className="w-full">{submitting ? <div className="flex items-center gap-1"><Spinner /> <span>Connexion...</span></div> : 'Se connecter'}</Button>
 		</form>
 	)
 }
