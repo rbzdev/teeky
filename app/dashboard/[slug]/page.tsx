@@ -10,13 +10,15 @@ import ShareActions from './ShareActions'
 import GuestList from './Guest'
 
 export default async function DashboardInvitationBySlugPage({ params }: DashboardInvitationBySlugPageProps) {
+    const { slug } = await params
+
     //   const user = await getCurrentUser()
     //   if (!user) {
-    //     redirect(`/auth/login?next=/dashboard/${encodeURIComponent(params.slug)}`)
+    //     redirect(`/auth/login?next=/dashboard/${encodeURIComponent(slug)}`)
     //   }
 
     const invitation = await prisma.invitation.findUnique({
-        where: { slug: params.slug },
+        where: { slug },
         select: {
             id: true,
             slug: true,

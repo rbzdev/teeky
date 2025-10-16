@@ -59,20 +59,7 @@ export default function GuestList({ guests, invitationSlug }: GuestListProps) {
     })
     const [seatNumber, setSeatNumber] = React.useState('')
 
-    if (guests.length === 0) {
-        return (
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="rounded-lg border p-4"
-            >
-                <h3 className="font-medium mb-2">Invités</h3>
-                <p className="text-sm text-muted-foreground">Aucun invité pour le moment.</p>
-            </motion.div>
-        )
-    }
-
-    // Filtrer les invités selon la recherche
+    // Filtrer les invités selon la recherche - doit être avant toute condition
     const filteredGuests = React.useMemo(() => {
         if (!searchQuery.trim()) return guests
 
@@ -146,6 +133,19 @@ export default function GuestList({ guests, invitationSlug }: GuestListProps) {
 
     const openAssignSeatDialog = (guestId: string, guestName: string) => {
         setAssignSeatDialog({ isOpen: true, guestId, guestName })
+    }
+
+    if (guests.length === 0) {
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-lg border p-4"
+            >
+                <h3 className="font-medium mb-2">Invités</h3>
+                <p className="text-sm text-muted-foreground">Aucun invité pour le moment.</p>
+            </motion.div>
+        )
     }
 
     return (
