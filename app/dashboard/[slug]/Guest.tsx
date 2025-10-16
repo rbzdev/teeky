@@ -291,7 +291,7 @@ export default function GuestList({ guests, invitationSlug }: GuestListProps) {
                     className="text-center py-8"
                 >
                     <p className="text-sm text-muted-foreground">
-                        Aucun invité trouvé pour "{searchQuery}"
+                        Aucun invité trouvé pour &quot;{searchQuery}&quot;
                     </p>
                 </motion.div>
             )}
