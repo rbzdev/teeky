@@ -35,7 +35,7 @@ export default function ClassicInvitationModel(props: ClassicProps) {
     return (
         <div className="relative overflow-hidden rounded-3xl border shadow-sm bg-gradient-to-br from-amber-50 via-white to-rose-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950 ">
             {/* Crest / monogram */}
-            <div className="absolute top-1 left-1/2 -translate-x-1/2">
+            <div className="absolute top-2 left-1/2 -translate-x-1/2">
                 <div className="p-1 md:p-2 rounded-full bg-amber-600 text-white flex items-center justify-center shadow-lg ring-4 ring-amber-100 dark:ring-neutral-800">
                     <Icon icon="solar:heart-bold-duotone" className="size-4 " />
                 </div>
@@ -46,7 +46,11 @@ export default function ClassicInvitationModel(props: ClassicProps) {
                     <p className="text-[11px] tracking-[0.25em] text-muted-foreground uppercase">Invitation</p>
                     {/* Couple */}
                     <h2 className={`${dancing.className} text-2xl md:text-5xl font-normal tracking-tight`}>{couple}</h2>
-                    <p className={`${cookie_font.className} text-sm text-muted-foreground`}>{props.title || ''}</p>
+
+                    {/* <p className={`${cookie_font.className} text-sm text-muted-foreground`}>{props.title || ''}</p> */}
+
+                    <p className={`${cookie_font.className} text-sm text-muted-foreground`}> Invitation privée </p>
+
                     <div className="mx-auto mt-2 h-px w-28 bg-gradient-to-r from-transparent via-border to-transparent" />
                 </header>
 

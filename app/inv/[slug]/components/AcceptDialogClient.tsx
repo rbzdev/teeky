@@ -48,15 +48,15 @@ export default function AcceptDialogClient({ onSubmit }: AcceptDialogClientProps
                             setSubmitting(false)
                         }
                     }}
-                    className="grid gap-3"
+                    className="grid gap-3 "
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="fullName">Nom complet</Label>
-                        <Input id="fullName" name="fullName" placeholder="Ex: Jean Dupont" required />
+                        <Input id="fullName" name="fullName" placeholder="Mr/Mme Jean Dupont" required />
                     </div>
                     <div className="grid gap-1.5">
                         <Label htmlFor="phone">Numéro de téléphone</Label>
-                        <Input id="phone" name="phone" placeholder="Ex: +243 07 00 00 00" required />
+                        <Input id="phone" name="phone" placeholder="+243 07 00 00 00" required />
                     </div>
 
                     <DialogFooter>

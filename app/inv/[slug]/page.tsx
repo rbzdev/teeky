@@ -38,7 +38,7 @@ export default async function PublicInvitationPage({ params }: PageProps) {
 		const slug = invitation.slug
 
 	return (
-		<main className="mx-auto max-w-3xl w-full p-6 space-y-6">
+		<main className="mx-auto max-w-3xl w-full p-6 space-y-6 flex flex-col justify-center min-h-screen ">
 			<section className="relative" >
 				<InvitationModelRenderer
 					model={(invitation.theme as InvitationModelKey) || 'minimalist'}

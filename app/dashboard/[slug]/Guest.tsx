@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Search, ChevronDown, MoreVertical, Trash2, UserCheck } from 'lucide-react'
 
 // UI Components
 import { Input } from '@/components/ui/input'
@@ -23,6 +22,10 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
+
+// Icons
+import { Icon } from '@iconify/react'
+import { Search, ChevronDown, MoreVertical, Trash2, UserCheck } from 'lucide-react'
 
 // Actions
 import { deleteGuest, assignSeat } from "./actions"
@@ -140,9 +143,10 @@ export default function GuestList({ guests, invitationSlug }: GuestListProps) {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-lg border p-4"
+                className="rounded-lg border p-4 flex flex-col justify-center items-center"
             >
                 <h3 className="font-medium mb-2">Invités</h3>
+                <Icon icon="hugeicons:license-third-party" className='text-9xl' />
                 <p className="text-sm text-muted-foreground">Aucun invité pour le moment.</p>
             </motion.div>
         )
