@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     siteName: 'Teeky',
     title: 'Teeky — Invitations élégantes en quelques minutes',
     description: 'Crée, personnalise et partage des invitations en ligne. Modèles élégants, partage instantané, et suivi des réponses (RSVP).',
-    images: [{ url: '/logo.png', width: 1200, height: 630, alt: 'Teeky' }],
+    images: [{ url: 'https://teeky.vercel.app/logo.png', width: 1200, height: 630, alt: 'Teeky' }],
     locale: 'fr_FR',
   },
   twitter: {
@@ -58,8 +58,8 @@ export const metadata: Metadata = {
     site: '@teeky',
     creator: '@teeky',
     title: 'Teeky — Invitations élégantes en quelques minutes',
-    description: 'Crée, personnalise et partage des invitations en ligne. Modèles élégants, partage instantané, et suivi des réponses (RSVP).',
-    images: ['/logo.png'],
+    description: 'Crée, personnalise et partage des invitations en quelques minutes. Modèles élégants, partage instantané, et suivi des réponses (RSVP).',
+    images: ['https://teeky.vercel.app/logo.png'],
   },
   robots: {
     index: true,
