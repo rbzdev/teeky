@@ -1,10 +1,15 @@
+
+import { Button } from "@/components/ui/button"
+import { Eye } from "lucide-react"
+
+
+// Components
 import CreateInvitationForm from "./components/form"
 import InvitationPreview from "./components/preview"
 import { InvitationDraftProvider } from "./components/invitation-context"
 import { Separator } from "@/components/ui/separator"
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "@/components/dialog"
-import { Button } from "@/components/ui/button"
-import { Eye } from "lucide-react"
+import FooterMin from "@/components/footer.min"
 
 export default function CreateInvitationPage() {
     return (
@@ -48,6 +53,7 @@ export default function CreateInvitationPage() {
                     </div>
                 </div>
             </div>
+            <FooterMin />
         </InvitationDraftProvider>
     )
 }

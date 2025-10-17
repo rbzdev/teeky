@@ -1,8 +1,12 @@
-import { Button } from "@/components/ui/button"
+
 import Link from "next/link"
+
+// Components
 import InvitationModelRenderer from "@/app/inv/Models/renderer"
 
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { Button } from "@/components/ui/button"
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
@@ -161,7 +165,7 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-16 sm:pb-24">
         <div className="rounded-2xl border bg-gradient-to-br from-amber-100/60 via-white to-rose-100/60 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900 p-6 sm:p-10 text-center">
           <h2 className="text-xl sm:text-3xl font-semibold tracking-tight">Prêt à créer ton invitation ?</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Commence dès maintenant — c’est rapide et gratuit.</p>
+          <p className="mt-2 text-sm text-muted-foreground">Commence dès maintenant — c&apos;est rapide et gratuit.</p>
           <div className="mt-5 flex justify-center">
             <Link href="/inv/create" className="inline-flex items-center rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background hover:opacity-90">
               Créer mon invitation
@@ -169,6 +173,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   )
 }
