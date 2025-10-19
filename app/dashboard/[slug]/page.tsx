@@ -5,9 +5,10 @@ import Link from 'next/link'
 import InvitationModelRenderer from '../../inv/Models/renderer'
 import type { InvitationModelKey } from '@/lib/types/invitation'
 import type { DashboardInvitationBySlugPageProps } from '@/lib/types/invitation'
-import QrCode from './QrCode'
-import ShareActions from './ShareActions'
-import GuestList from './Guest'
+import QrCode from './components/QrCode'
+import ShareActions from './components/ShareActions'
+import GuestList from './components/Guest'
+import GenerateImageButton from './components/generateImage'
 
 export default async function DashboardInvitationBySlugPage({ params }: DashboardInvitationBySlugPageProps) {
     const { slug } = await params
@@ -103,7 +104,10 @@ export default async function DashboardInvitationBySlugPage({ params }: Dashboar
                 </div>
 
                 <div className="pt-2">
-                    <ShareActions slug={invitation.slug} title={invitation.title} />
+                    <div className="flex flex-wrap gap-3 items-center">
+                        <ShareActions slug={invitation.slug} title={invitation.title} />
+                        <GenerateImageButton invitation={invitation} />
+                    </div>
                 </div>
             </section>
 

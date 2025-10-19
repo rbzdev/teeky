@@ -1,4 +1,5 @@
 "use client"
+
 import * as React from 'react'
 import { Icon } from '@iconify/react'
 import type { MinimalistInvitationProps as ClassicProps } from '@/lib/types/invitation'
