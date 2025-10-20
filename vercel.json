@@ -1,0 +1,9 @@
+{
+  "functions": {
+    "app/api/generate-image/route.tsx": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  },
+  "regions": ["fra1"]
+}

@@ -170,11 +170,14 @@ export async function GET(request: NextRequest) {
         </text>      </svg>
     `;
 
-    // Générer l'image avec Sharp
-    const imageBuffer = await sharp(Buffer.from(svgContent))
+    // Générer l'image avec Sharp (optimisé pour Vercel)
+    const imageBuffer = await sharp(Buffer.from(svgContent), {
+      limitInputPixels: 1200 * 630 * 4, // Limiter les pixels d'entrée
+    })
       .png({
-        quality: 100,
-        compressionLevel: 6
+        quality: 90, // Réduire légèrement la qualité pour économiser mémoire
+        compressionLevel: 9, // Compression maximale
+        progressive: false, // Désactiver le progressif pour économiser mémoire
       })
       .toBuffer();
 
@@ -187,8 +190,21 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Erreur lors de la génération de l\'image:', error);
-    return new Response('Erreur lors de la génération de l\'image', {
+    console.error('Erreur lors de la génération de l\'image:', {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      url: request.url,
+      userAgent: request.headers.get('user-agent'),
+      timestamp: new Date().toISOString()
+    });
+
+    // Retourner une réponse d'erreur détaillée pour le développement
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const errorMessage = isDevelopment
+      ? `Erreur détaillée: ${error instanceof Error ? error.message : 'Erreur inconnue'}`
+      : 'Erreur lors de la génération de l\'image';
+
+    return new Response(errorMessage, {
       status: 500,
       headers: { 'Content-Type': 'text/plain' },
     });
