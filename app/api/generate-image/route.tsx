@@ -1,24 +1,9 @@
 ﻿import { NextRequest } from "next/server";
+import sharp from "sharp";
 import { formatInvitationDate, formatInvitationTime } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
-    // Import dynamique de Sharp pour éviter les problèmes de chargement
-    const sharp = (await import('sharp')).default;
-
-    // Vérifier que Sharp est correctement chargé
-    if (!sharp) {
-      throw new Error('Sharp module could not be loaded');
-    }
-
-    // Tester que Sharp peut créer une instance
-    try {
-      await sharp({ create: { width: 1, height: 1, channels: 4, background: 'transparent' } }).png().toBuffer();
-    } catch (sharpTestError) {
-      console.error('Sharp initialization test failed:', sharpTestError);
-      throw new Error('Sharp is not properly configured for this environment');
-    }
-
     // Récupérer les données depuis les paramètres URL
     const { searchParams } = new URL(request.url);
     const title = searchParams.get("title") || "Invitation";
