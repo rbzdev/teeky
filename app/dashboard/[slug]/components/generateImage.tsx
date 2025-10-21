@@ -30,7 +30,7 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
       });
 
       // Call the API to generate the image
-      const response = await fetch(`/api/generate-image?${params.toString()}`);
+      const response = await fetch(`/api/generate-image-og?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error("Failed to generate image");
