@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     // Récupérer les données depuis les paramètres URL
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get("title") || "Invitation";  
+    const title = searchParams.get("title") || "Invitation";    
     const description = searchParams.get("description") || "Vous êtes invité";
     const hostManName = searchParams.get("hostManName") || "";
     const hostWomanName = searchParams.get("hostWomanName") || "";
