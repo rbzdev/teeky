@@ -73,7 +73,7 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
         :
         <div className="flex items-center gap-1">
           <Icon icon="solar:gallery-download-linear" className="text-xl" />
-          <span> Télécharger l'invitation </span>
+          <span> Télécharger l&apos;invitation </span>
         </div>
       }
     </Button>
