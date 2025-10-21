@@ -1,193 +1,318 @@
-﻿import { NextRequest } from "next/server";
-import sharp from "sharp";
+import { NextRequest } from "next/server";
+import { ImageResponse } from "next/og";
 import { formatInvitationDate, formatInvitationTime } from "@/lib/utils";
+import QRCode from 'qrcode';
 
+// App router includes @vercel/og.
+// No need to install it.
+
+// Icônes SVG basées sur Lucide
+const CalendarIcon = ({ size = 24, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6.94 2c.416 0 .753.324.753.724v1.46c.668-.012 1.417-.012 2.26-.012h4.015c.842 0 1.591 0 2.259.013v-1.46c0-.4.337-.725.753-.725s.753.324.753.724V4.25c1.445.111 2.394.384 3.09 1.055c.698.67.982 1.582 1.097 2.972L22 9H2v-.724c.116-1.39.4-2.302 1.097-2.972s1.645-.944 3.09-1.055V2.724c0-.4.337-.724.753-.724" /><path fill="currentColor" d="M22 14v-2c0-.839-.004-2.335-.017-3H2.01c-.013.665-.01 2.161-.01 3v2c0 3.771 0 5.657 1.172 6.828S6.228 22 10 22h4c3.77 0 5.656 0 6.828-1.172S22 17.772 22 14" opacity="0.5" /><path fill="currentColor" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" /></svg>
+);
+
+const ClockIcon = ({ size = 24, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 0 256 256"><g fill="currentColor"><path d="M224 128a96 96 0 1 1-96-96a96 96 0 0 1 96 96" opacity="0.2" /><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m0 192a88 88 0 1 1 88-88a88.1 88.1 0 0 1-88 88m64-88a8 8 0 0 1-8 8h-56a8 8 0 0 1-8-8V72a8 8 0 0 1 16 0v48h48a8 8 0 0 1 8 8" /></g></svg>
+);
+
+const MapPinIcon = ({ size = 24, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" stroke={color} viewBox="0 0 24 24"><path fill="currentColor" d="M17.657 5.304c-3.124-3.073-8.189-3.073-11.313 0a7.78 7.78 0 0 0 0 11.13L12 21.999l5.657-5.565a7.78 7.78 0 0 0 0-11.13M12 13.499c-.668 0-1.295-.26-1.768-.732a2.503 2.503 0 0 1 0-3.536c.472-.472 1.1-.732 1.768-.732s1.296.26 1.768.732a2.503 2.503 0 0 1 0 3.536c-.472.472-1.1.732-1.768.732" /></svg>
+);
+
+const HeartIcon = ({ size = 16, color = "#dc2626" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.106 18.247C5.298 16.083 2 13.542 2 9.137C2 4.274 7.5.825 12 5.501V20.5c-1 0-2-.77-3.038-1.59q-.417-.326-.856-.663" clip-rule="evenodd" opacity="0.5" /><path fill="currentColor" d="M15.038 18.91C17.981 16.592 22 14 22 9.138S16.5.825 12 5.501V20.5c1 0 2-.77 3.038-1.59" /></svg>
+);
+
+// ############################################################################################
+// ########################## CUSTOM FONTS FROM GOOGLE ########################################
+// ############################################################################################
+async function loadGoogleFont(font: string, text: string) {
+  const url = `https://fonts.googleapis.com/css2?family=${font}&text=${encodeURIComponent(text)}`
+  const css = await (await fetch(url)).text()
+  const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
+
+  if (resource) {
+    const response = await fetch(resource[1])
+    if (response.status == 200) {
+      return await response.arrayBuffer()
+    }
+  }
+
+  throw new Error('failed to load font data')
+}
+
+
+// ############################################################################################
+// ########################## ROOT FUNCTION LOGICs  ########################################
+// ############################################################################################
 export async function GET(request: NextRequest) {
   try {
     // Récupérer les données depuis les paramètres URL
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get("title") || "Invitation";    
+    const title = searchParams.get("title") || "Invitation";
     const description = searchParams.get("description") || "Vous êtes invité";
     const hostManName = searchParams.get("hostManName") || "";
     const hostWomanName = searchParams.get("hostWomanName") || "";
     const location = searchParams.get("location") || "";
     const startsAt = searchParams.get("startsAt");
-
-    // Fonction pour échapper les entités XML
-    const escapeXml = (str: string): string => {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
-    };
-
-    // Fonction pour diviser le texte en lignes
-    const wrapText = (text: string, maxCharsPerLine: number = 50): string[] => {
-      const words = text.split(' ');
-      const lines: string[] = [];
-      let currentLine = '';
-
-      for (const word of words) {
-        if ((currentLine + ' ' + word).length <= maxCharsPerLine) {
-          currentLine += (currentLine ? ' ' : '') + word;
-        } else {
-          if (currentLine) lines.push(currentLine);
-          currentLine = word;
-        }
-      }
-      if (currentLine) lines.push(currentLine);
-
-      return lines;
-    };
+    const slug = searchParams.get("slug") || "";
 
     // Format the date if provided
     const formattedDate = formatInvitationDate(startsAt);
     const formattedTime = formatInvitationTime(startsAt);
 
-    // Créer le SVG de l'invitation Classic
-    const svgContent = `
-      <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <!-- Fond gradient Classic -->
-          <linearGradient id="classicBg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#fffbeb;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#ffffff;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#fef2f2;stop-opacity:1" />
-          </linearGradient>
+    // Générer l'URL de l'invitation pour le QR code
+    const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || 'https://teeky.vercel.app';
+    const invitationUrl = `${baseUrl}/inv/${slug}`;
 
-          <!-- Monogramme shadow -->
-          <filter id="monogramShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.1)"/>
-          </filter>
-
-          <!-- Pilule shadow -->
-          <filter id="pillShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.08)"/>
-          </filter>
-        </defs>
-
-        <!-- Fond principal -->
-        <rect width="1200" height="630" fill="url(#classicBg)"/>
-
-        <!-- Monogramme / cœur en haut -->
-        <circle cx="600" cy="40" r="28" fill="#d97706" filter="url(#monogramShadow)"/>
-        <circle cx="600" cy="40" r="20" fill="#fed7aa"/>
-        <path d="M600 25 C595 20, 585 20, 585 28 C585 32, 590 38, 600 45 C610 38, 615 32, 615 28 C615 20, 605 20, 600 25 Z"
-              fill="#dc2626"/>
-
-        <!-- Conteneur principal -->
-        <rect x="150" y="80" width="900" height="480" rx="24" ry="24" fill="none"/>
-
-        <!-- Header -->
-        <text x="600" y="100" text-anchor="middle" font-family="serif" font-size="14"
-              fill="#6b7280" letter-spacing="0.25em" text-transform="uppercase" font-weight="500">
-          INVITATION
-        </text>
-
-        <!-- Noms du couple -->
-        <text x="600" y="160" text-anchor="middle" font-family="serif" font-size="48"
-              font-weight="300" letter-spacing="-0.02em" fill="#1f2937">
-          ${escapeXml(hostManName && hostWomanName ? `${hostManName} & ${hostWomanName}` : hostManName || hostWomanName || 'Monsieur & Madame')}
-        </text>
-
-        <!-- Invitation privée -->
-        <text x="600" y="200" text-anchor="middle" font-family="serif" font-size="16"
-              fill="#6b7280" font-style="italic">
-          Invitation privée
-        </text>
-
-        <!-- Ligne décorative -->
-        <line x1="520" y1="225" x2="680" y2="225" stroke="#d1d5db" stroke-width="1"/>
-
-        <!-- Description -->
-        <text x="600" y="250" text-anchor="middle" font-family="serif" font-size="20"
-              fill="#374151" font-style="italic" line-height="1.6">
-          ${wrapText(escapeXml(description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."), 45)
-            .map((line, index) => `<tspan x="600" dy="${index === 0 ? '0' : '1.4em'}">${line}</tspan>`)
-            .join('')}
-        </text>
-
-        <!-- Pilule date et heure -->
-        <rect x="350" y="450" width="500" height="60" rx="30" ry="30"
-              fill="rgba(255,255,255,0.8)" stroke="rgba(0,0,0,0.1)" stroke-width="1"
-              filter="url(#pillShadow)"/>
-
-        <!-- Icône calendrier dans la pilule -->
-        <circle cx="400" cy="480" r="12" fill="#6b7280"/>
-        <rect x="394" y="474" width="4" height="4" fill="white"/>
-        <rect x="400" y="474" width="4" height="4" fill="white"/>
-        <rect x="394" y="480" width="10" height="2" fill="white"/>
-        <line x1="394" y1="478" x2="394" y2="476" stroke="white" stroke-width="1"/>
-        <line x1="398" y1="478" x2="398" y2="476" stroke="white" stroke-width="1"/>
-        <line x1="402" y1="478" x2="402" y2="476" stroke="white" stroke-width="1"/>
-        <line x1="404" y1="478" x2="404" y2="476" stroke="white" stroke-width="1"/>
-
-        <!-- Date -->
-        <text x="430" y="488" text-anchor="start" font-family="serif" font-size="18"
-              fill="#1f2937" font-weight="500">
-          ${escapeXml(formattedDate)}
-        </text>
-
-        <!-- Séparateur -->
-        <circle cx="600" cy="480" r="3" fill="#6b7280"/>
-
-        <!-- Icône horloge dans la pilule -->
-        <circle cx="720" cy="480" r="12" fill="#6b7280"/>
-        <circle cx="720" cy="480" r="8" fill="white"/>
-        <line x1="720" y1="480" x2="720" y2="475" stroke="#6b7280" stroke-width="1"/>
-        <line x1="720" y1="480" x2="725" y2="480" stroke="#6b7280" stroke-width="1"/>
-
-        <!-- Heure -->
-        <text x="750" y="488" text-anchor="start" font-family="serif" font-size="18"
-              fill="#1f2937" font-weight="500">
-          ${escapeXml(formattedTime)}
-        </text>
-
-        <!-- Pilule lieu -->
-        <rect x="350" y="530" width="500" height="50" rx="25" ry="25"
-              fill="rgba(255,255,255,0.8)" stroke="rgba(0,0,0,0.1)" stroke-width="1"
-              filter="url(#pillShadow)"/>
-
-        <!-- Icône localisation dans la pilule -->
-        <circle cx="400" cy="555" r="12" fill="#6b7280"/>
-        <path d="M470 545 L465 550 L470 560 L475 550 Z" fill="white"/>
-        <circle cx="400" cy="552" r="2" fill="#6b7280"/>
-
-        <!-- Lieu -->
-        <text x="490" y="563" text-anchor="start" font-family="serif" font-size="18"
-              fill="#374151" font-weight="500">
-          ${escapeXml(location || "Lieu de l'événement")}
-        </text>
-
-        <!-- Footer -->
-
-
-        <text x="600" y="610" text-anchor="middle" font-family="serif" font-size="12"
-              fill="#9ca3af" letter-spacing="0.15em" text-transform="uppercase" font-weight="500">
-          Créée avec teeky.vercel.app
-        </text>      </svg>
-    `;
-
-    // Générer l'image avec Sharp (optimisé pour Vercel)
-    const imageBuffer = await sharp(Buffer.from(svgContent), {
-      limitInputPixels: 1200 * 630 * 4, // Limiter les pixels d'entrée
-    })
-      .png({
-        quality: 90, // Réduire légèrement la qualité pour économiser mémoire
-        compressionLevel: 9, // Compression maximale
-        progressive: false, // Désactiver le progressif pour économiser mémoire
-      })
-      .toBuffer();
-
-    // Retourner l'image
-    return new Response(new Uint8Array(imageBuffer), {
-      headers: {
-        'Content-Type': 'image/png',
-        'Cache-Control': 'public, max-age=300', // Cache 5 minutes
-      },
+    // Générer le QR code en matrice pour le rendu direct
+    const qrMatrix = QRCode.create(invitationUrl, {
+      errorCorrectionLevel: 'M',
+      version: undefined,
+      maskPattern: undefined,
     });
+
+    const matrixSize = qrMatrix.modules.size;
+    const cellSize = 70 / matrixSize; // Ajuster pour tenir dans 70px
+
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#fffbeb',
+            backgroundImage: 'linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef2f2 100%)',
+            padding: '40px',
+            fontFamily: 'Georgia, serif',
+          }}
+        >
+          {/* Monogramme */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '40px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              backgroundColor: '#d97706',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            }}
+          >
+            <div
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                backgroundColor: '#fed7aa',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <HeartIcon size={20} color="#dc2626" />
+            </div>
+          </div>
+
+          {/* Header */}
+          <div
+            style={{
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#6b7280',
+              letterSpacing: '0.25em',
+              textTransform: 'uppercase',
+              marginTop: '80px',
+              marginBottom: '30px',
+            }}
+          >
+            INVITATION
+          </div>
+
+          {/* Noms du couple */}
+          <div
+            style={{
+              fontSize: '48px',
+              fontWeight: '300',
+              color: '#1f2937',
+              marginBottom: '20px',
+              textAlign: 'center',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            {hostManName && hostWomanName ? `${hostManName} & ${hostWomanName}` : hostManName || hostWomanName || 'Monsieur & Madame'}
+          </div>
+
+          {/* Invitation privée */}
+          <div
+            style={{
+              fontSize: '16px',
+              color: '#6b7280',
+              fontStyle: 'italic',
+              marginBottom: '40px',
+            }}
+          >
+            Invitation privée
+          </div>
+
+          {/* Description */}
+          <div
+            style={{
+              fontSize: '20px',
+              color: '#374151',
+              fontStyle: 'italic',
+              textAlign: 'center',
+              maxWidth: '600px',
+              marginBottom: '60px',
+              lineHeight: '1.6',
+            }}
+          >
+            {description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."}
+          </div>
+
+          {/* Date et heure */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              padding: '20px 40px',
+              borderRadius: '30px',
+              marginBottom: '20px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+              border: '1px solid rgba(0,0,0,0.1)',
+            }}
+          >
+            <div style={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}>
+              <CalendarIcon size={18} color="#6b7280" />
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: '500', color: '#1f2937', marginRight: '30px' }}>
+              {formattedDate}
+            </div>
+            <div style={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}>
+              <ClockIcon size={18} color="#6b7280" />
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: '500', color: '#1f2937' }}>
+              {formattedTime}
+            </div>
+          </div>
+
+          {/* Lieu */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'rgba(255,255,255,0.8)',
+              padding: '15px 30px',
+              borderRadius: '25px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+              border: '1px solid rgba(0,0,0,0.1)',
+              marginBottom: '40px',
+            }}
+          >
+            <div style={{ marginRight: '15px', display: 'flex', alignItems: 'center' }}>
+              <MapPinIcon size={18} color="#6b7280" />
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: '500', color: '#374151' }}>
+              {location || "Lieu de l'événement"}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              fontSize: '12px',
+              color: '#9ca3af',
+              letterSpacing: '0.15em',
+              fontWeight: '500',
+            }}
+          >
+            Créée avec teeky.vercel.app
+          </div>
+
+          {/* QR Code - Coin inférieur droit */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              right: '20px',
+              width: '90px',
+              height: '90px',
+              backgroundColor: '#ffffff',
+              borderRadius: '8px',
+              padding: '8px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {/* QR Code généré par matrice de carrés */}
+            <div
+              style={{
+                width: '70px',
+                height: '70px',
+                backgroundColor: '#ffffff',
+                position: 'relative',
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {Array.from({ length: matrixSize * matrixSize }, (_, i) => {
+                const row = Math.floor(i / matrixSize);
+                const col = i % matrixSize;
+                const isDark = qrMatrix.modules.get(row, col);
+
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      width: `${cellSize}px`,
+                      height: `${cellSize}px`,
+                      backgroundColor: isDark ? '#000000' : '#ffffff',
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div
+              style={{
+                fontSize: '8px',
+                color: '#6b7280',
+                marginTop: '2px',
+                textAlign: 'center',
+                fontWeight: '500',
+              }}
+            >
+              Scanner ici
+            </div>
+          </div>
+        </div>
+      ),
+      {
+        width: 1200,
+        height: 630, 
+        // fonts: [
+        //   {
+        //     name: 'Cookie',
+        //     data: await loadGoogleFont('Cookie', description),
+        //     style: 'normal',
+        //   },
+        // ],
+      }
+    );
 
   } catch (error) {
     console.error('Erreur lors de la génération de l\'image:', {

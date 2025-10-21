@@ -11,6 +11,7 @@ interface GenerateImageButtonProps {
     location?: string | null;
     startsAt: Date;
     theme?: string | null;
+    slug: string; // Ajout du slug pour le QR code
   };
   onClick?: () => void;
 }
@@ -27,10 +28,11 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
         location: invitation.location || '',
         startsAt: invitation.startsAt.toISOString(),
         theme: invitation.theme || 'classic',
+        slug: invitation.slug, // Ajout du slug pour le QR code
       });
 
       // Call the API to generate the image
-      const response = await fetch(`/api/generate-image-og?${params.toString()}`);
+      const response = await fetch(`/api/generate-image?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error("Failed to generate image");
