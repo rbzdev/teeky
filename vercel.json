@@ -9,5 +9,8 @@
   "buildCommand": "pnpm install --include=optional sharp && pnpm run build",
   "env": {
     "SHARP_IGNORE_GLOBAL_LIBVIPS": "true"
+  },
+  "outputFileTracing": {
+    "ignorePaths": ["node_modules/@img/sharp-libvips**"]
   }
 }
