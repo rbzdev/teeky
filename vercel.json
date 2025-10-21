@@ -6,7 +6,7 @@
     }
   },
   "regions": ["fra1"],
-  "buildCommand": "pnpm install --include=optional sharp",
+  "buildCommand": "pnpm install --include=optional sharp && pnpm run build",
   "env": {
     "SHARP_IGNORE_GLOBAL_LIBVIPS": "true"
   }
