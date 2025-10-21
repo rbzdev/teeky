@@ -1,38 +1,31 @@
 "use client";
+import { useState } from "react";
 
+// Components
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
+
+// Icons
+import { Icon } from "@iconify/react";
 
 interface GenerateImageButtonProps {
   invitation: {
     title: string;
-    description?: string | null;
-    hostManName?: string | null;
-    hostWomanName?: string | null;
-    location?: string | null;
-    startsAt: Date;
-    theme?: string | null;
-    slug: string; // Ajout du slug pour le QR code
+    slug: string;
   };
   onClick?: () => void;
 }
 
 export default function GenerateImageButton({ invitation, onClick }: GenerateImageButtonProps) {
+  const [loading, setLoading] = useState(false);
+
+  // Handle image generation and download
   const handleGenerateImage = async () => {
     try {
-      // Build query parameters with invitation data
-      const params = new URLSearchParams({
-        title: invitation.title,
-        description: invitation.description || '',
-        hostManName: invitation.hostManName || '',
-        hostWomanName: invitation.hostWomanName || '',
-        location: invitation.location || '',
-        startsAt: invitation.startsAt.toISOString(),
-        theme: invitation.theme || 'classic',
-        slug: invitation.slug, // Ajout du slug pour le QR code
-      });
-
-      // Call the API to generate the image
-      const response = await fetch(`/api/generate-image?${params.toString()}`);
+      setLoading(true);
+      // Envoyer uniquement le slug - les données seront récupérées côté serveur
+      const response = await fetch(`/api/generate-image?slug=${invitation.slug}`);
 
       if (!response.ok) {
         throw new Error("Failed to generate image");
@@ -54,6 +47,7 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
       // Clean up
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
+      toast.success("Invitation téléchargée avec succès !");
 
       // Call the optional onClick prop if provided
       if (onClick) {
@@ -62,6 +56,8 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
     } catch (error) {
       console.error("Error generating image:", error);
       alert("Erreur lors de la génération de l'image. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +65,17 @@ export default function GenerateImageButton({ invitation, onClick }: GenerateIma
     <Button
       onClick={handleGenerateImage}
     >
-      Générer une image
+      {loading ?
+        <div className="flex items-center gap-1 ">
+          <Spinner />
+          <span> Téléchargement...</span>
+        </div>
+        :
+        <div className="flex items-center gap-1">
+          <Icon icon="solar:gallery-download-linear" className="text-xl" />
+          <span> Télécharger l'invitation </span>
+        </div>
+      }
     </Button>
   );
 }

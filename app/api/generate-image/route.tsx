@@ -2,24 +2,25 @@ import { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
 import { formatInvitationDate, formatInvitationTime } from "@/lib/utils";
 import QRCode from 'qrcode';
+import { prisma } from "@/lib/prisma/client";
 
 // App router includes @vercel/og.
 // No need to install it.
 
 // Icônes SVG basées sur Lucide
-const CalendarIcon = ({ size = 24, color = "#6b7280" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><g fill="none"><path stroke="currentColor" stroke-width="1.5" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z"/><path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M7 4V2.5M17 4V2.5M2.5 9h19"/><path fill="currentColor" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></g></svg>
+const CalendarIcon = ({ size = 28, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><g fill="none"><path stroke="currentColor" stroke-width="1.5" d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z" /><path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M7 4V2.5M17 4V2.5M2.5 9h19" /><path fill="currentColor" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0" /></g></svg>
 );
 
-const ClockIcon = ({ size = 24, color = "#6b7280" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" d="M256 64C150 64 64 150 64 256s86 192 192 192s192-86 192-192S362 64 256 64Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 128v144h96"/></svg>
+const ClockIcon = ({ size = 28, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32" d="M256 64C150 64 64 150 64 256s86 192 192 192s192-86 192-192S362 64 256 64Z" /><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 128v144h96" /></svg>
 );
 
-const MapPinIcon = ({ size = 24, color = "#6b7280" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" fill-opacity="0.16" fill-rule="evenodd" d="M6.374 4.809a8.017 8.017 0 0 1 11.258 0c3.15 3.098 3.15 8.056.041 11.113l-5.67 5.578l-5.671-5.578a7.74 7.74 0 0 1 0-11.072zM12 7.5a2 2 0 1 0 0 4a2 2 0 0 0 0-4" clip-rule="evenodd"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M17.632 4.809c3.15 3.098 3.15 8.056.042 11.113L12.003 21.5L6.33 15.922a7.74 7.74 0 0 1 0-11.072l.042-.041a8.017 8.017 0 0 1 11.259 0m0 0q-.063-.063 0 0M14 9.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0"/></g></svg>
+const MapPinIcon = ({ size = 28, color = "#6b7280" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><g fill="none"><path fill="currentColor" fill-opacity="0.16" fill-rule="evenodd" d="M6.374 4.809a8.017 8.017 0 0 1 11.258 0c3.15 3.098 3.15 8.056.041 11.113l-5.67 5.578l-5.671-5.578a7.74 7.74 0 0 1 0-11.072zM12 7.5a2 2 0 1 0 0 4a2 2 0 0 0 0-4" clip-rule="evenodd" /><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M17.632 4.809c3.15 3.098 3.15 8.056.042 11.113L12.003 21.5L6.33 15.922a7.74 7.74 0 0 1 0-11.072l.042-.041a8.017 8.017 0 0 1 11.259 0m0 0q-.063-.063 0 0M14 9.5a2 2 0 1 1-4 0a2 2 0 0 1 4 0" /></g></svg>
 );
 
-const HeartIcon = ({ size = 16, color = "#dc2626" }) => (
+const HeartIcon = ({ size = 32, color = "#dc2626" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" height={size} width={size} viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.106 18.247C5.298 16.083 2 13.542 2 9.137C2 4.274 7.5.825 12 5.501V20.5c-1 0-2-.77-3.038-1.59q-.417-.326-.856-.663" clip-rule="evenodd" opacity="0.5" /><path fill="currentColor" d="M15.038 18.91C17.981 16.592 22 14 22 9.138S16.5.825 12 5.501V20.5c1 0 2-.77 3.038-1.59" /></svg>
 );
 
@@ -50,22 +51,49 @@ async function loadGoogleFont(font: string, ...texts: string[]) {
 // ############################################################################################
 export async function GET(request: NextRequest) {
   try {
-    // Récupérer les données depuis les paramètres URL
+    // Récupérer le slug depuis les paramètres URL
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get("title") || "Invitation";
-    const description = searchParams.get("description") || "Vous êtes invité";
-    const hostManName = searchParams.get("hostManName") || "";
-    const hostWomanName = searchParams.get("hostWomanName") || "";
-    const location = searchParams.get("location") || "";
-    const startsAt = searchParams.get("startsAt");
-    const slug = searchParams.get("slug") || "";
+    const slug = searchParams.get("slug");
 
-    const couple = `${hostManName} & ${hostWomanName}`;
+    if (!slug) {
+      return new Response("Le slug de l'invitation est requis", {
+        status: 400,
+        headers: { 'Content-Type': 'text/plain' },
+      });
+    }
+
+    // Récupérer les données de l'invitation depuis la base de données
+    const invitation = await prisma.invitation.findUnique({
+      where: { slug },
+      select: {
+        title: true,
+        description: true,
+        hostManName: true,
+        hostWomanName: true,
+        location: true,
+        startsAt: true,
+        slug: true,
+      },
+    });
+
+    if (!invitation) {
+      return new Response("Invitation non trouvée", {
+        status: 404,
+        headers: { 'Content-Type': 'text/plain' },
+      });
+    }
+
+    const { title, hostManName, hostWomanName, startsAt } = invitation;
+    const description = invitation.description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante.";
+    const location = invitation.location || "Lieu de l'événement";
+
+    // Générer le contenu de l'image OG
+    const couple = `${hostManName || ''} & ${hostWomanName || ''}`.trim();
     const invStatus = "Invitation privée";
 
-    // Format the date if provided
-    const formattedDate = formatInvitationDate(startsAt);
-    const formattedTime = formatInvitationTime(startsAt);
+    // Format the date
+    const formattedDate = formatInvitationDate(startsAt.toISOString());
+    const formattedTime = formatInvitationTime(startsAt.toISOString());
 
     // Générer l'URL de l'invitation pour le QR code
     const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || 'https://teeky.vercel.app';
@@ -92,7 +120,7 @@ export async function GET(request: NextRequest) {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#fffbeb',
-            backgroundImage: 'linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #fef2f2 100%)',
+            backgroundImage: 'linear-gradient(135deg, #fffbeb 0%, #ffffff 50%, #bfdbfe 100%)',
             padding: '40px',
           }}
         >
@@ -100,13 +128,13 @@ export async function GET(request: NextRequest) {
           <div
             style={{
               position: 'absolute',
-              top: '15px',
-              left: '500px',
+              top: '10px',
+              left: '450px',
               transform: 'translateX(-50%)',
               width: '56px',
               height: '56px',
               borderRadius: '50%',
-              backgroundColor: '#2563eb',
+              backgroundColor: '#e2e8f0',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -124,20 +152,20 @@ export async function GET(request: NextRequest) {
                 justifyContent: 'center',
               }}
             >
-              <HeartIcon  />
+              <HeartIcon />
             </div>
           </div>
 
           {/* Header */}
           <div
             style={{
-              fontSize: '14px',
+              fontSize: '16px',
               fontWeight: '500',
               color: '#6b7280',
               letterSpacing: '0.25em',
               textTransform: 'uppercase',
-              marginTop: '35px',
-              marginBottom: '20px',
+              marginTop: '20px',
+              marginBottom: '10px',
               fontFamily: 'Poppins, sans-serif',
             }}
           >
@@ -147,7 +175,7 @@ export async function GET(request: NextRequest) {
           {/* Noms du couple */}
           <div
             style={{
-              fontSize: '48px',
+              fontSize: '72px',
               fontWeight: '300',
               color: '#1e3a8a',
               marginBottom: '15px',
@@ -160,7 +188,7 @@ export async function GET(request: NextRequest) {
           {/* Invitation privée */}
           <div
             style={{
-              fontSize: '14px',
+              fontSize: '16px',
               color: '#6b7280',
               fontStyle: 'italic',
               marginBottom: '10px',
@@ -174,21 +202,25 @@ export async function GET(request: NextRequest) {
             height: '1px',
             background: 'linear-gradient(to right, transparent, #e5e7eb, transparent)',
             margin: '5px 0',
-            width: '20%',
+            width: '40%',
 
-          }} 
+          }}
           />
 
           {/* Description */}
           <div
             style={{
-              fontSize: '20px',
+              fontSize: '32px',
               color: '#374151',
               fontStyle: 'italic',
               textAlign: 'center',
-              maxWidth: '600px',
+              maxWidth: '680px',
               marginBottom: '30px',
               lineHeight: '1.2',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              WebkitLineClamp: 6,
+              WebkitBoxOrient: 'vertical',
             }}
           >
             {description || "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante."}
@@ -200,7 +232,7 @@ export async function GET(request: NextRequest) {
               display: 'flex',
               alignItems: 'center',
               backgroundColor: 'rgba(255,255,255,0.8)',
-              padding: '20px 40px',
+              padding: '10px 15px',
               borderRadius: '30px',
               marginBottom: '20px',
               boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
@@ -210,13 +242,23 @@ export async function GET(request: NextRequest) {
             <div style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
               <CalendarIcon />
             </div>
-            <div style={{ fontSize: '18px', fontWeight: '500', color: '#1f2937', marginRight: '40px' }}>
+            <div style={{
+              fontSize: '32px',
+              fontWeight: '500',
+              color: '#0f172a',
+              marginRight: '40px'
+            }}>
               {formattedDate}
             </div>
-            <div style={{ marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+
+            <div style={{ marginRight: '5px', display: 'flex', alignItems: 'center' }}>
               <ClockIcon />
             </div>
-            <div style={{ fontSize: '18px', fontWeight: '500', color: '#1f2937' }}>
+            <div style={{
+              fontSize: '32px',
+              fontWeight: '500',
+              color: '#0f172a'
+            }}>
               {formattedTime}
             </div>
           </div>
@@ -237,7 +279,19 @@ export async function GET(request: NextRequest) {
             <div style={{ marginRight: '2px', display: 'flex', alignItems: 'center' }}>
               <MapPinIcon />
             </div>
-            <div style={{ fontSize: '18px', fontWeight: '500', color: '#374151' }}>
+            <div
+              style={{
+                fontSize: '22px',
+                fontWeight: '500',
+                color: '#374151',
+                maxWidth: '760px',
+
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
               {location || "Lieu de l'événement"}
             </div>
           </div>
@@ -247,7 +301,7 @@ export async function GET(request: NextRequest) {
             style={{
               position: 'absolute',
               bottom: '10px',
-              fontSize: '12px',
+              fontSize: '14px',
               color: '#9ca3af',
               fontWeight: '500',
               fontFamily: 'Poppins, sans-serif',
@@ -280,6 +334,7 @@ export async function GET(request: NextRequest) {
                 width: '90px',
                 height: '90px',
                 backgroundColor: '#ffffff',
+                borderRadius: '12px',
                 position: 'relative',
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -304,7 +359,7 @@ export async function GET(request: NextRequest) {
             </div>
             <div
               style={{
-                fontSize: '8px',
+                fontSize: '11px',
                 color: '#6b7280',
                 margin: '2px auto',
                 textAlign: 'center',
@@ -320,12 +375,12 @@ export async function GET(request: NextRequest) {
 
       // Conifiguration de l'image OG
       {
-        width: 1000,
-        height: 630, 
+        width: 900,
+        height: 630,
         fonts: [
           {
             name: 'Cookie',
-            data: await loadGoogleFont('Cookie', invStatus, description, couple, location, formattedDate, formattedTime ),
+            data: await loadGoogleFont('Cookie', invStatus, description, couple, location, formattedDate, formattedTime),
             style: 'normal',
           },
           {
