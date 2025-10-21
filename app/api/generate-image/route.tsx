@@ -1,11 +1,9 @@
 ﻿import { NextRequest } from "next/server";
+import sharp from "sharp";
 import { formatInvitationDate, formatInvitationTime } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   try {
-    // Import dynamique de Sharp pour éviter les problèmes avec Turbopack
-    const sharp = (await import('sharp')).default;
-    
     // Récupérer les données depuis les paramètres URL
     const { searchParams } = new URL(request.url);
     const title = searchParams.get("title") || "Invitation";
