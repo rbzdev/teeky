@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.16.3
- * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+ * Prisma Client JS version: 6.17.1
+ * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
  */
 Prisma.prismaVersion = {
-  client: "6.16.3",
-  engine: "bb420e667c1820a8c05a38023385f6cc7ef8e83a"
+  client: "6.17.1",
+  engine: "272a37d34178c2894197e17273bf937f25acdeac"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -193,8 +193,8 @@ const config = {
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",
-  "clientVersion": "6.16.3",
-  "engineVersion": "bb420e667c1820a8c05a38023385f6cc7ef8e83a",
+  "clientVersion": "6.17.1",
+  "engineVersion": "272a37d34178c2894197e17273bf937f25acdeac",
   "datasourceNames": [
     "db"
   ],
@@ -208,8 +208,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// Prisma schema for MongoDB\n// Datasource & generator\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"prisma/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Models\nmodel User {\n  id          String       @id @default(uuid()) @map(\"_id\")\n  email       String       @unique\n  phone       String?      @unique\n  firstName   String\n  lastName    String\n  password    String\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  roles       String[]     @default([])\n  invitations Invitation[]\n}\n\n/// Invitation (event) hosted by a User and having many Guests\nmodel Invitation {\n  id            String               @id @default(uuid()) @map(\"_id\")\n  hostId        String\n  host          User                 @relation(fields: [hostId], references: [id])\n  title         String\n  hostManName   String?\n  hostWomanName String?\n  description   String?\n  location      String?\n  coordinate    String[] // optional semantics handled by empty array\n  slug          String               @unique\n  startsAt      DateTime\n  endsAt        DateTime?\n  theme         String?\n  visibility    InvitationVisibility @default(PRIVATE)\n  status        InvitationStatus     @default(DRAFT)\n  guests        Guest[]\n  createdAt     DateTime             @default(now())\n  updatedAt     DateTime             @updatedAt\n\n  @@index([hostId])\n  @@index([status])\n  @@index([visibility])\n}\n\n/// Guest invited to an Invitation\nmodel Guest {\n  id           String     @id @default(uuid()) @map(\"_id\")\n  invitationId String\n  invitation   Invitation @relation(fields: [invitationId], references: [id])\n  name         String\n  email        String?\n  phone        String?\n  slug         String\n  status       String\n  token        String     @unique\n  place        String?\n  respondedAt  DateTime?\n  createdAt    DateTime   @default(now())\n  updatedAt    DateTime   @updatedAt\n\n  @@unique([invitationId, phone])\n  @@index([status])\n}\n\n// Enums reflecting domain state machines\nenum InvitationVisibility {\n  PRIVATE\n  PUBLIC\n}\n\nenum InvitationStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n",
-  "inlineSchemaHash": "742fea5b43f7152d6035890c3bf37a17e0969a5591c7be6c468ca77f3fea9d4d",
+  "inlineSchema": "// Prisma schema for MongoDB\n// Datasource & generator\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"prisma/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Models\nmodel User {\n  id          String       @id @default(uuid()) @map(\"_id\")\n  email       String       @unique\n  phone       String?      @unique\n  firstName   String\n  lastName    String\n  password    String\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  roles       String[]     @default([])\n  invitations Invitation[]\n}\n\n/// Invitation (event) hosted by a User and having many Guests\nmodel Invitation {\n  id            String               @id @default(uuid()) @map(\"_id\")\n  hostId        String\n  host          User                 @relation(fields: [hostId], references: [id])\n  title         String\n  hostManName   String?\n  hostWomanName String?\n  description   String?\n  location      String?\n  coordinate    String[] // optional semantics handled by empty array\n  slug          String               @unique\n  startsAt      DateTime\n  endsAt        DateTime?\n  theme         String?\n  visibility    InvitationVisibility @default(PRIVATE)\n  status        InvitationStatus     @default(DRAFT)\n  guests        Guest[]\n  createdAt     DateTime             @default(now())\n  updatedAt     DateTime             @updatedAt\n\n  @@index([hostId])\n  @@index([status])\n  @@index([visibility])\n}\n\n/// Guest invited to an Invitation\nmodel Guest {\n  id           String     @id @default(uuid()) @map(\"_id\")\n  invitationId String\n  invitation   Invitation @relation(fields: [invitationId], references: [id])\n  name         String\n  email        String?\n  phone        String?\n  slug         String     @unique\n  status       String\n  token        String     @unique\n  place        String?\n  respondedAt  DateTime?\n  createdAt    DateTime   @default(now())\n  updatedAt    DateTime   @updatedAt\n\n  @@unique([invitationId, phone])\n  @@index([status])\n}\n\n// Enums reflecting domain state machines\nenum InvitationVisibility {\n  PRIVATE\n  PUBLIC\n}\n\nenum InvitationStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n",
+  "inlineSchemaHash": "b97698b064af6731d5b79adae99ac8eeb018c0663cc5a9d593bd19979b250c2b",
   "copyEngine": true
 }
 config.dirname = '/'

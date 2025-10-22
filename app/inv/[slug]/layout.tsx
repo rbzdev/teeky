@@ -151,11 +151,11 @@ export default async function InvitationLayout({ params, children }: LayoutProps
     //     return <InvitationStateDisplay state="private" slug={slug} />
     // }
 
-    if (invitation.status !== 'ACTIVE') {
-        const state = invitation.status === 'DRAFT' ? 'draft' :
-                     invitation.status === 'ARCHIVED' ? 'archived' : 'inactive'
-        return <InvitationStateDisplay state={state} slug={slug} />
-    }
+    // if (invitation.status !== 'ACTIVE') {
+    //     const state = invitation.status === 'DRAFT' ? 'draft' :
+    //                  invitation.status === 'ARCHIVED' ? 'archived' : 'inactive'
+    //     return <InvitationStateDisplay state={state} slug={slug} />
+    // }
 
     return (
         <>

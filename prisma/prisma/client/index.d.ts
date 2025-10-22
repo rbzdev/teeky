@@ -231,8 +231,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.16.3
-   * Query Engine version: bb420e667c1820a8c05a38023385f6cc7ef8e83a
+   * Prisma Client JS version: 6.17.1
+   * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
    */
   export type PrismaVersion = {
     client: string
@@ -4688,6 +4688,7 @@ export namespace Prisma {
 
   export type GuestWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    slug?: string
     token?: string
     invitationId_phone?: GuestInvitationIdPhoneCompoundUniqueInput
     AND?: GuestWhereInput | GuestWhereInput[]
@@ -4697,14 +4698,13 @@ export namespace Prisma {
     name?: StringFilter<"Guest"> | string
     email?: StringNullableFilter<"Guest"> | string | null
     phone?: StringNullableFilter<"Guest"> | string | null
-    slug?: StringFilter<"Guest"> | string
     status?: StringFilter<"Guest"> | string
     place?: StringNullableFilter<"Guest"> | string | null
     respondedAt?: DateTimeNullableFilter<"Guest"> | Date | string | null
     createdAt?: DateTimeFilter<"Guest"> | Date | string
     updatedAt?: DateTimeFilter<"Guest"> | Date | string
     invitation?: XOR<InvitationScalarRelationFilter, InvitationWhereInput>
-  }, "id" | "token" | "invitationId_phone">
+  }, "id" | "slug" | "token" | "invitationId_phone">
 
   export type GuestOrderByWithAggregationInput = {
     id?: SortOrder

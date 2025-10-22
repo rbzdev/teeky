@@ -24,9 +24,10 @@ export async function rsvpInvitation(slug: string, decision: RsvpDecision) {
 /**
  * Confirm an invitation by creating a Guest linked to the Invitation identified by slug.
  * Currently creates a new Guest record with ACCEPTED status and optional phone.
+ * Returns the guest slug for personalized image generation.
  */
 export async function confirmInvitation(slug: string, data: { fullName: string; phone?: string | null }) {
-  const invitation = await prisma.invitation.findUnique({ where: { slug }, select: { id: true } })
+  const invitation = await prisma.invitation.findUnique({ where: { slug }, select: { id: true, slug: true } })
   if (!invitation) {
     throw new Error('Invitation not found')
   }
@@ -64,7 +65,7 @@ export async function confirmInvitation(slug: string, data: { fullName: string; 
         })
       }
       revalidatePath(`/inv/${slug}`)
-      return { ok: true }
+      return { ok: true, guestSlug, invitationSlug: invitation.slug }
 
     } catch (err) {
       // Prisma unique constraint violation (token) => retry with new token once
@@ -91,5 +92,5 @@ export async function confirmInvitation(slug: string, data: { fullName: string; 
     await prisma.guest.create({ data: createData, select: { id: true } })
   }
   revalidatePath(`/inv/${slug}`)
-  return { ok: true }
+  return { ok: true, guestSlug, invitationSlug: invitation.slug }
 }

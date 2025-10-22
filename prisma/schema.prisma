@@ -60,7 +60,7 @@ model Guest {
   name         String
   email        String?
   phone        String?
-  slug         String
+  slug         String      @unique
   status       String
   token        String      @unique
   place        String?
