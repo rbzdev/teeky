@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "motion/react";
 import AnimatedGroup from "@/components/AnimatedGroup";
 import FloatingBadge from "@/app/Blocks/FloatingBadge";
+import Image from "next/image";
 
 export default function Header() {
     return (
@@ -94,7 +95,7 @@ export default function Header() {
                                         whileHover={{ y: -5, zIndex: 10 }}
                                         className="h-10 w-10 rounded-full border-2 border-background bg-muted flex items-center justify-center overflow-hidden shadow-sm"
                                     >
-                                        <img src={`https://i.pravatar.cc/150?u=${i + 20}`} alt="User" className="h-full w-full object-cover" />
+                                        <Image src={`https://i.pravatar.cc/150?u=${i + 20}`} width={50} height={50} alt="User" className="h-full w-full object-cover" />
                                     </motion.div>
                                 ))}
                             </div>

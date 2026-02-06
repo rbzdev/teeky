@@ -79,7 +79,7 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
       <div className="mt-4 px-4 text-center pb-4">
         <p className="text-[10px] text-muted-foreground font-medium flex items-center justify-center gap-1.5 uppercase tracking-tighter italic">
           <Icon icon="solar:info-circle-bold" className="text-primary text-sm" />
-          L'aperçu s'adapte automatiquement à vos saisies
+          L&apos;aperçu s&apos;adapte automatiquement à vos saisies
         </p>
       </div>
     </div>

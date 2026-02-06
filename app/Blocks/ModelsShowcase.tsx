@@ -40,7 +40,7 @@ export default function ModelsShowcase() {
                     <div key={item.name} className="group relative rounded-xl border border-border/50 bg-card p-4 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
                         <div className="rounded-lg overflow-hidden mb-6 border border-border/50 shadow-inner">
                             <InvitationModelRenderer
-                                model={item.model as any}
+                                model={item.model as string}
                                 {...item.props}
                                 description="Rejoignez-nous pour une célébration chaleureuse."
                                 startsAt={new Date('2025-06-21T16:00:00')}

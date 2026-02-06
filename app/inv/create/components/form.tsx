@@ -168,8 +168,10 @@ export default function CreateInvitationForm() {
                 saveDraftForLater()
                 router.push('/auth/login?next=/inv/create')
             }
-        } catch (e: any) {
-            toast.error("Erreur", { description: e.message || "Une erreur est survenue" })
+        } catch (error) {
+            toast.error("Une erreur est survenue")
+
+            console.error(error)
         } finally {
             setSubmitting(false)
         }
@@ -289,7 +291,7 @@ export default function CreateInvitationForm() {
 
                         {currentStep === 1 && (
                             <div className="space-y-6">
-                                <h3 className="text-xl font-black">Quand aura lieu l'événement ?</h3>
+                                <h3 className="text-xl font-black">Quand aura lieu l&apos;événement ?</h3>
                                 <div className="grid gap-6 sm:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="dateDisplay">Date</Label>
