@@ -1,10 +1,11 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import { createInvitation } from "../action"
 import dynamic from 'next/dynamic'
 import { useInvitationDraft } from "./invitation-context"
 import { toast } from 'sonner'
 import { useRouter } from "next/navigation"
+import { motion, AnimatePresence } from "motion/react"
 
 // Components
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
@@ -15,11 +16,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
 import { Spinner } from "@/components/ui/spinner"
 import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 
 // Client-side form logic for date/time composition
-// Build an ISO string that preserves the user's local time with timezone offset (e.g. 2025-10-10T12:00:00.000+02:00)
 function ISODate(date: Date, time?: string): string {
-    // Normalize and parse time (expected HH:MM). Fallback to 00:00 if missing/invalid.
     let hours = 0
     let minutes = 0
     if (typeof time === 'string') {
@@ -30,7 +30,6 @@ function ISODate(date: Date, time?: string): string {
         }
     }
 
-    // Construct a local Date for the given calendar day and time in the user's timezone
     const d = new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -41,7 +40,6 @@ function ISODate(date: Date, time?: string): string {
         0
     )
 
-    // Format as YYYY-MM-DDTHH:mm:ss.sss±HH:MM with the local offset at that instant (handles DST)
     const y = d.getFullYear()
     const mo = String(d.getMonth() + 1).padStart(2, '0')
     const da = String(d.getDate()).padStart(2, '0')
@@ -50,7 +48,7 @@ function ISODate(date: Date, time?: string): string {
     const ss = '00'
     const ms = '000'
 
-    const tzMin = d.getTimezoneOffset() // minutes to add to local time to get UTC
+    const tzMin = d.getTimezoneOffset()
     const sign = tzMin <= 0 ? '+' : '-'
     const abs = Math.abs(tzMin)
     const offH = String(Math.floor(abs / 60)).padStart(2, '0')
@@ -59,25 +57,28 @@ function ISODate(date: Date, time?: string): string {
     return `${y}-${mo}-${da}T${hh}:${mm}:${ss}.${ms}${sign}${offH}:${offM}`
 }
 
+const steps = [
+    { title: "Hôtes", icon: "solar:users-group-rounded-bold" },
+    { title: "Détails", icon: "solar:calendar-date-bold" },
+    { title: "Lieu", icon: "solar:map-point-bold" },
+]
+
 export default function CreateInvitationForm() {
     const { draft, update, reset } = useInvitationDraft()
-    const [date, setDate] = React.useState<Date | undefined>(draft.date || new Date())
-    const [dateInput, setDateInput] = React.useState<string>(() => draft.date ? draft.date.toLocaleDateString() : new Date().toLocaleDateString())
-    const [dateInvalid, setDateInvalid] = React.useState(false)
-    const [startTime, setStartTime] = React.useState(draft.startTime)
-    const [submitting, setSubmitting] = React.useState(false)
-    const [openDate, setOpenDate] = React.useState(false)
-    const [openMap, setOpenMap] = React.useState(false)
+    const [currentStep, setCurrentStep] = useState(0)
+    const [date, setDate] = useState<Date | undefined>(draft.date || new Date())
+    const [dateInput, setDateInput] = useState<string>(() => draft.date ? draft.date.toLocaleDateString() : new Date().toLocaleDateString())
+    const [dateInvalid, setDateInvalid] = useState(false)
+    const [startTime, setStartTime] = useState(draft.startTime)
+    const [submitting, setSubmitting] = useState(false)
+    const [openDate, setOpenDate] = useState(false)
+    const [openMap, setOpenMap] = useState(false)
 
-    // Router for navigation
     const router = useRouter()
-
-    // Lazy load MapDialog only on client when opened
     const MapDialog = React.useMemo(() => dynamic(() => import('./map-dialog'), { ssr: false }), [])
 
-    // Draft persistence: keep data for up to 10 minutes
-    const DRAFT_KEY = React.useMemo(() => 'invitation:create:draft', [])
-    const DRAFT_TTL = 10 * 60 * 1000 // 10 minutes
+    const DRAFT_KEY = 'invitation:create:draft'
+    const DRAFT_TTL = 10 * 60 * 1000
 
     function saveDraftForLater() {
         try {
@@ -99,7 +100,6 @@ export default function CreateInvitationForm() {
         } catch { }
     }
 
-    // Clear saved draft / Supprime les données sauvegardées en LocalStorage
     function clearSavedDraft() {
         try {
             if (typeof window !== 'undefined') localStorage.removeItem(DRAFT_KEY)
@@ -107,24 +107,16 @@ export default function CreateInvitationForm() {
     }
 
     React.useEffect(() => {
-        // Restore draft if saved within TTL
         if (typeof window === 'undefined') return
         try {
             const raw = localStorage.getItem(DRAFT_KEY)
             if (!raw) return
-            const parsed = JSON.parse(raw) as {
-                hostManName: string; hostWomanName: string; description: string; location: string;
-                locationLat: number | null; locationLng: number | null; dateISO: string | null; startTime: string;
-                theme?: 'classic' | 'elegant';
-                savedAt: number;
-            }
+            const parsed = JSON.parse(raw)
             if (!parsed?.savedAt || Date.now() - parsed.savedAt > DRAFT_TTL) {
-                // Expired -> cleanup
                 localStorage.removeItem(DRAFT_KEY)
                 return
             }
 
-            // Apply to context/state
             if (parsed.hostManName) update('hostManName', parsed.hostManName)
             if (parsed.hostWomanName) update('hostWomanName', parsed.hostWomanName)
             if (parsed.description) update('description', parsed.description)
@@ -132,9 +124,7 @@ export default function CreateInvitationForm() {
             if (typeof parsed.locationLat === 'number') update('locationLat', parsed.locationLat)
             if (typeof parsed.locationLng === 'number') update('locationLng', parsed.locationLng)
             if (parsed.startTime) { setStartTime(parsed.startTime); update('startTime', parsed.startTime) }
-            if (parsed.theme && (parsed.theme === 'classic' || parsed.theme === 'elegant')) {
-                update('theme', parsed.theme)
-            }
+            if (parsed.theme) update('theme', parsed.theme)
             if (parsed.dateISO) {
                 const d = new Date(parsed.dateISO)
                 if (!isNaN(d.getTime())) {
@@ -143,25 +133,18 @@ export default function CreateInvitationForm() {
                     update('date', d)
                 }
             }
-            toast.info('Brouillon restauré', { description: 'Vos informations ont été rechargées.' })
+            toast.info('Brouillon restauré')
         } catch { }
-        // We restore only once on mount
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    async function onSubmit() {
+        if (!date) {
+            toast.error("Date manquante")
+            return
+        }
 
-    // ===========================================================================
-    // ======================== SOUMISSION DU FORMULAIRE ===========================
-    // ===========================================================================
-    async function onSubmit(form: HTMLFormElement) {
         setSubmitting(true)
         try {
-            if (!date) {
-                toast.error("Date manquante")
-                return
-            }
-
-            // Build JSON payload instead of FormData
             const payload = {
                 hostManName: draft.hostManName,
                 hostWomanName: draft.hostWomanName,
@@ -173,42 +156,20 @@ export default function CreateInvitationForm() {
                 theme: draft.theme,
             }
 
-            // DEBUG
-            // console.log("Submitting payload:", JSON.stringify(payload))
-            // console.log("Submitting payload:", payload)
-
-            // // Call server action with JSON
             const result = await createInvitation(payload)
 
             if (result.success) {
-                toast.success("Invitation créée avec succès !", {
-                    description: `Slug: ${result.invitation?.slug || 'N/A'}`
-                })
-                form.reset()
+                toast.success("Invitation créée avec succès !")
                 reset()
                 clearSavedDraft()
                 router.push(`/dashboard/${result.invitation?.slug || ""}`)
-            } else {
-                if (result.code === 401) {
-                    toast.info("Attention", {
-                        description: "Veuillez vous connecter pour créer une invitation"
-                    })
-                    // Persist draft for 10 minutes and redirect to login
-                    saveDraftForLater()
-                    router.push('/auth/login?next=/inv/create')
-                }
+            } else if (result.code === 401) {
+                toast.info("Veuillez vous connecter")
+                saveDraftForLater()
+                router.push('/auth/login?next=/inv/create')
             }
-
-        } catch (e: unknown) {
-            // console.error("createInvitation caught error", e)
-
-            let message = "Erreur inconnue"
-            if (e && typeof e === 'object' && 'message' in e) {
-                message = String((e as { message?: string }).message || message)
-            }
-            toast.error("Erreur", {
-                description: message
-            })
+        } catch (e: any) {
+            toast.error("Erreur", { description: e.message || "Une erreur est survenue" })
         } finally {
             setSubmitting(false)
         }
@@ -217,10 +178,9 @@ export default function CreateInvitationForm() {
     function parseDateInput(raw: string): Date | null {
         const v = raw.trim()
         if (!v) return null
-        // Accept DD/MM/YYYY
         const dmy = /^([0-3]?\d)[\/\-.]([0-1]?\d)[\/\-.](\d{4})$/
         const ymd = /^(\d{4})[\/\-.]([0-1]?\d)[\/\-.]([0-3]?\d)$/
-        let year: number, month: number, day: number
+        let year, month, day
         if (dmy.test(v)) {
             const m = v.match(dmy)!
             day = parseInt(m[1], 10)
@@ -233,173 +193,254 @@ export default function CreateInvitationForm() {
             day = parseInt(m[3], 10)
         } else {
             const direct = new Date(v)
-            if (!isNaN(direct.getTime())) return direct
-            return null
+            return isNaN(direct.getTime()) ? null : direct
         }
         const constructed = new Date(year, month, day)
-        if (constructed.getFullYear() !== year || constructed.getMonth() !== month || constructed.getDate() !== day) return null
-        return constructed
+        return (constructed.getFullYear() === year && constructed.getMonth() === month && constructed.getDate() === day) ? constructed : null
     }
 
-    function formatDisplayDate(d: Date) {
-        return d.toLocaleDateString()
+    const nextStep = () => {
+        if (currentStep === 0 && (!draft.hostManName || !draft.hostWomanName)) {
+            toast.error("Veuillez renseigner les noms des hôtes")
+            return
+        }
+        if (currentStep === 1 && (!date || dateInvalid)) {
+            toast.error("Veuillez renseigner une date valide")
+            return
+        }
+        setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))
     }
+
+    const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0))
 
     return (
-        <form
-            className="space-y-4"
-            onSubmit={async (e) => {
-                e.preventDefault()
-                await onSubmit(e.currentTarget)
-            }}
-        >
-            <div className="grid gap-2 sm:gap-6 grid-cols-2">
-                <div className="flex flex-col">
-                    <Label htmlFor="mr" className="text-xs font-medium">Monsieur *</Label>
-                    <Input id="mr" name="hostManName" required placeholder="Le marié" defaultValue={draft.hostManName} onChange={e => update('hostManName', e.target.value)} />
-                </div>
-
-                <div className="flex flex-col">
-                    <Label htmlFor="mme" className="text-xs font-medium">Madame *</Label>
-                    <Input id="mme" name="hostWomanName" required placeholder="La mariée" defaultValue={draft.hostWomanName} onChange={e => update('hostWomanName', e.target.value)} />
-                </div>
-            </div>
-
-            <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-medium">Description</Label>
-                <Textarea
-                    id="description"
-                    name="description"
-                    rows={4}
-                    placeholder="Programme, dress code, notes..."
-                    defaultValue={draft.description} onChange={e => update('description', e.target.value)}
-                    className="max-h-40"
+        <div className="space-y-8">
+            {/* Stepper */}
+            <div className="flex items-center justify-between relative px-2 mb-12">
+                <div className="absolute top-1/2 left-0 w-full h-0.5 bg-muted -translate-y-1/2 -z-10" />
+                <div
+                    className="absolute top-1/2 left-0 h-0.5 bg-primary -translate-y-1/2 -z-10 transition-all duration-500"
+                    style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
                 />
+
+                {steps.map((step, idx) => (
+                    <div key={idx} className="flex flex-col items-center gap-3">
+                        <div
+                            className={cn(
+                                "h-12 w-12 rounded-2xl flex items-center justify-center transition-all duration-500 border-4",
+                                idx <= currentStep
+                                    ? "bg-primary border-primary text-white shadow-lg shadow-primary/20 scale-110"
+                                    : "bg-background border-muted text-muted-foreground"
+                            )}
+                        >
+                            <Icon icon={step.icon} className="text-xl" />
+                        </div>
+                        <span className={cn(
+                            "text-[10px] font-black uppercase tracking-widest transition-colors duration-500",
+                            idx <= currentStep ? "text-primary" : "text-muted-foreground"
+                        )}>
+                            {step.title}
+                        </span>
+                    </div>
+                ))}
             </div>
 
-            <div className="grid gap-2 sm:gap-6 grid-cols-2">
-                <div className="space-y-2">
-                    <Label htmlFor="location" className="text-sm font-medium">Lieu</Label>
-                    <div className="relative flex items-center justify-center">
-                        <Input
-                            id="location"
-                            name="location"
-                            placeholder="Adresse ou lieu"
-                            defaultValue={draft.location}
-                            onChange={e => update('location', e.target.value)}
-                            className="pr-8"
-                        />
+            <form onSubmit={e => e.preventDefault()} className="min-h-[300px]">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentStep}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-6"
+                    >
+                        {currentStep === 0 && (
+                            <div className="grid gap-6">
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-black">Qui sont les hôtes ?</h3>
+                                    <div className="grid gap-4 sm:grid-cols-2">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="mr">Monsieur</Label>
+                                            <Input
+                                                id="mr"
+                                                required
+                                                placeholder="Ex: Alexandre"
+                                                value={draft.hostManName}
+                                                onChange={e => update('hostManName', e.target.value)}
+                                                className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="mme">Madame</Label>
+                                            <Input
+                                                id="mme"
+                                                required
+                                                placeholder="Ex: Sophie"
+                                                value={draft.hostWomanName}
+                                                onChange={e => update('hostWomanName', e.target.value)}
+                                                className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-                        <Icon icon="fluent:location-28-regular" className="size-5 sm:size-5 absolute right-2 sm:right-2 cursor-pointer text-muted-foreground hover:text-foreground" onClick={() => setOpenMap(true)} />
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="coordinate" className="text-sm font-medium">Heure</Label>
-                    <Input
-                        type="time"
-                        id="startTime"
-                        name="_startTime_local"
-                        placeholder="19:30"
-                        value={startTime}
-                        onChange={e => {
-                            setStartTime(e.target.value);
-                            update('startTime', e.target.value)
-                        }}
-                    />
+                        {currentStep === 1 && (
+                            <div className="space-y-6">
+                                <h3 className="text-xl font-black">Quand aura lieu l'événement ?</h3>
+                                <div className="grid gap-6 sm:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="dateDisplay">Date</Label>
+                                        <div className="relative">
+                                            <Input
+                                                id="dateDisplay"
+                                                value={dateInput}
+                                                className={cn(
+                                                    "h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary",
+                                                    dateInvalid && "border-destructive focus:ring-destructive"
+                                                )}
+                                                placeholder="JJ/MM/AAAA"
+                                                onChange={(e) => {
+                                                    const v = e.target.value
+                                                    setDateInput(v)
+                                                    if (v.trim().length < 6) return
+                                                    const parsed = parseDateInput(v)
+                                                    if (parsed) { setDate(parsed); update('date', parsed); setDateInvalid(false) } else { setDateInvalid(true) }
+                                                }}
+                                            />
+                                            <Popover open={openDate} onOpenChange={setOpenDate}>
+                                                <PopoverTrigger asChild>
+                                                    <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors">
+                                                        <Icon icon="solar:calendar-bold" className="size-6" />
+                                                    </button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden border-border/50" align="end">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={date}
+                                                        onSelect={(d) => { if (d) { setDate(d); update('date', d); setDateInput(d.toLocaleDateString()); setDateInvalid(false) } setOpenDate(false) }}
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="startTime">Heure</Label>
+                                        <Input
+                                            type="time"
+                                            id="startTime"
+                                            value={startTime}
+                                            onChange={e => { setStartTime(e.target.value); update('startTime', e.target.value) }}
+                                            className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="description">Message personnalisé</Label>
+                                    <Textarea
+                                        id="description"
+                                        rows={4}
+                                        placeholder="Décrivez votre événement..."
+                                        value={draft.description}
+                                        onChange={e => update('description', e.target.value)}
+                                        className="rounded-2xl border-muted-foreground/20 focus:border-primary resize-none"
+                                    />
+                                </div>
+                            </div>
+                        )}
 
-                </div>
-            </div>
+                        {currentStep === 2 && (
+                            <div className="space-y-6">
+                                <h3 className="text-xl font-black">Où se déroule la fête ?</h3>
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="location">Lieu ou adresse</Label>
+                                        <div className="relative">
+                                            <Input
+                                                id="location"
+                                                placeholder="Ex: Villa des Arts, Paris"
+                                                value={draft.location}
+                                                onChange={e => update('location', e.target.value)}
+                                                className="h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary"
+                                            />
+                                            <button
+                                                onClick={() => setOpenMap(true)}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                                            >
+                                                <Icon icon="solar:map-point-wave-bold" className="size-6" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        onClick={() => setOpenMap(true)}
+                                        className="relative h-48 rounded-3xl overflow-hidden border-2 border-dashed border-muted hover:border-primary/50 cursor-pointer group transition-all"
+                                    >
+                                        <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                                            <div className="h-12 w-12 rounded-full bg-white dark:bg-neutral-800 flex items-center justify-center shadow-lg">
+                                                <Icon icon="solar:map-bold" className="text-2xl text-primary" />
+                                            </div>
+                                            <span className="text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
+                                                {draft.locationLat ? "Position enregistrée" : "Choisir sur la carte"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </motion.div>
+                </AnimatePresence>
 
-            <div className="grid gap-6 sm:grid-cols-2">
-                <div className="space-y-2 col-span-2">
-                    <Label className="text-sm font-medium" htmlFor="dateDisplay">Date *</Label>
-                    <div className="flex items-center gap-2 relative">
-                        <Input
-                            id="dateDisplay"
-                            value={dateInput}
-                            aria-invalid={dateInvalid || undefined}
-                            className={"flex-1 pr-10 " + (dateInvalid ? "border-destructive focus-visible:ring-destructive" : "")}
-                            placeholder="JJ/MM/AAAA ou YYYY-MM-DD"
-                            // onClick={() => setOpenDate(true)}
-                            onChange={(e) => {
-                                const v = e.target.value
-                                setDateInput(v)
-                                // live len-based heuristics – don't validate too early
-                                if (v.trim().length < 6) { setDateInvalid(false); return }
-                                const parsed = parseDateInput(v)
-                                if (parsed) { setDate(parsed); update('date', parsed); setDateInvalid(false) } else { setDateInvalid(true) }
-                            }}
-                            onBlur={() => {
-                                if (!dateInput.trim()) {
-                                    setDate(undefined);
-                                    setDateInvalid(true);
-                                    toast.error("Date requise", {
-                                        description: "Veuillez saisir une date valide"
-                                    })
-                                    return
-                                }
-                                const parsed = parseDateInput(dateInput)
-                                if (parsed) {
-                                    setDate(parsed);
-                                    update('date', parsed);
-                                    setDateInput(formatDisplayDate(parsed));
-                                    setDateInvalid(false)
-                                } else {
-                                    setDateInvalid(true);
-                                    toast.error("Format de date invalide", {
-                                        description: "Utilisez JJ/MM/AAAA ou YYYY-MM-DD"
-                                    })
-                                }
-                            }}
-                        />
-                        <Popover open={openDate} onOpenChange={setOpenDate}>
-                            <PopoverTrigger asChild>
-                                <Icon icon="solar:calendar-outline" className="size-6 absolute right-3 cursor-pointer text-muted-foreground hover:text-foreground" onClick={() => setOpenDate(true)} />
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" side="bottom" align="start">
-                                <Calendar
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={(d) => { if (d) { setDate(d); update('date', d); setDateInput(formatDisplayDate(d)); setDateInvalid(false) } setOpenDate(false) }}
-                                    fromYear={new Date().getFullYear() - 1}
-                                    toYear={new Date().getFullYear() + 2}
-                                    captionLayout="dropdown"
-                                />
-                            </PopoverContent>
-                        </Popover>
-                    </div>
-                    {dateInvalid && (
-                        <p className="text-xs text-destructive mt-1">Format invalide. Exemples valides: 25/12/2025 ou 2025-12-25</p>
+                {/* Navigation Buttons */}
+                <div className="flex items-center justify-between pt-10 mt-8 border-t border-border/50">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={prevStep}
+                        disabled={currentStep === 0 || submitting}
+                        className="rounded-xl font-bold"
+                    >
+                        Retour
+                    </Button>
+
+                    {currentStep === steps.length - 1 ? (
+                        <Button
+                            type="button"
+                            onClick={onSubmit}
+                            disabled={submitting}
+                            className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 min-w-40"
+                        >
+                            {submitting ? (
+                                <div className="flex items-center gap-2">
+                                    <Spinner className="size-4" />
+                                    <span>Création...</span>
+                                </div>
+                            ) : (
+                                "Finaliser l'invitation"
+                            )}
+                        </Button>
+                    ) : (
+                        <Button
+                            type="button"
+                            onClick={nextStep}
+                            className="h-12 px-8 rounded-xl bg-foreground text-background hover:bg-foreground/90 font-bold min-w-40"
+                        >
+                            Suivant
+                        </Button>
                     )}
                 </div>
-            </div>
+            </form>
 
-            {/* Time selectors to use the states */}
-
-            <div className="pt-2 flex items-center gap-3">
-                <Button type="submit" disabled={submitting} className="min-w-40 w-full">
-                    {submitting ?
-                        <div className="flex items-center gap-1">
-                            <Spinner />
-                            <span> En cours...</span>
-                        </div>
-                        :
-                        "Créer l'invitation"
-                    }
-                </Button>
-                {/* <span className="text-xs text-muted-foreground">Statut initial: DRAFT</span> */}
-            </div>
-
-            {/* Map dialog for selecting location */}
             <MapDialog
                 open={openMap}
                 onOpenChange={setOpenMap}
                 onSelect={({ lat, lng }) => {
-                    // update('location', address)
                     update('locationLat', lat)
                     update('locationLng', lng)
                 }}
             />
-        </form>
+        </div>
     )
 }

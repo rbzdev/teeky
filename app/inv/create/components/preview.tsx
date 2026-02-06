@@ -2,6 +2,8 @@
 import * as React from "react"
 import { useInvitationDraft } from "./invitation-context"
 import type { InvitationModelKey } from '@/lib/types/invitation'
+import { cn } from "@/lib/utils"
+import { Icon } from "@iconify/react"
 
 // Invitation model renderer
 import InvitationModelRenderer from "@/app/inv/Models/renderer"
@@ -20,56 +22,66 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
   const { draft, update } = useInvitationDraft()
   const startsAt = React.useMemo(() => composeStartsAt(draft.date, draft.startTime), [draft.date, draft.startTime])
 
-  const variantClass = variant === "inline" ? "lg:sticky lg:top-8" : " "
+  const themes: { id: InvitationModelKey; label: string; icon: string }[] = [
+    { id: 'classic', label: 'Classique', icon: 'solar:clapperboard-edit-bold' },
+    { id: 'elegant', label: 'Élégant', icon: 'solar:crown-minimalistic-bold' },
+    { id: 'minimalist', label: 'Minimal', icon: 'solar:leaf-bold' },
+  ]
 
   return (
-    <div className={`relative ${variantClass}`}>
-      {/* LIVE badge overlay */}
-      <div className="absolute z-20 top-3 left-3">
-        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-600/90 px-2 py-1 text-[10px] font-medium tracking-wide text-white shadow-sm ring-1 ring-inset ring-emerald-500/60 backdrop-blur">
-          <span className="inline-block size-1.5 rounded-full bg-white animate-pulse" /> LIVE PREVIEW
-        </span>
+    <div className="relative group/preview h-full flex flex-col">
+      {/* Live Indicator Overlay */}
+      <div className="absolute top-4 left-4 z-20 pointer-events-none">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest shadow-lg">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          Live Preview
+        </div>
       </div>
 
-      {/* Model switcher (free text with suggestions) */}
-      {/* <div className="absolute z-20 top-3 right-3">
-        <input
-          list="known-models"
-          className="rounded-md border bg-background/80 px-2 py-1 text-xs shadow-sm"
-          value={draft.theme}
-          onChange={(e) => update('theme', e.target.value as InvitationModelKey)}
-          placeholder="theme"
+      {/* Theme Switcher Header */}
+      <div className="absolute top-4 right-4 z-20">
+        <div className="bg-white/80 dark:bg-black/40 backdrop-blur-xl border border-white/20 p-1.5 rounded-2xl shadow-2xl flex items-center gap-1">
+          {themes.map((theme) => (
+            <button
+              key={theme.id}
+              onClick={() => update('theme', theme.id)}
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all",
+                draft.theme === theme.id
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "text-muted-foreground hover:bg-black/5 dark:hover:bg-white/5"
+              )}
+            >
+              <Icon icon={theme.icon} className="text-sm" />
+              <span className="hidden sm:inline">{theme.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1 min-h-[500px] h-full overflow-hidden">
+        <InvitationModelRenderer
+          model={draft.theme}
+          title={undefined}
+          hostManName={draft.hostManName || "Alexandre"}
+          hostWomanName={draft.hostWomanName || "Sophie"}
+          description={draft.description || "Votre message s'affichera ici..."}
+          location={draft.location || "Lieu de l'événement"}
+          coordinate={undefined}
+          startsAt={startsAt}
         />
-        <datalist id="known-models">
-          <option value="minimalist" />
-          <option value="elegant" />
-        </datalist>
-      </div> */}
-
-      {/* Model switcher */}
-      <div className="absolute z-20 top-3 right-3">
-        <select
-          className="rounded-md border bg-background/80 px-2 py-1 text-xs shadow-sm"
-          value={draft.theme}
-          onChange={(e) => update('theme', e.target.value as InvitationModelKey)}
-        >
-          
-          <option value="classic">Classic</option>
-          <option value="elegant">Elegant</option>
-          <option value="minimalist">Minimalist</option>
-        </select>
       </div>
 
-      <InvitationModelRenderer
-        model={draft.theme}
-        title={undefined}
-        hostManName={draft.hostManName || undefined}
-        hostWomanName={draft.hostWomanName || undefined}
-        description={draft.description || undefined}
-        location={draft.location || undefined}
-        coordinate={undefined}
-        startsAt={startsAt}
-      />
+      {/* Hint Footer */}
+      <div className="mt-4 px-4 text-center pb-4">
+        <p className="text-[10px] text-muted-foreground font-medium flex items-center justify-center gap-1.5 uppercase tracking-tighter italic">
+          <Icon icon="solar:info-circle-bold" className="text-primary text-sm" />
+          L'aperçu s'adapte automatiquement à vos saisies
+        </p>
+      </div>
     </div>
   )
 }
