@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import type { CreateInvitationPayload, EventType } from "@/lib/types/invitation"
-import { EVENT_TYPE_METADATA } from "@/lib/types/invitation"
 
 // Components
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
@@ -274,19 +273,26 @@ export default function CreateInvitationForm() {
                             <div className="space-y-6">
                                 <h3 className="text-sm lg:text-xl font-semibold ">Quel type d&apos;événement organisez-vous ?</h3>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                    {(Object.entries(EVENT_TYPE_METADATA) as [EventType, any][]).map(([id, info]) => (
+                                    {[
+                                        { id: 'MARRIAGE', label: 'Mariage', icon: 'solar:heart-bold' },
+                                        { id: 'DOT', label: 'Dot', icon: 'solar:wad-of-money-bold' },
+                                        { id: 'ANNIVERSARY', label: 'Anniversaire', icon: 'fluent-mdl2:birthday-cake' },
+                                        { id: 'CONFERENCE', label: 'Conférence', icon: 'solar:videocamera-record-bold' },
+                                        { id: 'MEETING', label: 'Réunion', icon: 'solar:users-group-two-rounded-bold' },
+                                        { id: 'OTHER', label: 'Autre', icon: 'solar:menu-dots-bold' },
+                                    ].map((type) => (
                                         <button
-                                            key={id}
-                                            onClick={() => update('type', id)}
+                                            key={type.id}
+                                            onClick={() => update('type', type.id as EventType)}
                                             className={cn(
                                                 "flex flex-col items-center justify-center p-6 gap-3 rounded-3xl border-2 transition-all duration-300 cursor-pointer",
-                                                draft.type === id
+                                                draft.type === type.id
                                                     ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10 scale-105"
                                                     : "border-muted bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5"
                                             )}
                                         >
-                                            <Icon icon={info.icon} className="text-3xl" />
-                                            <span className="font-bold text-sm">{info.label}</span>
+                                            <Icon icon={type.icon} className="text-3xl" />
+                                            <span className="font-bold text-sm">{type.label}</span>
                                         </button>
                                     ))}
                                 </div>
