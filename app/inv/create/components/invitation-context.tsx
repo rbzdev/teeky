@@ -3,6 +3,7 @@ import React from "react"
 import type { InvitationDraft, InvitationContextValue } from '@/lib/types/invitation'
 
 const defaultDraft: InvitationDraft = {
+  type: 'MARRIAGE',
   hostManName: "",
   hostWomanName: "",
   description: "Nous avons le plaisir de vous inviter à célébrer notre union dans une ambiance chaleureuse et élégante.",

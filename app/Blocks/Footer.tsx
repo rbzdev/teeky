@@ -20,7 +20,7 @@ export default function Footer() {
                         <Link href="/" className="group flex items-center gap-3 font-bold text-3xl tracking-tight">
                             <motion.div
                                 whileHover={{ scale: 1.1, rotate: -10 }}
-                                className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20"
+                                className="h-12 w-12 flex items-center justify-center text-primary-foreground shadow-xl shadow-primary/20"
                             >
 
                                 <Image
@@ -28,7 +28,7 @@ export default function Footer() {
                                     alt="Logo"
                                     width={50}
                                     height={50}
-                                    className="rounded-sm hover:scale-105 hover:-rotate-12 transition-all duration-300"
+                                    className="rounded-sm border hover:scale-105 hover:-rotate-12 transition-all duration-300"
                                 />
                             </motion.div>
                             <span className="bg-clip-text text-transparent bg-gradient-to-br from-foreground to-foreground/60 transition-all group-hover:to-foreground">

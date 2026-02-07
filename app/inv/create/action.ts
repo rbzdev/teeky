@@ -10,6 +10,9 @@ import type { CreateInvitationPayload, InvitationModelKey } from '@/lib/types/in
 
 export async function createInvitation(payload: CreateInvitationPayload) {
 
+  // DEBUG
+  // console.log("Payload de création inv reçu : ", payload)
+
   const session = await getSession()
   if (!session) {
     console.error("Not authorized: no session");
@@ -18,10 +21,19 @@ export async function createInvitation(payload: CreateInvitationPayload) {
 
   const hostId = session?.userId
 
-  const { hostManName, hostWomanName, description, location, startsAt, coordinateLat, coordinateLng, theme } = payload
+  const { type, hostManName, hostWomanName, description, location, startsAt, coordinateLat, coordinateLng, theme, venueId, cateringId, securityId } = payload
 
-  // Generate title from hostManName + hostWomanName
-  const title = [hostManName?.trim(), hostWomanName?.trim()].filter(Boolean).join(" & ") || "Événement"
+  // Generate title based on event type
+  let title = ""
+  if (type === 'MARRIAGE' || type === 'DOT') {
+    title = [hostManName?.trim(), hostWomanName?.trim()].filter(Boolean).join(" & ") || "Événement"
+  } else {
+    // For other types, maybe use a generic title or something else
+    title = hostManName?.trim() || hostWomanName?.trim() || "Nouvel Événement"
+  }
+
+  // // DEBUG
+  // console.log("Title : ", title)
 
   // Build coordinate array from lat/lng if present
   let coordinate: string[] | undefined = undefined
@@ -32,17 +44,48 @@ export async function createInvitation(payload: CreateInvitationPayload) {
     }
   }
 
+  // // DEBUG
+  // console.log("Coordinate : ", coordinate)
+
   // Validation
   if (!hostId) return { success: false, error: "Not authorized" }
-  if (!hostManName?.trim() && !hostWomanName?.trim()) return { success: false, error: "Au moins un nom (Monsieur ou Madame) est requis" }
+
+  // DEBUG
+  // console.log("Host id : ", hostId)
+
+  if (!hostManName?.trim()) return { success: false, error: "Au moins un nom (Monsieur ou Madame) est requis" }
+
+  // // DEBUG
+  // console.log("Host names : ", hostManName)
+
   if (!startsAt) return { success: false, error: "Start date/time required" }
+
+  // // DEBUG
+  // console.log("Starts at : ", startsAt)
+
   if (!location?.trim()) return { success: false, error: "Location is required" }
+
+  // // DEBUG
+  // console.log("Location : ", location)
+
   if (location && location.trim().length > 100) return { success: false, error: "Location is too long (max 100 characters)" }
+
+  // // DEBUG
+  // console.log("Location : ", location)
+
   if (description && description.trim().length > 500) return { success: false, error: "Description is too long (max 500 characters)" }
+
+  // // DEBUG
+  // console.log("Description : ", description)
 
   // Parse and validate start date
   const starts = new Date(startsAt)
   if (isNaN(starts.getTime())) return { success: false, error: "Invalid start time" }
+
+
+
+  // // DEBUG
+  // console.log("Payload de création : ", payload)
 
   try {
     const slug = randomSlug();
@@ -50,6 +93,7 @@ export async function createInvitation(payload: CreateInvitationPayload) {
     const invitation = await prisma.invitation.create({
       data: {
         hostId,
+        type,
         title: title.trim(),
         hostManName,
         hostWomanName,
@@ -60,6 +104,9 @@ export async function createInvitation(payload: CreateInvitationPayload) {
         theme: (theme as InvitationModelKey) || 'classic',
         visibility: "PRIVATE",
         slug,
+        venueId: venueId || undefined,
+        cateringId: cateringId || undefined,
+        securityId: securityId || undefined,
       },
       select: {
         slug: true,
@@ -77,6 +124,7 @@ export async function createInvitation(payload: CreateInvitationPayload) {
 
   } catch (e: unknown) {
     console.error("createInvitation caught error", e)
+
     if (e && typeof e === 'object' && 'message' in e) {
       console.error("createInvitation error", { message: (e as { message?: string }).message })
     } else {

@@ -24,6 +24,16 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Invitation = $Result.DefaultSelection<Prisma.$InvitationPayload>
 /**
+ * Model Venue
+ * 
+ */
+export type Venue = $Result.DefaultSelection<Prisma.$VenuePayload>
+/**
+ * Model Provider
+ * 
+ */
+export type Provider = $Result.DefaultSelection<Prisma.$ProviderPayload>
+/**
  * Model Guest
  * Guest invited to an Invitation
  */
@@ -33,7 +43,15 @@ export type Guest = $Result.DefaultSelection<Prisma.$GuestPayload>
  * Enums
  */
 export namespace $Enums {
-  export const InvitationVisibility: {
+  export const ProviderType: {
+  CATERING: 'CATERING',
+  SECURITY: 'SECURITY'
+};
+
+export type ProviderType = (typeof ProviderType)[keyof typeof ProviderType]
+
+
+export const InvitationVisibility: {
   PRIVATE: 'PRIVATE',
   PUBLIC: 'PUBLIC'
 };
@@ -49,7 +67,23 @@ export const InvitationStatus: {
 
 export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
 
+
+export const EventType: {
+  MARRIAGE: 'MARRIAGE',
+  DOT: 'DOT',
+  ANNIVERSARY: 'ANNIVERSARY',
+  CONFERENCE: 'CONFERENCE',
+  MEETING: 'MEETING',
+  OTHER: 'OTHER'
+};
+
+export type EventType = (typeof EventType)[keyof typeof EventType]
+
 }
+
+export type ProviderType = $Enums.ProviderType
+
+export const ProviderType: typeof $Enums.ProviderType
 
 export type InvitationVisibility = $Enums.InvitationVisibility
 
@@ -58,6 +92,10 @@ export const InvitationVisibility: typeof $Enums.InvitationVisibility
 export type InvitationStatus = $Enums.InvitationStatus
 
 export const InvitationStatus: typeof $Enums.InvitationStatus
+
+export type EventType = $Enums.EventType
+
+export const EventType: typeof $Enums.EventType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -163,6 +201,26 @@ export class PrismaClient<
     * ```
     */
   get invitation(): Prisma.InvitationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.venue`: Exposes CRUD operations for the **Venue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Venues
+    * const venues = await prisma.venue.findMany()
+    * ```
+    */
+  get venue(): Prisma.VenueDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.provider`: Exposes CRUD operations for the **Provider** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Providers
+    * const providers = await prisma.provider.findMany()
+    * ```
+    */
+  get provider(): Prisma.ProviderDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.guest`: Exposes CRUD operations for the **Guest** model.
@@ -615,6 +673,8 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Invitation: 'Invitation',
+    Venue: 'Venue',
+    Provider: 'Provider',
     Guest: 'Guest'
   };
 
@@ -634,7 +694,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "invitation" | "guest"
+      modelProps: "user" | "invitation" | "venue" | "provider" | "guest"
       txIsolationLevel: never
     }
     model: {
@@ -783,6 +843,154 @@ export namespace Prisma {
           count: {
             args: Prisma.InvitationCountArgs<ExtArgs>
             result: $Utils.Optional<InvitationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Venue: {
+        payload: Prisma.$VenuePayload<ExtArgs>
+        fields: Prisma.VenueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VenueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VenueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          findFirst: {
+            args: Prisma.VenueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VenueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          findMany: {
+            args: Prisma.VenueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>[]
+          }
+          create: {
+            args: Prisma.VenueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          createMany: {
+            args: Prisma.VenueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.VenueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          update: {
+            args: Prisma.VenueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          deleteMany: {
+            args: Prisma.VenueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VenueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.VenueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VenuePayload>
+          }
+          aggregate: {
+            args: Prisma.VenueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVenue>
+          }
+          groupBy: {
+            args: Prisma.VenueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VenueGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.VenueFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.VenueAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.VenueCountArgs<ExtArgs>
+            result: $Utils.Optional<VenueCountAggregateOutputType> | number
+          }
+        }
+      }
+      Provider: {
+        payload: Prisma.$ProviderPayload<ExtArgs>
+        fields: Prisma.ProviderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProviderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProviderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          findFirst: {
+            args: Prisma.ProviderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProviderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          findMany: {
+            args: Prisma.ProviderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>[]
+          }
+          create: {
+            args: Prisma.ProviderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          createMany: {
+            args: Prisma.ProviderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.ProviderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          update: {
+            args: Prisma.ProviderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProviderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProviderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProviderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderPayload>
+          }
+          aggregate: {
+            args: Prisma.ProviderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProvider>
+          }
+          groupBy: {
+            args: Prisma.ProviderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProviderGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.ProviderFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.ProviderAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.ProviderCountArgs<ExtArgs>
+            result: $Utils.Optional<ProviderCountAggregateOutputType> | number
           }
         }
       }
@@ -941,6 +1149,8 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     invitation?: InvitationOmit
+    venue?: VenueOmit
+    provider?: ProviderOmit
     guest?: GuestOmit
   }
 
@@ -1076,6 +1286,77 @@ export namespace Prisma {
    */
   export type InvitationCountOutputTypeCountGuestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GuestWhereInput
+  }
+
+
+  /**
+   * Count Type VenueCountOutputType
+   */
+
+  export type VenueCountOutputType = {
+    invitations: number
+  }
+
+  export type VenueCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invitations?: boolean | VenueCountOutputTypeCountInvitationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * VenueCountOutputType without action
+   */
+  export type VenueCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VenueCountOutputType
+     */
+    select?: VenueCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * VenueCountOutputType without action
+   */
+  export type VenueCountOutputTypeCountInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
+  }
+
+
+  /**
+   * Count Type ProviderCountOutputType
+   */
+
+  export type ProviderCountOutputType = {
+    cateringInvitations: number
+    securityInvitations: number
+  }
+
+  export type ProviderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cateringInvitations?: boolean | ProviderCountOutputTypeCountCateringInvitationsArgs
+    securityInvitations?: boolean | ProviderCountOutputTypeCountSecurityInvitationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderCountOutputType
+     */
+    select?: ProviderCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountCateringInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
+  }
+
+  /**
+   * ProviderCountOutputType without action
+   */
+  export type ProviderCountOutputTypeCountSecurityInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvitationWhereInput
   }
 
 
@@ -2141,6 +2422,7 @@ export namespace Prisma {
   export type InvitationMinAggregateOutputType = {
     id: string | null
     hostId: string | null
+    type: $Enums.EventType | null
     title: string | null
     hostManName: string | null
     hostWomanName: string | null
@@ -2152,6 +2434,9 @@ export namespace Prisma {
     theme: string | null
     visibility: $Enums.InvitationVisibility | null
     status: $Enums.InvitationStatus | null
+    venueId: string | null
+    cateringId: string | null
+    securityId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2159,6 +2444,7 @@ export namespace Prisma {
   export type InvitationMaxAggregateOutputType = {
     id: string | null
     hostId: string | null
+    type: $Enums.EventType | null
     title: string | null
     hostManName: string | null
     hostWomanName: string | null
@@ -2170,6 +2456,9 @@ export namespace Prisma {
     theme: string | null
     visibility: $Enums.InvitationVisibility | null
     status: $Enums.InvitationStatus | null
+    venueId: string | null
+    cateringId: string | null
+    securityId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2177,6 +2466,7 @@ export namespace Prisma {
   export type InvitationCountAggregateOutputType = {
     id: number
     hostId: number
+    type: number
     title: number
     hostManName: number
     hostWomanName: number
@@ -2189,6 +2479,9 @@ export namespace Prisma {
     theme: number
     visibility: number
     status: number
+    venueId: number
+    cateringId: number
+    securityId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2198,6 +2491,7 @@ export namespace Prisma {
   export type InvitationMinAggregateInputType = {
     id?: true
     hostId?: true
+    type?: true
     title?: true
     hostManName?: true
     hostWomanName?: true
@@ -2209,6 +2503,9 @@ export namespace Prisma {
     theme?: true
     visibility?: true
     status?: true
+    venueId?: true
+    cateringId?: true
+    securityId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2216,6 +2513,7 @@ export namespace Prisma {
   export type InvitationMaxAggregateInputType = {
     id?: true
     hostId?: true
+    type?: true
     title?: true
     hostManName?: true
     hostWomanName?: true
@@ -2227,6 +2525,9 @@ export namespace Prisma {
     theme?: true
     visibility?: true
     status?: true
+    venueId?: true
+    cateringId?: true
+    securityId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2234,6 +2535,7 @@ export namespace Prisma {
   export type InvitationCountAggregateInputType = {
     id?: true
     hostId?: true
+    type?: true
     title?: true
     hostManName?: true
     hostWomanName?: true
@@ -2246,6 +2548,9 @@ export namespace Prisma {
     theme?: true
     visibility?: true
     status?: true
+    venueId?: true
+    cateringId?: true
+    securityId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2326,6 +2631,7 @@ export namespace Prisma {
   export type InvitationGroupByOutputType = {
     id: string
     hostId: string
+    type: $Enums.EventType
     title: string
     hostManName: string | null
     hostWomanName: string | null
@@ -2338,6 +2644,9 @@ export namespace Prisma {
     theme: string | null
     visibility: $Enums.InvitationVisibility
     status: $Enums.InvitationStatus
+    venueId: string | null
+    cateringId: string | null
+    securityId: string | null
     createdAt: Date
     updatedAt: Date
     _count: InvitationCountAggregateOutputType | null
@@ -2362,6 +2671,7 @@ export namespace Prisma {
   export type InvitationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     hostId?: boolean
+    type?: boolean
     title?: boolean
     hostManName?: boolean
     hostWomanName?: boolean
@@ -2374,9 +2684,15 @@ export namespace Prisma {
     theme?: boolean
     visibility?: boolean
     status?: boolean
+    venueId?: boolean
+    cateringId?: boolean
+    securityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     host?: boolean | UserDefaultArgs<ExtArgs>
+    venue?: boolean | Invitation$venueArgs<ExtArgs>
+    catering?: boolean | Invitation$cateringArgs<ExtArgs>
+    security?: boolean | Invitation$securityArgs<ExtArgs>
     guests?: boolean | Invitation$guestsArgs<ExtArgs>
     _count?: boolean | InvitationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invitation"]>
@@ -2386,6 +2702,7 @@ export namespace Prisma {
   export type InvitationSelectScalar = {
     id?: boolean
     hostId?: boolean
+    type?: boolean
     title?: boolean
     hostManName?: boolean
     hostWomanName?: boolean
@@ -2398,13 +2715,19 @@ export namespace Prisma {
     theme?: boolean
     visibility?: boolean
     status?: boolean
+    venueId?: boolean
+    cateringId?: boolean
+    securityId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "hostId" | "title" | "hostManName" | "hostWomanName" | "description" | "location" | "coordinate" | "slug" | "startsAt" | "endsAt" | "theme" | "visibility" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
+  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "hostId" | "type" | "title" | "hostManName" | "hostWomanName" | "description" | "location" | "coordinate" | "slug" | "startsAt" | "endsAt" | "theme" | "visibility" | "status" | "venueId" | "cateringId" | "securityId" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
   export type InvitationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     host?: boolean | UserDefaultArgs<ExtArgs>
+    venue?: boolean | Invitation$venueArgs<ExtArgs>
+    catering?: boolean | Invitation$cateringArgs<ExtArgs>
+    security?: boolean | Invitation$securityArgs<ExtArgs>
     guests?: boolean | Invitation$guestsArgs<ExtArgs>
     _count?: boolean | InvitationCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2413,11 +2736,15 @@ export namespace Prisma {
     name: "Invitation"
     objects: {
       host: Prisma.$UserPayload<ExtArgs>
+      venue: Prisma.$VenuePayload<ExtArgs> | null
+      catering: Prisma.$ProviderPayload<ExtArgs> | null
+      security: Prisma.$ProviderPayload<ExtArgs> | null
       guests: Prisma.$GuestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       hostId: string
+      type: $Enums.EventType
       title: string
       hostManName: string | null
       hostWomanName: string | null
@@ -2430,6 +2757,9 @@ export namespace Prisma {
       theme: string | null
       visibility: $Enums.InvitationVisibility
       status: $Enums.InvitationStatus
+      venueId: string | null
+      cateringId: string | null
+      securityId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["invitation"]>
@@ -2796,6 +3126,9 @@ export namespace Prisma {
   export interface Prisma__InvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     host<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    venue<T extends Invitation$venueArgs<ExtArgs> = {}>(args?: Subset<T, Invitation$venueArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    catering<T extends Invitation$cateringArgs<ExtArgs> = {}>(args?: Subset<T, Invitation$cateringArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    security<T extends Invitation$securityArgs<ExtArgs> = {}>(args?: Subset<T, Invitation$securityArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     guests<T extends Invitation$guestsArgs<ExtArgs> = {}>(args?: Subset<T, Invitation$guestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GuestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2828,6 +3161,7 @@ export namespace Prisma {
   interface InvitationFieldRefs {
     readonly id: FieldRef<"Invitation", 'String'>
     readonly hostId: FieldRef<"Invitation", 'String'>
+    readonly type: FieldRef<"Invitation", 'EventType'>
     readonly title: FieldRef<"Invitation", 'String'>
     readonly hostManName: FieldRef<"Invitation", 'String'>
     readonly hostWomanName: FieldRef<"Invitation", 'String'>
@@ -2840,6 +3174,9 @@ export namespace Prisma {
     readonly theme: FieldRef<"Invitation", 'String'>
     readonly visibility: FieldRef<"Invitation", 'InvitationVisibility'>
     readonly status: FieldRef<"Invitation", 'InvitationStatus'>
+    readonly venueId: FieldRef<"Invitation", 'String'>
+    readonly cateringId: FieldRef<"Invitation", 'String'>
+    readonly securityId: FieldRef<"Invitation", 'String'>
     readonly createdAt: FieldRef<"Invitation", 'DateTime'>
     readonly updatedAt: FieldRef<"Invitation", 'DateTime'>
   }
@@ -3212,6 +3549,63 @@ export namespace Prisma {
   }
 
   /**
+   * Invitation.venue
+   */
+  export type Invitation$venueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    where?: VenueWhereInput
+  }
+
+  /**
+   * Invitation.catering
+   */
+  export type Invitation$cateringArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    where?: ProviderWhereInput
+  }
+
+  /**
+   * Invitation.security
+   */
+  export type Invitation$securityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    where?: ProviderWhereInput
+  }
+
+  /**
    * Invitation.guests
    */
   export type Invitation$guestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3251,6 +3645,2182 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: InvitationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Venue
+   */
+
+  export type AggregateVenue = {
+    _count: VenueCountAggregateOutputType | null
+    _avg: VenueAvgAggregateOutputType | null
+    _sum: VenueSumAggregateOutputType | null
+    _min: VenueMinAggregateOutputType | null
+    _max: VenueMaxAggregateOutputType | null
+  }
+
+  export type VenueAvgAggregateOutputType = {
+    capacity: number | null
+    price: number | null
+  }
+
+  export type VenueSumAggregateOutputType = {
+    capacity: number | null
+    price: number | null
+  }
+
+  export type VenueMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    address: string | null
+    capacity: number | null
+    price: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VenueMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    address: string | null
+    capacity: number | null
+    price: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VenueCountAggregateOutputType = {
+    id: number
+    name: number
+    address: number
+    capacity: number
+    price: number
+    images: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VenueAvgAggregateInputType = {
+    capacity?: true
+    price?: true
+  }
+
+  export type VenueSumAggregateInputType = {
+    capacity?: true
+    price?: true
+  }
+
+  export type VenueMinAggregateInputType = {
+    id?: true
+    name?: true
+    address?: true
+    capacity?: true
+    price?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VenueMaxAggregateInputType = {
+    id?: true
+    name?: true
+    address?: true
+    capacity?: true
+    price?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VenueCountAggregateInputType = {
+    id?: true
+    name?: true
+    address?: true
+    capacity?: true
+    price?: true
+    images?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VenueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Venue to aggregate.
+     */
+    where?: VenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Venues to fetch.
+     */
+    orderBy?: VenueOrderByWithRelationInput | VenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Venues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Venues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Venues
+    **/
+    _count?: true | VenueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VenueAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VenueSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VenueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VenueMaxAggregateInputType
+  }
+
+  export type GetVenueAggregateType<T extends VenueAggregateArgs> = {
+        [P in keyof T & keyof AggregateVenue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVenue[P]>
+      : GetScalarType<T[P], AggregateVenue[P]>
+  }
+
+
+
+
+  export type VenueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VenueWhereInput
+    orderBy?: VenueOrderByWithAggregationInput | VenueOrderByWithAggregationInput[]
+    by: VenueScalarFieldEnum[] | VenueScalarFieldEnum
+    having?: VenueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VenueCountAggregateInputType | true
+    _avg?: VenueAvgAggregateInputType
+    _sum?: VenueSumAggregateInputType
+    _min?: VenueMinAggregateInputType
+    _max?: VenueMaxAggregateInputType
+  }
+
+  export type VenueGroupByOutputType = {
+    id: string
+    name: string
+    address: string
+    capacity: number | null
+    price: number | null
+    images: string[]
+    createdAt: Date
+    updatedAt: Date
+    _count: VenueCountAggregateOutputType | null
+    _avg: VenueAvgAggregateOutputType | null
+    _sum: VenueSumAggregateOutputType | null
+    _min: VenueMinAggregateOutputType | null
+    _max: VenueMaxAggregateOutputType | null
+  }
+
+  type GetVenueGroupByPayload<T extends VenueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VenueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VenueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VenueGroupByOutputType[P]>
+            : GetScalarType<T[P], VenueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VenueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    address?: boolean
+    capacity?: boolean
+    price?: boolean
+    images?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    invitations?: boolean | Venue$invitationsArgs<ExtArgs>
+    _count?: boolean | VenueCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["venue"]>
+
+
+
+  export type VenueSelectScalar = {
+    id?: boolean
+    name?: boolean
+    address?: boolean
+    capacity?: boolean
+    price?: boolean
+    images?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VenueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "address" | "capacity" | "price" | "images" | "createdAt" | "updatedAt", ExtArgs["result"]["venue"]>
+  export type VenueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invitations?: boolean | Venue$invitationsArgs<ExtArgs>
+    _count?: boolean | VenueCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $VenuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Venue"
+    objects: {
+      invitations: Prisma.$InvitationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      address: string
+      capacity: number | null
+      price: number | null
+      images: string[]
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["venue"]>
+    composites: {}
+  }
+
+  type VenueGetPayload<S extends boolean | null | undefined | VenueDefaultArgs> = $Result.GetResult<Prisma.$VenuePayload, S>
+
+  type VenueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VenueFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VenueCountAggregateInputType | true
+    }
+
+  export interface VenueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Venue'], meta: { name: 'Venue' } }
+    /**
+     * Find zero or one Venue that matches the filter.
+     * @param {VenueFindUniqueArgs} args - Arguments to find a Venue
+     * @example
+     * // Get one Venue
+     * const venue = await prisma.venue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VenueFindUniqueArgs>(args: SelectSubset<T, VenueFindUniqueArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Venue that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VenueFindUniqueOrThrowArgs} args - Arguments to find a Venue
+     * @example
+     * // Get one Venue
+     * const venue = await prisma.venue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VenueFindUniqueOrThrowArgs>(args: SelectSubset<T, VenueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Venue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueFindFirstArgs} args - Arguments to find a Venue
+     * @example
+     * // Get one Venue
+     * const venue = await prisma.venue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VenueFindFirstArgs>(args?: SelectSubset<T, VenueFindFirstArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Venue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueFindFirstOrThrowArgs} args - Arguments to find a Venue
+     * @example
+     * // Get one Venue
+     * const venue = await prisma.venue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VenueFindFirstOrThrowArgs>(args?: SelectSubset<T, VenueFindFirstOrThrowArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Venues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Venues
+     * const venues = await prisma.venue.findMany()
+     * 
+     * // Get first 10 Venues
+     * const venues = await prisma.venue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const venueWithIdOnly = await prisma.venue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VenueFindManyArgs>(args?: SelectSubset<T, VenueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Venue.
+     * @param {VenueCreateArgs} args - Arguments to create a Venue.
+     * @example
+     * // Create one Venue
+     * const Venue = await prisma.venue.create({
+     *   data: {
+     *     // ... data to create a Venue
+     *   }
+     * })
+     * 
+     */
+    create<T extends VenueCreateArgs>(args: SelectSubset<T, VenueCreateArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Venues.
+     * @param {VenueCreateManyArgs} args - Arguments to create many Venues.
+     * @example
+     * // Create many Venues
+     * const venue = await prisma.venue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VenueCreateManyArgs>(args?: SelectSubset<T, VenueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Venue.
+     * @param {VenueDeleteArgs} args - Arguments to delete one Venue.
+     * @example
+     * // Delete one Venue
+     * const Venue = await prisma.venue.delete({
+     *   where: {
+     *     // ... filter to delete one Venue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VenueDeleteArgs>(args: SelectSubset<T, VenueDeleteArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Venue.
+     * @param {VenueUpdateArgs} args - Arguments to update one Venue.
+     * @example
+     * // Update one Venue
+     * const venue = await prisma.venue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VenueUpdateArgs>(args: SelectSubset<T, VenueUpdateArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Venues.
+     * @param {VenueDeleteManyArgs} args - Arguments to filter Venues to delete.
+     * @example
+     * // Delete a few Venues
+     * const { count } = await prisma.venue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VenueDeleteManyArgs>(args?: SelectSubset<T, VenueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Venues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Venues
+     * const venue = await prisma.venue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VenueUpdateManyArgs>(args: SelectSubset<T, VenueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Venue.
+     * @param {VenueUpsertArgs} args - Arguments to update or create a Venue.
+     * @example
+     * // Update or create a Venue
+     * const venue = await prisma.venue.upsert({
+     *   create: {
+     *     // ... data to create a Venue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Venue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VenueUpsertArgs>(args: SelectSubset<T, VenueUpsertArgs<ExtArgs>>): Prisma__VenueClient<$Result.GetResult<Prisma.$VenuePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Venues that matches the filter.
+     * @param {VenueFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const venue = await prisma.venue.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: VenueFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a Venue.
+     * @param {VenueAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const venue = await prisma.venue.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: VenueAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of Venues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueCountArgs} args - Arguments to filter Venues to count.
+     * @example
+     * // Count the number of Venues
+     * const count = await prisma.venue.count({
+     *   where: {
+     *     // ... the filter for the Venues we want to count
+     *   }
+     * })
+    **/
+    count<T extends VenueCountArgs>(
+      args?: Subset<T, VenueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VenueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Venue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VenueAggregateArgs>(args: Subset<T, VenueAggregateArgs>): Prisma.PrismaPromise<GetVenueAggregateType<T>>
+
+    /**
+     * Group by Venue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VenueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VenueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VenueGroupByArgs['orderBy'] }
+        : { orderBy?: VenueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VenueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVenueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Venue model
+   */
+  readonly fields: VenueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Venue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VenueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invitations<T extends Venue$invitationsArgs<ExtArgs> = {}>(args?: Subset<T, Venue$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Venue model
+   */
+  interface VenueFieldRefs {
+    readonly id: FieldRef<"Venue", 'String'>
+    readonly name: FieldRef<"Venue", 'String'>
+    readonly address: FieldRef<"Venue", 'String'>
+    readonly capacity: FieldRef<"Venue", 'Int'>
+    readonly price: FieldRef<"Venue", 'Float'>
+    readonly images: FieldRef<"Venue", 'String[]'>
+    readonly createdAt: FieldRef<"Venue", 'DateTime'>
+    readonly updatedAt: FieldRef<"Venue", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Venue findUnique
+   */
+  export type VenueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter, which Venue to fetch.
+     */
+    where: VenueWhereUniqueInput
+  }
+
+  /**
+   * Venue findUniqueOrThrow
+   */
+  export type VenueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter, which Venue to fetch.
+     */
+    where: VenueWhereUniqueInput
+  }
+
+  /**
+   * Venue findFirst
+   */
+  export type VenueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter, which Venue to fetch.
+     */
+    where?: VenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Venues to fetch.
+     */
+    orderBy?: VenueOrderByWithRelationInput | VenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Venues.
+     */
+    cursor?: VenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Venues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Venues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Venues.
+     */
+    distinct?: VenueScalarFieldEnum | VenueScalarFieldEnum[]
+  }
+
+  /**
+   * Venue findFirstOrThrow
+   */
+  export type VenueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter, which Venue to fetch.
+     */
+    where?: VenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Venues to fetch.
+     */
+    orderBy?: VenueOrderByWithRelationInput | VenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Venues.
+     */
+    cursor?: VenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Venues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Venues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Venues.
+     */
+    distinct?: VenueScalarFieldEnum | VenueScalarFieldEnum[]
+  }
+
+  /**
+   * Venue findMany
+   */
+  export type VenueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter, which Venues to fetch.
+     */
+    where?: VenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Venues to fetch.
+     */
+    orderBy?: VenueOrderByWithRelationInput | VenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Venues.
+     */
+    cursor?: VenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Venues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Venues.
+     */
+    skip?: number
+    distinct?: VenueScalarFieldEnum | VenueScalarFieldEnum[]
+  }
+
+  /**
+   * Venue create
+   */
+  export type VenueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Venue.
+     */
+    data: XOR<VenueCreateInput, VenueUncheckedCreateInput>
+  }
+
+  /**
+   * Venue createMany
+   */
+  export type VenueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Venues.
+     */
+    data: VenueCreateManyInput | VenueCreateManyInput[]
+  }
+
+  /**
+   * Venue update
+   */
+  export type VenueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Venue.
+     */
+    data: XOR<VenueUpdateInput, VenueUncheckedUpdateInput>
+    /**
+     * Choose, which Venue to update.
+     */
+    where: VenueWhereUniqueInput
+  }
+
+  /**
+   * Venue updateMany
+   */
+  export type VenueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Venues.
+     */
+    data: XOR<VenueUpdateManyMutationInput, VenueUncheckedUpdateManyInput>
+    /**
+     * Filter which Venues to update
+     */
+    where?: VenueWhereInput
+    /**
+     * Limit how many Venues to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Venue upsert
+   */
+  export type VenueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Venue to update in case it exists.
+     */
+    where: VenueWhereUniqueInput
+    /**
+     * In case the Venue found by the `where` argument doesn't exist, create a new Venue with this data.
+     */
+    create: XOR<VenueCreateInput, VenueUncheckedCreateInput>
+    /**
+     * In case the Venue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VenueUpdateInput, VenueUncheckedUpdateInput>
+  }
+
+  /**
+   * Venue delete
+   */
+  export type VenueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+    /**
+     * Filter which Venue to delete.
+     */
+    where: VenueWhereUniqueInput
+  }
+
+  /**
+   * Venue deleteMany
+   */
+  export type VenueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Venues to delete
+     */
+    where?: VenueWhereInput
+    /**
+     * Limit how many Venues to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Venue findRaw
+   */
+  export type VenueFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Venue aggregateRaw
+   */
+  export type VenueAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Venue.invitations
+   */
+  export type Venue$invitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Venue without action
+   */
+  export type VenueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Venue
+     */
+    select?: VenueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Venue
+     */
+    omit?: VenueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VenueInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Provider
+   */
+
+  export type AggregateProvider = {
+    _count: ProviderCountAggregateOutputType | null
+    _avg: ProviderAvgAggregateOutputType | null
+    _sum: ProviderSumAggregateOutputType | null
+    _min: ProviderMinAggregateOutputType | null
+    _max: ProviderMaxAggregateOutputType | null
+  }
+
+  export type ProviderAvgAggregateOutputType = {
+    price: number | null
+    rating: number | null
+  }
+
+  export type ProviderSumAggregateOutputType = {
+    price: number | null
+    rating: number | null
+  }
+
+  export type ProviderMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: $Enums.ProviderType | null
+    description: string | null
+    price: number | null
+    rating: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProviderMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    type: $Enums.ProviderType | null
+    description: string | null
+    price: number | null
+    rating: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProviderCountAggregateOutputType = {
+    id: number
+    name: number
+    type: number
+    description: number
+    price: number
+    rating: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProviderAvgAggregateInputType = {
+    price?: true
+    rating?: true
+  }
+
+  export type ProviderSumAggregateInputType = {
+    price?: true
+    rating?: true
+  }
+
+  export type ProviderMinAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    description?: true
+    price?: true
+    rating?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProviderMaxAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    description?: true
+    price?: true
+    rating?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProviderCountAggregateInputType = {
+    id?: true
+    name?: true
+    type?: true
+    description?: true
+    price?: true
+    rating?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProviderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Provider to aggregate.
+     */
+    where?: ProviderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Providers to fetch.
+     */
+    orderBy?: ProviderOrderByWithRelationInput | ProviderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProviderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Providers
+    **/
+    _count?: true | ProviderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProviderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProviderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProviderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProviderMaxAggregateInputType
+  }
+
+  export type GetProviderAggregateType<T extends ProviderAggregateArgs> = {
+        [P in keyof T & keyof AggregateProvider]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProvider[P]>
+      : GetScalarType<T[P], AggregateProvider[P]>
+  }
+
+
+
+
+  export type ProviderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderWhereInput
+    orderBy?: ProviderOrderByWithAggregationInput | ProviderOrderByWithAggregationInput[]
+    by: ProviderScalarFieldEnum[] | ProviderScalarFieldEnum
+    having?: ProviderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProviderCountAggregateInputType | true
+    _avg?: ProviderAvgAggregateInputType
+    _sum?: ProviderSumAggregateInputType
+    _min?: ProviderMinAggregateInputType
+    _max?: ProviderMaxAggregateInputType
+  }
+
+  export type ProviderGroupByOutputType = {
+    id: string
+    name: string
+    type: $Enums.ProviderType
+    description: string | null
+    price: number | null
+    rating: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProviderCountAggregateOutputType | null
+    _avg: ProviderAvgAggregateOutputType | null
+    _sum: ProviderSumAggregateOutputType | null
+    _min: ProviderMinAggregateOutputType | null
+    _max: ProviderMaxAggregateOutputType | null
+  }
+
+  type GetProviderGroupByPayload<T extends ProviderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProviderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProviderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProviderGroupByOutputType[P]>
+            : GetScalarType<T[P], ProviderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProviderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    description?: boolean
+    price?: boolean
+    rating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cateringInvitations?: boolean | Provider$cateringInvitationsArgs<ExtArgs>
+    securityInvitations?: boolean | Provider$securityInvitationsArgs<ExtArgs>
+    _count?: boolean | ProviderCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["provider"]>
+
+
+
+  export type ProviderSelectScalar = {
+    id?: boolean
+    name?: boolean
+    type?: boolean
+    description?: boolean
+    price?: boolean
+    rating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProviderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "type" | "description" | "price" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["provider"]>
+  export type ProviderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cateringInvitations?: boolean | Provider$cateringInvitationsArgs<ExtArgs>
+    securityInvitations?: boolean | Provider$securityInvitationsArgs<ExtArgs>
+    _count?: boolean | ProviderCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $ProviderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Provider"
+    objects: {
+      cateringInvitations: Prisma.$InvitationPayload<ExtArgs>[]
+      securityInvitations: Prisma.$InvitationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      type: $Enums.ProviderType
+      description: string | null
+      price: number | null
+      rating: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["provider"]>
+    composites: {}
+  }
+
+  type ProviderGetPayload<S extends boolean | null | undefined | ProviderDefaultArgs> = $Result.GetResult<Prisma.$ProviderPayload, S>
+
+  type ProviderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProviderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProviderCountAggregateInputType | true
+    }
+
+  export interface ProviderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Provider'], meta: { name: 'Provider' } }
+    /**
+     * Find zero or one Provider that matches the filter.
+     * @param {ProviderFindUniqueArgs} args - Arguments to find a Provider
+     * @example
+     * // Get one Provider
+     * const provider = await prisma.provider.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProviderFindUniqueArgs>(args: SelectSubset<T, ProviderFindUniqueArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Provider that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProviderFindUniqueOrThrowArgs} args - Arguments to find a Provider
+     * @example
+     * // Get one Provider
+     * const provider = await prisma.provider.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProviderFindUniqueOrThrowArgs>(args: SelectSubset<T, ProviderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Provider that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderFindFirstArgs} args - Arguments to find a Provider
+     * @example
+     * // Get one Provider
+     * const provider = await prisma.provider.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProviderFindFirstArgs>(args?: SelectSubset<T, ProviderFindFirstArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Provider that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderFindFirstOrThrowArgs} args - Arguments to find a Provider
+     * @example
+     * // Get one Provider
+     * const provider = await prisma.provider.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProviderFindFirstOrThrowArgs>(args?: SelectSubset<T, ProviderFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Providers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Providers
+     * const providers = await prisma.provider.findMany()
+     * 
+     * // Get first 10 Providers
+     * const providers = await prisma.provider.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const providerWithIdOnly = await prisma.provider.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProviderFindManyArgs>(args?: SelectSubset<T, ProviderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Provider.
+     * @param {ProviderCreateArgs} args - Arguments to create a Provider.
+     * @example
+     * // Create one Provider
+     * const Provider = await prisma.provider.create({
+     *   data: {
+     *     // ... data to create a Provider
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProviderCreateArgs>(args: SelectSubset<T, ProviderCreateArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Providers.
+     * @param {ProviderCreateManyArgs} args - Arguments to create many Providers.
+     * @example
+     * // Create many Providers
+     * const provider = await prisma.provider.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProviderCreateManyArgs>(args?: SelectSubset<T, ProviderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Provider.
+     * @param {ProviderDeleteArgs} args - Arguments to delete one Provider.
+     * @example
+     * // Delete one Provider
+     * const Provider = await prisma.provider.delete({
+     *   where: {
+     *     // ... filter to delete one Provider
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProviderDeleteArgs>(args: SelectSubset<T, ProviderDeleteArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Provider.
+     * @param {ProviderUpdateArgs} args - Arguments to update one Provider.
+     * @example
+     * // Update one Provider
+     * const provider = await prisma.provider.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProviderUpdateArgs>(args: SelectSubset<T, ProviderUpdateArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Providers.
+     * @param {ProviderDeleteManyArgs} args - Arguments to filter Providers to delete.
+     * @example
+     * // Delete a few Providers
+     * const { count } = await prisma.provider.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProviderDeleteManyArgs>(args?: SelectSubset<T, ProviderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Providers
+     * const provider = await prisma.provider.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProviderUpdateManyArgs>(args: SelectSubset<T, ProviderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Provider.
+     * @param {ProviderUpsertArgs} args - Arguments to update or create a Provider.
+     * @example
+     * // Update or create a Provider
+     * const provider = await prisma.provider.upsert({
+     *   create: {
+     *     // ... data to create a Provider
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Provider we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProviderUpsertArgs>(args: SelectSubset<T, ProviderUpsertArgs<ExtArgs>>): Prisma__ProviderClient<$Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Providers that matches the filter.
+     * @param {ProviderFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const provider = await prisma.provider.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: ProviderFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a Provider.
+     * @param {ProviderAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const provider = await prisma.provider.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: ProviderAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of Providers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderCountArgs} args - Arguments to filter Providers to count.
+     * @example
+     * // Count the number of Providers
+     * const count = await prisma.provider.count({
+     *   where: {
+     *     // ... the filter for the Providers we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProviderCountArgs>(
+      args?: Subset<T, ProviderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProviderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Provider.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProviderAggregateArgs>(args: Subset<T, ProviderAggregateArgs>): Prisma.PrismaPromise<GetProviderAggregateType<T>>
+
+    /**
+     * Group by Provider.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProviderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProviderGroupByArgs['orderBy'] }
+        : { orderBy?: ProviderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProviderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProviderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Provider model
+   */
+  readonly fields: ProviderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Provider.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProviderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    cateringInvitations<T extends Provider$cateringInvitationsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$cateringInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    securityInvitations<T extends Provider$securityInvitationsArgs<ExtArgs> = {}>(args?: Subset<T, Provider$securityInvitationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Provider model
+   */
+  interface ProviderFieldRefs {
+    readonly id: FieldRef<"Provider", 'String'>
+    readonly name: FieldRef<"Provider", 'String'>
+    readonly type: FieldRef<"Provider", 'ProviderType'>
+    readonly description: FieldRef<"Provider", 'String'>
+    readonly price: FieldRef<"Provider", 'Float'>
+    readonly rating: FieldRef<"Provider", 'Float'>
+    readonly createdAt: FieldRef<"Provider", 'DateTime'>
+    readonly updatedAt: FieldRef<"Provider", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Provider findUnique
+   */
+  export type ProviderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter, which Provider to fetch.
+     */
+    where: ProviderWhereUniqueInput
+  }
+
+  /**
+   * Provider findUniqueOrThrow
+   */
+  export type ProviderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter, which Provider to fetch.
+     */
+    where: ProviderWhereUniqueInput
+  }
+
+  /**
+   * Provider findFirst
+   */
+  export type ProviderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter, which Provider to fetch.
+     */
+    where?: ProviderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Providers to fetch.
+     */
+    orderBy?: ProviderOrderByWithRelationInput | ProviderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Providers.
+     */
+    cursor?: ProviderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Providers.
+     */
+    distinct?: ProviderScalarFieldEnum | ProviderScalarFieldEnum[]
+  }
+
+  /**
+   * Provider findFirstOrThrow
+   */
+  export type ProviderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter, which Provider to fetch.
+     */
+    where?: ProviderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Providers to fetch.
+     */
+    orderBy?: ProviderOrderByWithRelationInput | ProviderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Providers.
+     */
+    cursor?: ProviderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Providers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Providers.
+     */
+    distinct?: ProviderScalarFieldEnum | ProviderScalarFieldEnum[]
+  }
+
+  /**
+   * Provider findMany
+   */
+  export type ProviderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter, which Providers to fetch.
+     */
+    where?: ProviderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Providers to fetch.
+     */
+    orderBy?: ProviderOrderByWithRelationInput | ProviderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Providers.
+     */
+    cursor?: ProviderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Providers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Providers.
+     */
+    skip?: number
+    distinct?: ProviderScalarFieldEnum | ProviderScalarFieldEnum[]
+  }
+
+  /**
+   * Provider create
+   */
+  export type ProviderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Provider.
+     */
+    data: XOR<ProviderCreateInput, ProviderUncheckedCreateInput>
+  }
+
+  /**
+   * Provider createMany
+   */
+  export type ProviderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Providers.
+     */
+    data: ProviderCreateManyInput | ProviderCreateManyInput[]
+  }
+
+  /**
+   * Provider update
+   */
+  export type ProviderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Provider.
+     */
+    data: XOR<ProviderUpdateInput, ProviderUncheckedUpdateInput>
+    /**
+     * Choose, which Provider to update.
+     */
+    where: ProviderWhereUniqueInput
+  }
+
+  /**
+   * Provider updateMany
+   */
+  export type ProviderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Providers.
+     */
+    data: XOR<ProviderUpdateManyMutationInput, ProviderUncheckedUpdateManyInput>
+    /**
+     * Filter which Providers to update
+     */
+    where?: ProviderWhereInput
+    /**
+     * Limit how many Providers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Provider upsert
+   */
+  export type ProviderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Provider to update in case it exists.
+     */
+    where: ProviderWhereUniqueInput
+    /**
+     * In case the Provider found by the `where` argument doesn't exist, create a new Provider with this data.
+     */
+    create: XOR<ProviderCreateInput, ProviderUncheckedCreateInput>
+    /**
+     * In case the Provider was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProviderUpdateInput, ProviderUncheckedUpdateInput>
+  }
+
+  /**
+   * Provider delete
+   */
+  export type ProviderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
+    /**
+     * Filter which Provider to delete.
+     */
+    where: ProviderWhereUniqueInput
+  }
+
+  /**
+   * Provider deleteMany
+   */
+  export type ProviderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Providers to delete
+     */
+    where?: ProviderWhereInput
+    /**
+     * Limit how many Providers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Provider findRaw
+   */
+  export type ProviderFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Provider aggregateRaw
+   */
+  export type ProviderAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Provider.cateringInvitations
+   */
+  export type Provider$cateringInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Provider.securityInvitations
+   */
+  export type Provider$securityInvitationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invitation
+     */
+    select?: InvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Invitation
+     */
+    omit?: InvitationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvitationInclude<ExtArgs> | null
+    where?: InvitationWhereInput
+    orderBy?: InvitationOrderByWithRelationInput | InvitationOrderByWithRelationInput[]
+    cursor?: InvitationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvitationScalarFieldEnum | InvitationScalarFieldEnum[]
+  }
+
+  /**
+   * Provider without action
+   */
+  export type ProviderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provider
+     */
+    select?: ProviderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Provider
+     */
+    omit?: ProviderOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderInclude<ExtArgs> | null
   }
 
 
@@ -4332,6 +6902,7 @@ export namespace Prisma {
   export const InvitationScalarFieldEnum: {
     id: 'id',
     hostId: 'hostId',
+    type: 'type',
     title: 'title',
     hostManName: 'hostManName',
     hostWomanName: 'hostWomanName',
@@ -4344,11 +6915,42 @@ export namespace Prisma {
     theme: 'theme',
     visibility: 'visibility',
     status: 'status',
+    venueId: 'venueId',
+    cateringId: 'cateringId',
+    securityId: 'securityId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type InvitationScalarFieldEnum = (typeof InvitationScalarFieldEnum)[keyof typeof InvitationScalarFieldEnum]
+
+
+  export const VenueScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    address: 'address',
+    capacity: 'capacity',
+    price: 'price',
+    images: 'images',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VenueScalarFieldEnum = (typeof VenueScalarFieldEnum)[keyof typeof VenueScalarFieldEnum]
+
+
+  export const ProviderScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    type: 'type',
+    description: 'description',
+    price: 'price',
+    rating: 'rating',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProviderScalarFieldEnum = (typeof ProviderScalarFieldEnum)[keyof typeof ProviderScalarFieldEnum]
 
 
   export const GuestScalarFieldEnum: {
@@ -4419,6 +7021,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EventType'
+   */
+  export type EnumEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventType'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventType[]'
+   */
+  export type ListEnumEventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'InvitationVisibility'
    */
   export type EnumInvitationVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationVisibility'>
@@ -4457,6 +7073,34 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProviderType'
+   */
+  export type EnumProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProviderType'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProviderType[]'
+   */
+  export type ListEnumProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProviderType[]'>
     
   /**
    * Deep Input Types
@@ -4544,6 +7188,7 @@ export namespace Prisma {
     NOT?: InvitationWhereInput | InvitationWhereInput[]
     id?: StringFilter<"Invitation"> | string
     hostId?: StringFilter<"Invitation"> | string
+    type?: EnumEventTypeFilter<"Invitation"> | $Enums.EventType
     title?: StringFilter<"Invitation"> | string
     hostManName?: StringNullableFilter<"Invitation"> | string | null
     hostWomanName?: StringNullableFilter<"Invitation"> | string | null
@@ -4556,15 +7201,22 @@ export namespace Prisma {
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    venueId?: StringNullableFilter<"Invitation"> | string | null
+    cateringId?: StringNullableFilter<"Invitation"> | string | null
+    securityId?: StringNullableFilter<"Invitation"> | string | null
     createdAt?: DateTimeFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
     host?: XOR<UserScalarRelationFilter, UserWhereInput>
+    venue?: XOR<VenueNullableScalarRelationFilter, VenueWhereInput> | null
+    catering?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
+    security?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
     guests?: GuestListRelationFilter
   }
 
   export type InvitationOrderByWithRelationInput = {
     id?: SortOrder
     hostId?: SortOrder
+    type?: SortOrder
     title?: SortOrder
     hostManName?: SortOrder
     hostWomanName?: SortOrder
@@ -4577,9 +7229,15 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    venueId?: SortOrder
+    cateringId?: SortOrder
+    securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     host?: UserOrderByWithRelationInput
+    venue?: VenueOrderByWithRelationInput
+    catering?: ProviderOrderByWithRelationInput
+    security?: ProviderOrderByWithRelationInput
     guests?: GuestOrderByRelationAggregateInput
   }
 
@@ -4590,6 +7248,7 @@ export namespace Prisma {
     OR?: InvitationWhereInput[]
     NOT?: InvitationWhereInput | InvitationWhereInput[]
     hostId?: StringFilter<"Invitation"> | string
+    type?: EnumEventTypeFilter<"Invitation"> | $Enums.EventType
     title?: StringFilter<"Invitation"> | string
     hostManName?: StringNullableFilter<"Invitation"> | string | null
     hostWomanName?: StringNullableFilter<"Invitation"> | string | null
@@ -4601,15 +7260,22 @@ export namespace Prisma {
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    venueId?: StringNullableFilter<"Invitation"> | string | null
+    cateringId?: StringNullableFilter<"Invitation"> | string | null
+    securityId?: StringNullableFilter<"Invitation"> | string | null
     createdAt?: DateTimeFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
     host?: XOR<UserScalarRelationFilter, UserWhereInput>
+    venue?: XOR<VenueNullableScalarRelationFilter, VenueWhereInput> | null
+    catering?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
+    security?: XOR<ProviderNullableScalarRelationFilter, ProviderWhereInput> | null
     guests?: GuestListRelationFilter
   }, "id" | "slug">
 
   export type InvitationOrderByWithAggregationInput = {
     id?: SortOrder
     hostId?: SortOrder
+    type?: SortOrder
     title?: SortOrder
     hostManName?: SortOrder
     hostWomanName?: SortOrder
@@ -4622,6 +7288,9 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    venueId?: SortOrder
+    cateringId?: SortOrder
+    securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InvitationCountOrderByAggregateInput
@@ -4635,6 +7304,7 @@ export namespace Prisma {
     NOT?: InvitationScalarWhereWithAggregatesInput | InvitationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Invitation"> | string
     hostId?: StringWithAggregatesFilter<"Invitation"> | string
+    type?: EnumEventTypeWithAggregatesFilter<"Invitation"> | $Enums.EventType
     title?: StringWithAggregatesFilter<"Invitation"> | string
     hostManName?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     hostWomanName?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
@@ -4647,8 +7317,158 @@ export namespace Prisma {
     theme?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityWithAggregatesFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusWithAggregatesFilter<"Invitation"> | $Enums.InvitationStatus
+    venueId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
+    cateringId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
+    securityId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
+  }
+
+  export type VenueWhereInput = {
+    AND?: VenueWhereInput | VenueWhereInput[]
+    OR?: VenueWhereInput[]
+    NOT?: VenueWhereInput | VenueWhereInput[]
+    id?: StringFilter<"Venue"> | string
+    name?: StringFilter<"Venue"> | string
+    address?: StringFilter<"Venue"> | string
+    capacity?: IntNullableFilter<"Venue"> | number | null
+    price?: FloatNullableFilter<"Venue"> | number | null
+    images?: StringNullableListFilter<"Venue">
+    createdAt?: DateTimeFilter<"Venue"> | Date | string
+    updatedAt?: DateTimeFilter<"Venue"> | Date | string
+    invitations?: InvitationListRelationFilter
+  }
+
+  export type VenueOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    address?: SortOrder
+    capacity?: SortOrder
+    price?: SortOrder
+    images?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    invitations?: InvitationOrderByRelationAggregateInput
+  }
+
+  export type VenueWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VenueWhereInput | VenueWhereInput[]
+    OR?: VenueWhereInput[]
+    NOT?: VenueWhereInput | VenueWhereInput[]
+    name?: StringFilter<"Venue"> | string
+    address?: StringFilter<"Venue"> | string
+    capacity?: IntNullableFilter<"Venue"> | number | null
+    price?: FloatNullableFilter<"Venue"> | number | null
+    images?: StringNullableListFilter<"Venue">
+    createdAt?: DateTimeFilter<"Venue"> | Date | string
+    updatedAt?: DateTimeFilter<"Venue"> | Date | string
+    invitations?: InvitationListRelationFilter
+  }, "id">
+
+  export type VenueOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    address?: SortOrder
+    capacity?: SortOrder
+    price?: SortOrder
+    images?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VenueCountOrderByAggregateInput
+    _avg?: VenueAvgOrderByAggregateInput
+    _max?: VenueMaxOrderByAggregateInput
+    _min?: VenueMinOrderByAggregateInput
+    _sum?: VenueSumOrderByAggregateInput
+  }
+
+  export type VenueScalarWhereWithAggregatesInput = {
+    AND?: VenueScalarWhereWithAggregatesInput | VenueScalarWhereWithAggregatesInput[]
+    OR?: VenueScalarWhereWithAggregatesInput[]
+    NOT?: VenueScalarWhereWithAggregatesInput | VenueScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Venue"> | string
+    name?: StringWithAggregatesFilter<"Venue"> | string
+    address?: StringWithAggregatesFilter<"Venue"> | string
+    capacity?: IntNullableWithAggregatesFilter<"Venue"> | number | null
+    price?: FloatNullableWithAggregatesFilter<"Venue"> | number | null
+    images?: StringNullableListFilter<"Venue">
+    createdAt?: DateTimeWithAggregatesFilter<"Venue"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Venue"> | Date | string
+  }
+
+  export type ProviderWhereInput = {
+    AND?: ProviderWhereInput | ProviderWhereInput[]
+    OR?: ProviderWhereInput[]
+    NOT?: ProviderWhereInput | ProviderWhereInput[]
+    id?: StringFilter<"Provider"> | string
+    name?: StringFilter<"Provider"> | string
+    type?: EnumProviderTypeFilter<"Provider"> | $Enums.ProviderType
+    description?: StringNullableFilter<"Provider"> | string | null
+    price?: FloatNullableFilter<"Provider"> | number | null
+    rating?: FloatNullableFilter<"Provider"> | number | null
+    createdAt?: DateTimeFilter<"Provider"> | Date | string
+    updatedAt?: DateTimeFilter<"Provider"> | Date | string
+    cateringInvitations?: InvitationListRelationFilter
+    securityInvitations?: InvitationListRelationFilter
+  }
+
+  export type ProviderOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    description?: SortOrder
+    price?: SortOrder
+    rating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    cateringInvitations?: InvitationOrderByRelationAggregateInput
+    securityInvitations?: InvitationOrderByRelationAggregateInput
+  }
+
+  export type ProviderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProviderWhereInput | ProviderWhereInput[]
+    OR?: ProviderWhereInput[]
+    NOT?: ProviderWhereInput | ProviderWhereInput[]
+    name?: StringFilter<"Provider"> | string
+    type?: EnumProviderTypeFilter<"Provider"> | $Enums.ProviderType
+    description?: StringNullableFilter<"Provider"> | string | null
+    price?: FloatNullableFilter<"Provider"> | number | null
+    rating?: FloatNullableFilter<"Provider"> | number | null
+    createdAt?: DateTimeFilter<"Provider"> | Date | string
+    updatedAt?: DateTimeFilter<"Provider"> | Date | string
+    cateringInvitations?: InvitationListRelationFilter
+    securityInvitations?: InvitationListRelationFilter
+  }, "id">
+
+  export type ProviderOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    description?: SortOrder
+    price?: SortOrder
+    rating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProviderCountOrderByAggregateInput
+    _avg?: ProviderAvgOrderByAggregateInput
+    _max?: ProviderMaxOrderByAggregateInput
+    _min?: ProviderMinOrderByAggregateInput
+    _sum?: ProviderSumOrderByAggregateInput
+  }
+
+  export type ProviderScalarWhereWithAggregatesInput = {
+    AND?: ProviderScalarWhereWithAggregatesInput | ProviderScalarWhereWithAggregatesInput[]
+    OR?: ProviderScalarWhereWithAggregatesInput[]
+    NOT?: ProviderScalarWhereWithAggregatesInput | ProviderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Provider"> | string
+    name?: StringWithAggregatesFilter<"Provider"> | string
+    type?: EnumProviderTypeWithAggregatesFilter<"Provider"> | $Enums.ProviderType
+    description?: StringNullableWithAggregatesFilter<"Provider"> | string | null
+    price?: FloatNullableWithAggregatesFilter<"Provider"> | number | null
+    rating?: FloatNullableWithAggregatesFilter<"Provider"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"Provider"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Provider"> | Date | string
   }
 
   export type GuestWhereInput = {
@@ -4828,6 +7648,7 @@ export namespace Prisma {
 
   export type InvitationCreateInput = {
     id?: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -4843,12 +7664,16 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
+    venue?: VenueCreateNestedOneWithoutInvitationsInput
+    catering?: ProviderCreateNestedOneWithoutCateringInvitationsInput
+    security?: ProviderCreateNestedOneWithoutSecurityInvitationsInput
     guests?: GuestCreateNestedManyWithoutInvitationInput
   }
 
   export type InvitationUncheckedCreateInput = {
     id?: string
     hostId: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -4861,12 +7686,16 @@ export namespace Prisma {
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    securityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guests?: GuestUncheckedCreateNestedManyWithoutInvitationInput
   }
 
   export type InvitationUpdateInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4882,11 +7711,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
+    venue?: VenueUpdateOneWithoutInvitationsNestedInput
+    catering?: ProviderUpdateOneWithoutCateringInvitationsNestedInput
+    security?: ProviderUpdateOneWithoutSecurityInvitationsNestedInput
     guests?: GuestUpdateManyWithoutInvitationNestedInput
   }
 
   export type InvitationUncheckedUpdateInput = {
     hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4899,6 +7732,9 @@ export namespace Prisma {
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guests?: GuestUncheckedUpdateManyWithoutInvitationNestedInput
@@ -4907,6 +7743,7 @@ export namespace Prisma {
   export type InvitationCreateManyInput = {
     id?: string
     hostId: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -4919,11 +7756,15 @@ export namespace Prisma {
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    securityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type InvitationUpdateManyMutationInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4942,6 +7783,7 @@ export namespace Prisma {
 
   export type InvitationUncheckedUpdateManyInput = {
     hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4954,6 +7796,167 @@ export namespace Prisma {
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VenueCreateInput = {
+    id?: string
+    name: string
+    address: string
+    capacity?: number | null
+    price?: number | null
+    images?: VenueCreateimagesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invitations?: InvitationCreateNestedManyWithoutVenueInput
+  }
+
+  export type VenueUncheckedCreateInput = {
+    id?: string
+    name: string
+    address: string
+    capacity?: number | null
+    price?: number | null
+    images?: VenueCreateimagesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    invitations?: InvitationUncheckedCreateNestedManyWithoutVenueInput
+  }
+
+  export type VenueUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitations?: InvitationUpdateManyWithoutVenueNestedInput
+  }
+
+  export type VenueUncheckedUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    invitations?: InvitationUncheckedUpdateManyWithoutVenueNestedInput
+  }
+
+  export type VenueCreateManyInput = {
+    id?: string
+    name: string
+    address: string
+    capacity?: number | null
+    price?: number | null
+    images?: VenueCreateimagesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VenueUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VenueUncheckedUpdateManyInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderCreateInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cateringInvitations?: InvitationCreateNestedManyWithoutCateringInput
+    securityInvitations?: InvitationCreateNestedManyWithoutSecurityInput
+  }
+
+  export type ProviderUncheckedCreateInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cateringInvitations?: InvitationUncheckedCreateNestedManyWithoutCateringInput
+    securityInvitations?: InvitationUncheckedCreateNestedManyWithoutSecurityInput
+  }
+
+  export type ProviderUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cateringInvitations?: InvitationUpdateManyWithoutCateringNestedInput
+    securityInvitations?: InvitationUpdateManyWithoutSecurityNestedInput
+  }
+
+  export type ProviderUncheckedUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cateringInvitations?: InvitationUncheckedUpdateManyWithoutCateringNestedInput
+    securityInvitations?: InvitationUncheckedUpdateManyWithoutSecurityNestedInput
+  }
+
+  export type ProviderCreateManyInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProviderUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderUncheckedUpdateManyInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -5203,6 +8206,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventType | EnumEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventTypeFilter<$PrismaModel> | $Enums.EventType
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -5234,6 +8244,16 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type VenueNullableScalarRelationFilter = {
+    is?: VenueWhereInput | null
+    isNot?: VenueWhereInput | null
+  }
+
+  export type ProviderNullableScalarRelationFilter = {
+    is?: ProviderWhereInput | null
+    isNot?: ProviderWhereInput | null
+  }
+
   export type GuestListRelationFilter = {
     every?: GuestWhereInput
     some?: GuestWhereInput
@@ -5247,6 +8267,7 @@ export namespace Prisma {
   export type InvitationCountOrderByAggregateInput = {
     id?: SortOrder
     hostId?: SortOrder
+    type?: SortOrder
     title?: SortOrder
     hostManName?: SortOrder
     hostWomanName?: SortOrder
@@ -5259,6 +8280,9 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    venueId?: SortOrder
+    cateringId?: SortOrder
+    securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5266,6 +8290,7 @@ export namespace Prisma {
   export type InvitationMaxOrderByAggregateInput = {
     id?: SortOrder
     hostId?: SortOrder
+    type?: SortOrder
     title?: SortOrder
     hostManName?: SortOrder
     hostWomanName?: SortOrder
@@ -5277,6 +8302,9 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    venueId?: SortOrder
+    cateringId?: SortOrder
+    securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -5284,6 +8312,7 @@ export namespace Prisma {
   export type InvitationMinOrderByAggregateInput = {
     id?: SortOrder
     hostId?: SortOrder
+    type?: SortOrder
     title?: SortOrder
     hostManName?: SortOrder
     hostWomanName?: SortOrder
@@ -5295,8 +8324,21 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    venueId?: SortOrder
+    cateringId?: SortOrder
+    securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventType | EnumEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.EventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumEventTypeFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5332,6 +8374,165 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInvitationStatusFilter<$PrismaModel>
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
+  export type VenueCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    address?: SortOrder
+    capacity?: SortOrder
+    price?: SortOrder
+    images?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VenueAvgOrderByAggregateInput = {
+    capacity?: SortOrder
+    price?: SortOrder
+  }
+
+  export type VenueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    address?: SortOrder
+    capacity?: SortOrder
+    price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VenueMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    address?: SortOrder
+    capacity?: SortOrder
+    price?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VenueSumOrderByAggregateInput = {
+    capacity?: SortOrder
+    price?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type EnumProviderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderType | EnumProviderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderTypeFilter<$PrismaModel> | $Enums.ProviderType
+  }
+
+  export type ProviderCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    description?: SortOrder
+    price?: SortOrder
+    rating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProviderAvgOrderByAggregateInput = {
+    price?: SortOrder
+    rating?: SortOrder
+  }
+
+  export type ProviderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    description?: SortOrder
+    price?: SortOrder
+    rating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProviderMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    description?: SortOrder
+    price?: SortOrder
+    rating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProviderSumOrderByAggregateInput = {
+    price?: SortOrder
+    rating?: SortOrder
+  }
+
+  export type EnumProviderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderType | EnumProviderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProviderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProviderTypeFilter<$PrismaModel>
+    _max?: NestedEnumProviderTypeFilter<$PrismaModel>
   }
 
   export type InvitationScalarRelationFilter = {
@@ -5463,6 +8664,24 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type VenueCreateNestedOneWithoutInvitationsInput = {
+    create?: XOR<VenueCreateWithoutInvitationsInput, VenueUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: VenueCreateOrConnectWithoutInvitationsInput
+    connect?: VenueWhereUniqueInput
+  }
+
+  export type ProviderCreateNestedOneWithoutCateringInvitationsInput = {
+    create?: XOR<ProviderCreateWithoutCateringInvitationsInput, ProviderUncheckedCreateWithoutCateringInvitationsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutCateringInvitationsInput
+    connect?: ProviderWhereUniqueInput
+  }
+
+  export type ProviderCreateNestedOneWithoutSecurityInvitationsInput = {
+    create?: XOR<ProviderCreateWithoutSecurityInvitationsInput, ProviderUncheckedCreateWithoutSecurityInvitationsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSecurityInvitationsInput
+    connect?: ProviderWhereUniqueInput
+  }
+
   export type GuestCreateNestedManyWithoutInvitationInput = {
     create?: XOR<GuestCreateWithoutInvitationInput, GuestUncheckedCreateWithoutInvitationInput> | GuestCreateWithoutInvitationInput[] | GuestUncheckedCreateWithoutInvitationInput[]
     connectOrCreate?: GuestCreateOrConnectWithoutInvitationInput | GuestCreateOrConnectWithoutInvitationInput[]
@@ -5475,6 +8694,10 @@ export namespace Prisma {
     connectOrCreate?: GuestCreateOrConnectWithoutInvitationInput | GuestCreateOrConnectWithoutInvitationInput[]
     createMany?: GuestCreateManyInvitationInputEnvelope
     connect?: GuestWhereUniqueInput | GuestWhereUniqueInput[]
+  }
+
+  export type EnumEventTypeFieldUpdateOperationsInput = {
+    set?: $Enums.EventType
   }
 
   export type InvitationUpdatecoordinateInput = {
@@ -5503,6 +8726,36 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvitationsInput, UserUpdateWithoutInvitationsInput>, UserUncheckedUpdateWithoutInvitationsInput>
   }
 
+  export type VenueUpdateOneWithoutInvitationsNestedInput = {
+    create?: XOR<VenueCreateWithoutInvitationsInput, VenueUncheckedCreateWithoutInvitationsInput>
+    connectOrCreate?: VenueCreateOrConnectWithoutInvitationsInput
+    upsert?: VenueUpsertWithoutInvitationsInput
+    disconnect?: boolean
+    delete?: VenueWhereInput | boolean
+    connect?: VenueWhereUniqueInput
+    update?: XOR<XOR<VenueUpdateToOneWithWhereWithoutInvitationsInput, VenueUpdateWithoutInvitationsInput>, VenueUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type ProviderUpdateOneWithoutCateringInvitationsNestedInput = {
+    create?: XOR<ProviderCreateWithoutCateringInvitationsInput, ProviderUncheckedCreateWithoutCateringInvitationsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutCateringInvitationsInput
+    upsert?: ProviderUpsertWithoutCateringInvitationsInput
+    disconnect?: boolean
+    delete?: ProviderWhereInput | boolean
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutCateringInvitationsInput, ProviderUpdateWithoutCateringInvitationsInput>, ProviderUncheckedUpdateWithoutCateringInvitationsInput>
+  }
+
+  export type ProviderUpdateOneWithoutSecurityInvitationsNestedInput = {
+    create?: XOR<ProviderCreateWithoutSecurityInvitationsInput, ProviderUncheckedCreateWithoutSecurityInvitationsInput>
+    connectOrCreate?: ProviderCreateOrConnectWithoutSecurityInvitationsInput
+    upsert?: ProviderUpsertWithoutSecurityInvitationsInput
+    disconnect?: boolean
+    delete?: ProviderWhereInput | boolean
+    connect?: ProviderWhereUniqueInput
+    update?: XOR<XOR<ProviderUpdateToOneWithWhereWithoutSecurityInvitationsInput, ProviderUpdateWithoutSecurityInvitationsInput>, ProviderUncheckedUpdateWithoutSecurityInvitationsInput>
+  }
+
   export type GuestUpdateManyWithoutInvitationNestedInput = {
     create?: XOR<GuestCreateWithoutInvitationInput, GuestUncheckedCreateWithoutInvitationInput> | GuestCreateWithoutInvitationInput[] | GuestUncheckedCreateWithoutInvitationInput[]
     connectOrCreate?: GuestCreateOrConnectWithoutInvitationInput | GuestCreateOrConnectWithoutInvitationInput[]
@@ -5529,6 +8782,163 @@ export namespace Prisma {
     update?: GuestUpdateWithWhereUniqueWithoutInvitationInput | GuestUpdateWithWhereUniqueWithoutInvitationInput[]
     updateMany?: GuestUpdateManyWithWhereWithoutInvitationInput | GuestUpdateManyWithWhereWithoutInvitationInput[]
     deleteMany?: GuestScalarWhereInput | GuestScalarWhereInput[]
+  }
+
+  export type VenueCreateimagesInput = {
+    set: string[]
+  }
+
+  export type InvitationCreateNestedManyWithoutVenueInput = {
+    create?: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput> | InvitationCreateWithoutVenueInput[] | InvitationUncheckedCreateWithoutVenueInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutVenueInput | InvitationCreateOrConnectWithoutVenueInput[]
+    createMany?: InvitationCreateManyVenueInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutVenueInput = {
+    create?: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput> | InvitationCreateWithoutVenueInput[] | InvitationUncheckedCreateWithoutVenueInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutVenueInput | InvitationCreateOrConnectWithoutVenueInput[]
+    createMany?: InvitationCreateManyVenueInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+    unset?: boolean
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+    unset?: boolean
+  }
+
+  export type VenueUpdateimagesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type InvitationUpdateManyWithoutVenueNestedInput = {
+    create?: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput> | InvitationCreateWithoutVenueInput[] | InvitationUncheckedCreateWithoutVenueInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutVenueInput | InvitationCreateOrConnectWithoutVenueInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutVenueInput | InvitationUpsertWithWhereUniqueWithoutVenueInput[]
+    createMany?: InvitationCreateManyVenueInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutVenueInput | InvitationUpdateWithWhereUniqueWithoutVenueInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutVenueInput | InvitationUpdateManyWithWhereWithoutVenueInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutVenueNestedInput = {
+    create?: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput> | InvitationCreateWithoutVenueInput[] | InvitationUncheckedCreateWithoutVenueInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutVenueInput | InvitationCreateOrConnectWithoutVenueInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutVenueInput | InvitationUpsertWithWhereUniqueWithoutVenueInput[]
+    createMany?: InvitationCreateManyVenueInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutVenueInput | InvitationUpdateWithWhereUniqueWithoutVenueInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutVenueInput | InvitationUpdateManyWithWhereWithoutVenueInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type InvitationCreateNestedManyWithoutCateringInput = {
+    create?: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput> | InvitationCreateWithoutCateringInput[] | InvitationUncheckedCreateWithoutCateringInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCateringInput | InvitationCreateOrConnectWithoutCateringInput[]
+    createMany?: InvitationCreateManyCateringInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type InvitationCreateNestedManyWithoutSecurityInput = {
+    create?: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput> | InvitationCreateWithoutSecurityInput[] | InvitationUncheckedCreateWithoutSecurityInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutSecurityInput | InvitationCreateOrConnectWithoutSecurityInput[]
+    createMany?: InvitationCreateManySecurityInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutCateringInput = {
+    create?: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput> | InvitationCreateWithoutCateringInput[] | InvitationUncheckedCreateWithoutCateringInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCateringInput | InvitationCreateOrConnectWithoutCateringInput[]
+    createMany?: InvitationCreateManyCateringInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type InvitationUncheckedCreateNestedManyWithoutSecurityInput = {
+    create?: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput> | InvitationCreateWithoutSecurityInput[] | InvitationUncheckedCreateWithoutSecurityInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutSecurityInput | InvitationCreateOrConnectWithoutSecurityInput[]
+    createMany?: InvitationCreateManySecurityInputEnvelope
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+  }
+
+  export type EnumProviderTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ProviderType
+  }
+
+  export type InvitationUpdateManyWithoutCateringNestedInput = {
+    create?: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput> | InvitationCreateWithoutCateringInput[] | InvitationUncheckedCreateWithoutCateringInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCateringInput | InvitationCreateOrConnectWithoutCateringInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCateringInput | InvitationUpsertWithWhereUniqueWithoutCateringInput[]
+    createMany?: InvitationCreateManyCateringInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCateringInput | InvitationUpdateWithWhereUniqueWithoutCateringInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCateringInput | InvitationUpdateManyWithWhereWithoutCateringInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type InvitationUpdateManyWithoutSecurityNestedInput = {
+    create?: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput> | InvitationCreateWithoutSecurityInput[] | InvitationUncheckedCreateWithoutSecurityInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutSecurityInput | InvitationCreateOrConnectWithoutSecurityInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutSecurityInput | InvitationUpsertWithWhereUniqueWithoutSecurityInput[]
+    createMany?: InvitationCreateManySecurityInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutSecurityInput | InvitationUpdateWithWhereUniqueWithoutSecurityInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutSecurityInput | InvitationUpdateManyWithWhereWithoutSecurityInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutCateringNestedInput = {
+    create?: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput> | InvitationCreateWithoutCateringInput[] | InvitationUncheckedCreateWithoutCateringInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutCateringInput | InvitationCreateOrConnectWithoutCateringInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutCateringInput | InvitationUpsertWithWhereUniqueWithoutCateringInput[]
+    createMany?: InvitationCreateManyCateringInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutCateringInput | InvitationUpdateWithWhereUniqueWithoutCateringInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutCateringInput | InvitationUpdateManyWithWhereWithoutCateringInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutSecurityNestedInput = {
+    create?: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput> | InvitationCreateWithoutSecurityInput[] | InvitationUncheckedCreateWithoutSecurityInput[]
+    connectOrCreate?: InvitationCreateOrConnectWithoutSecurityInput | InvitationCreateOrConnectWithoutSecurityInput[]
+    upsert?: InvitationUpsertWithWhereUniqueWithoutSecurityInput | InvitationUpsertWithWhereUniqueWithoutSecurityInput[]
+    createMany?: InvitationCreateManySecurityInputEnvelope
+    set?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    disconnect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    delete?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    connect?: InvitationWhereUniqueInput | InvitationWhereUniqueInput[]
+    update?: InvitationUpdateWithWhereUniqueWithoutSecurityInput | InvitationUpdateWithWhereUniqueWithoutSecurityInput[]
+    updateMany?: InvitationUpdateManyWithWhereWithoutSecurityInput | InvitationUpdateManyWithWhereWithoutSecurityInput[]
+    deleteMany?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
   }
 
   export type InvitationCreateNestedOneWithoutGuestsInput = {
@@ -5657,6 +9067,13 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumEventTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventType | EnumEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventTypeFilter<$PrismaModel> | $Enums.EventType
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -5681,6 +9098,16 @@ export namespace Prisma {
     in?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.InvitationStatus[] | ListEnumInvitationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
+  }
+
+  export type NestedEnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventType | EnumEventTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventTypeWithAggregatesFilter<$PrismaModel> | $Enums.EventType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventTypeFilter<$PrismaModel>
+    _max?: NestedEnumEventTypeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5718,8 +9145,72 @@ export namespace Prisma {
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedEnumProviderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderType | EnumProviderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderTypeFilter<$PrismaModel> | $Enums.ProviderType
+  }
+
+  export type NestedEnumProviderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderType | EnumProviderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderType[] | ListEnumProviderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderTypeWithAggregatesFilter<$PrismaModel> | $Enums.ProviderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProviderTypeFilter<$PrismaModel>
+    _max?: NestedEnumProviderTypeFilter<$PrismaModel>
+  }
+
   export type InvitationCreateWithoutHostInput = {
     id?: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -5734,11 +9225,15 @@ export namespace Prisma {
     status?: $Enums.InvitationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    venue?: VenueCreateNestedOneWithoutInvitationsInput
+    catering?: ProviderCreateNestedOneWithoutCateringInvitationsInput
+    security?: ProviderCreateNestedOneWithoutSecurityInvitationsInput
     guests?: GuestCreateNestedManyWithoutInvitationInput
   }
 
   export type InvitationUncheckedCreateWithoutHostInput = {
     id?: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -5751,6 +9246,9 @@ export namespace Prisma {
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    securityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guests?: GuestUncheckedCreateNestedManyWithoutInvitationInput
@@ -5787,6 +9285,7 @@ export namespace Prisma {
     NOT?: InvitationScalarWhereInput | InvitationScalarWhereInput[]
     id?: StringFilter<"Invitation"> | string
     hostId?: StringFilter<"Invitation"> | string
+    type?: EnumEventTypeFilter<"Invitation"> | $Enums.EventType
     title?: StringFilter<"Invitation"> | string
     hostManName?: StringNullableFilter<"Invitation"> | string | null
     hostWomanName?: StringNullableFilter<"Invitation"> | string | null
@@ -5799,6 +9298,9 @@ export namespace Prisma {
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    venueId?: StringNullableFilter<"Invitation"> | string | null
+    cateringId?: StringNullableFilter<"Invitation"> | string | null
+    securityId?: StringNullableFilter<"Invitation"> | string | null
     createdAt?: DateTimeFilter<"Invitation"> | Date | string
     updatedAt?: DateTimeFilter<"Invitation"> | Date | string
   }
@@ -5830,6 +9332,91 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutInvitationsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutInvitationsInput, UserUncheckedCreateWithoutInvitationsInput>
+  }
+
+  export type VenueCreateWithoutInvitationsInput = {
+    id?: string
+    name: string
+    address: string
+    capacity?: number | null
+    price?: number | null
+    images?: VenueCreateimagesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VenueUncheckedCreateWithoutInvitationsInput = {
+    id?: string
+    name: string
+    address: string
+    capacity?: number | null
+    price?: number | null
+    images?: VenueCreateimagesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VenueCreateOrConnectWithoutInvitationsInput = {
+    where: VenueWhereUniqueInput
+    create: XOR<VenueCreateWithoutInvitationsInput, VenueUncheckedCreateWithoutInvitationsInput>
+  }
+
+  export type ProviderCreateWithoutCateringInvitationsInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    securityInvitations?: InvitationCreateNestedManyWithoutSecurityInput
+  }
+
+  export type ProviderUncheckedCreateWithoutCateringInvitationsInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    securityInvitations?: InvitationUncheckedCreateNestedManyWithoutSecurityInput
+  }
+
+  export type ProviderCreateOrConnectWithoutCateringInvitationsInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutCateringInvitationsInput, ProviderUncheckedCreateWithoutCateringInvitationsInput>
+  }
+
+  export type ProviderCreateWithoutSecurityInvitationsInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cateringInvitations?: InvitationCreateNestedManyWithoutCateringInput
+  }
+
+  export type ProviderUncheckedCreateWithoutSecurityInvitationsInput = {
+    id?: string
+    name: string
+    type: $Enums.ProviderType
+    description?: string | null
+    price?: number | null
+    rating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cateringInvitations?: InvitationUncheckedCreateNestedManyWithoutCateringInput
+  }
+
+  export type ProviderCreateOrConnectWithoutSecurityInvitationsInput = {
+    where: ProviderWhereUniqueInput
+    create: XOR<ProviderCreateWithoutSecurityInvitationsInput, ProviderUncheckedCreateWithoutSecurityInvitationsInput>
   }
 
   export type GuestCreateWithoutInvitationInput = {
@@ -5902,6 +9489,103 @@ export namespace Prisma {
     roles?: UserUpdaterolesInput | string[]
   }
 
+  export type VenueUpsertWithoutInvitationsInput = {
+    update: XOR<VenueUpdateWithoutInvitationsInput, VenueUncheckedUpdateWithoutInvitationsInput>
+    create: XOR<VenueCreateWithoutInvitationsInput, VenueUncheckedCreateWithoutInvitationsInput>
+    where?: VenueWhereInput
+  }
+
+  export type VenueUpdateToOneWithWhereWithoutInvitationsInput = {
+    where?: VenueWhereInput
+    data: XOR<VenueUpdateWithoutInvitationsInput, VenueUncheckedUpdateWithoutInvitationsInput>
+  }
+
+  export type VenueUpdateWithoutInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VenueUncheckedUpdateWithoutInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    capacity?: NullableIntFieldUpdateOperationsInput | number | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    images?: VenueUpdateimagesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderUpsertWithoutCateringInvitationsInput = {
+    update: XOR<ProviderUpdateWithoutCateringInvitationsInput, ProviderUncheckedUpdateWithoutCateringInvitationsInput>
+    create: XOR<ProviderCreateWithoutCateringInvitationsInput, ProviderUncheckedCreateWithoutCateringInvitationsInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutCateringInvitationsInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutCateringInvitationsInput, ProviderUncheckedUpdateWithoutCateringInvitationsInput>
+  }
+
+  export type ProviderUpdateWithoutCateringInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    securityInvitations?: InvitationUpdateManyWithoutSecurityNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutCateringInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    securityInvitations?: InvitationUncheckedUpdateManyWithoutSecurityNestedInput
+  }
+
+  export type ProviderUpsertWithoutSecurityInvitationsInput = {
+    update: XOR<ProviderUpdateWithoutSecurityInvitationsInput, ProviderUncheckedUpdateWithoutSecurityInvitationsInput>
+    create: XOR<ProviderCreateWithoutSecurityInvitationsInput, ProviderUncheckedCreateWithoutSecurityInvitationsInput>
+    where?: ProviderWhereInput
+  }
+
+  export type ProviderUpdateToOneWithWhereWithoutSecurityInvitationsInput = {
+    where?: ProviderWhereInput
+    data: XOR<ProviderUpdateWithoutSecurityInvitationsInput, ProviderUncheckedUpdateWithoutSecurityInvitationsInput>
+  }
+
+  export type ProviderUpdateWithoutSecurityInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cateringInvitations?: InvitationUpdateManyWithoutCateringNestedInput
+  }
+
+  export type ProviderUncheckedUpdateWithoutSecurityInvitationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumProviderTypeFieldUpdateOperationsInput | $Enums.ProviderType
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cateringInvitations?: InvitationUncheckedUpdateManyWithoutCateringNestedInput
+  }
+
   export type GuestUpsertWithWhereUniqueWithoutInvitationInput = {
     where: GuestWhereUniqueInput
     update: XOR<GuestUpdateWithoutInvitationInput, GuestUncheckedUpdateWithoutInvitationInput>
@@ -5936,8 +9620,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Guest"> | Date | string
   }
 
-  export type InvitationCreateWithoutGuestsInput = {
+  export type InvitationCreateWithoutVenueInput = {
     id?: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -5953,11 +9638,15 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
+    catering?: ProviderCreateNestedOneWithoutCateringInvitationsInput
+    security?: ProviderCreateNestedOneWithoutSecurityInvitationsInput
+    guests?: GuestCreateNestedManyWithoutInvitationInput
   }
 
-  export type InvitationUncheckedCreateWithoutGuestsInput = {
+  export type InvitationUncheckedCreateWithoutVenueInput = {
     id?: string
     hostId: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -5970,6 +9659,222 @@ export namespace Prisma {
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    cateringId?: string | null
+    securityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    guests?: GuestUncheckedCreateNestedManyWithoutInvitationInput
+  }
+
+  export type InvitationCreateOrConnectWithoutVenueInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput>
+  }
+
+  export type InvitationCreateManyVenueInputEnvelope = {
+    data: InvitationCreateManyVenueInput | InvitationCreateManyVenueInput[]
+  }
+
+  export type InvitationUpsertWithWhereUniqueWithoutVenueInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutVenueInput, InvitationUncheckedUpdateWithoutVenueInput>
+    create: XOR<InvitationCreateWithoutVenueInput, InvitationUncheckedCreateWithoutVenueInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutVenueInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutVenueInput, InvitationUncheckedUpdateWithoutVenueInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutVenueInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutVenueInput>
+  }
+
+  export type InvitationCreateWithoutCateringInput = {
+    id?: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    host: UserCreateNestedOneWithoutInvitationsInput
+    venue?: VenueCreateNestedOneWithoutInvitationsInput
+    security?: ProviderCreateNestedOneWithoutSecurityInvitationsInput
+    guests?: GuestCreateNestedManyWithoutInvitationInput
+  }
+
+  export type InvitationUncheckedCreateWithoutCateringInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    venueId?: string | null
+    securityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    guests?: GuestUncheckedCreateNestedManyWithoutInvitationInput
+  }
+
+  export type InvitationCreateOrConnectWithoutCateringInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput>
+  }
+
+  export type InvitationCreateManyCateringInputEnvelope = {
+    data: InvitationCreateManyCateringInput | InvitationCreateManyCateringInput[]
+  }
+
+  export type InvitationCreateWithoutSecurityInput = {
+    id?: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    host: UserCreateNestedOneWithoutInvitationsInput
+    venue?: VenueCreateNestedOneWithoutInvitationsInput
+    catering?: ProviderCreateNestedOneWithoutCateringInvitationsInput
+    guests?: GuestCreateNestedManyWithoutInvitationInput
+  }
+
+  export type InvitationUncheckedCreateWithoutSecurityInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    guests?: GuestUncheckedCreateNestedManyWithoutInvitationInput
+  }
+
+  export type InvitationCreateOrConnectWithoutSecurityInput = {
+    where: InvitationWhereUniqueInput
+    create: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput>
+  }
+
+  export type InvitationCreateManySecurityInputEnvelope = {
+    data: InvitationCreateManySecurityInput | InvitationCreateManySecurityInput[]
+  }
+
+  export type InvitationUpsertWithWhereUniqueWithoutCateringInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutCateringInput, InvitationUncheckedUpdateWithoutCateringInput>
+    create: XOR<InvitationCreateWithoutCateringInput, InvitationUncheckedCreateWithoutCateringInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutCateringInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutCateringInput, InvitationUncheckedUpdateWithoutCateringInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutCateringInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutCateringInput>
+  }
+
+  export type InvitationUpsertWithWhereUniqueWithoutSecurityInput = {
+    where: InvitationWhereUniqueInput
+    update: XOR<InvitationUpdateWithoutSecurityInput, InvitationUncheckedUpdateWithoutSecurityInput>
+    create: XOR<InvitationCreateWithoutSecurityInput, InvitationUncheckedCreateWithoutSecurityInput>
+  }
+
+  export type InvitationUpdateWithWhereUniqueWithoutSecurityInput = {
+    where: InvitationWhereUniqueInput
+    data: XOR<InvitationUpdateWithoutSecurityInput, InvitationUncheckedUpdateWithoutSecurityInput>
+  }
+
+  export type InvitationUpdateManyWithWhereWithoutSecurityInput = {
+    where: InvitationScalarWhereInput
+    data: XOR<InvitationUpdateManyMutationInput, InvitationUncheckedUpdateManyWithoutSecurityInput>
+  }
+
+  export type InvitationCreateWithoutGuestsInput = {
+    id?: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    host: UserCreateNestedOneWithoutInvitationsInput
+    venue?: VenueCreateNestedOneWithoutInvitationsInput
+    catering?: ProviderCreateNestedOneWithoutCateringInvitationsInput
+    security?: ProviderCreateNestedOneWithoutSecurityInvitationsInput
+  }
+
+  export type InvitationUncheckedCreateWithoutGuestsInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    securityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -5991,6 +9896,7 @@ export namespace Prisma {
   }
 
   export type InvitationUpdateWithoutGuestsInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6006,10 +9912,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
+    venue?: VenueUpdateOneWithoutInvitationsNestedInput
+    catering?: ProviderUpdateOneWithoutCateringInvitationsNestedInput
+    security?: ProviderUpdateOneWithoutSecurityInvitationsNestedInput
   }
 
   export type InvitationUncheckedUpdateWithoutGuestsInput = {
     hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6022,12 +9932,16 @@ export namespace Prisma {
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InvitationCreateManyHostInput = {
     id?: string
+    type?: $Enums.EventType
     title: string
     hostManName?: string | null
     hostWomanName?: string | null
@@ -6040,11 +9954,15 @@ export namespace Prisma {
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    securityId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type InvitationUpdateWithoutHostInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6059,10 +9977,14 @@ export namespace Prisma {
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: VenueUpdateOneWithoutInvitationsNestedInput
+    catering?: ProviderUpdateOneWithoutCateringInvitationsNestedInput
+    security?: ProviderUpdateOneWithoutSecurityInvitationsNestedInput
     guests?: GuestUpdateManyWithoutInvitationNestedInput
   }
 
   export type InvitationUncheckedUpdateWithoutHostInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6075,12 +9997,16 @@ export namespace Prisma {
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guests?: GuestUncheckedUpdateManyWithoutInvitationNestedInput
   }
 
   export type InvitationUncheckedUpdateManyWithoutHostInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
     title?: StringFieldUpdateOperationsInput | string
     hostManName?: NullableStringFieldUpdateOperationsInput | string | null
     hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -6093,6 +10019,9 @@ export namespace Prisma {
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6146,6 +10075,267 @@ export namespace Prisma {
     token?: StringFieldUpdateOperationsInput | string
     place?: NullableStringFieldUpdateOperationsInput | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateManyVenueInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    cateringId?: string | null
+    securityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationUpdateWithoutVenueInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
+    catering?: ProviderUpdateOneWithoutCateringInvitationsNestedInput
+    security?: ProviderUpdateOneWithoutSecurityInvitationsNestedInput
+    guests?: GuestUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutVenueInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guests?: GuestUncheckedUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutVenueInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationCreateManyCateringInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    venueId?: string | null
+    securityId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationCreateManySecurityInput = {
+    id?: string
+    hostId: string
+    type?: $Enums.EventType
+    title: string
+    hostManName?: string | null
+    hostWomanName?: string | null
+    description?: string | null
+    location?: string | null
+    coordinate?: InvitationCreatecoordinateInput | string[]
+    slug: string
+    startsAt: Date | string
+    endsAt?: Date | string | null
+    theme?: string | null
+    visibility?: $Enums.InvitationVisibility
+    status?: $Enums.InvitationStatus
+    venueId?: string | null
+    cateringId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InvitationUpdateWithoutCateringInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
+    venue?: VenueUpdateOneWithoutInvitationsNestedInput
+    security?: ProviderUpdateOneWithoutSecurityInvitationsNestedInput
+    guests?: GuestUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutCateringInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guests?: GuestUncheckedUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutCateringInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    securityId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvitationUpdateWithoutSecurityInput = {
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
+    venue?: VenueUpdateOneWithoutInvitationsNestedInput
+    catering?: ProviderUpdateOneWithoutCateringInvitationsNestedInput
+    guests?: GuestUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateWithoutSecurityInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guests?: GuestUncheckedUpdateManyWithoutInvitationNestedInput
+  }
+
+  export type InvitationUncheckedUpdateManyWithoutSecurityInput = {
+    hostId?: StringFieldUpdateOperationsInput | string
+    type?: EnumEventTypeFieldUpdateOperationsInput | $Enums.EventType
+    title?: StringFieldUpdateOperationsInput | string
+    hostManName?: NullableStringFieldUpdateOperationsInput | string | null
+    hostWomanName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    coordinate?: InvitationUpdatecoordinateInput | string[]
+    slug?: StringFieldUpdateOperationsInput | string
+    startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
+    status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    venueId?: NullableStringFieldUpdateOperationsInput | string | null
+    cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

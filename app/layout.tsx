@@ -5,7 +5,6 @@ import { Toaster } from 'sonner'
 
 // Components
 import { ThemeProvider } from "@/components/theme-provider";
-// import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 
 const geistSans = Geist({
@@ -113,10 +112,6 @@ export default function RootLayout({
 
         >
           {children}
-
-          <div className="absolute left-4 top-2 border rounded-[11px] p-2 flex items-center justify-center bg-white/80 dark:bg-neutral-800/80 backdrop-blur">
-            {/* <AnimatedThemeToggler duration={900} /> */}
-          </div>
           <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>

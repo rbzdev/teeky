@@ -14,12 +14,12 @@ export default function CreateInvitationPage() {
     return (
         <InvitationDraftProvider>
             <div className="min-h-screen bg-neutral-50/50 dark:bg-neutral-950">
-                <div className="mx-auto max-w-6xl pt-12 pb-20 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto max-w-[2000px] pt-12 pb-20 px-4 sm:px-6 lg:px-8">
                     {/* Progress Header */}
-                    <header className="mb-12 text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                    <header className="mb-6 text-center sm:text-left flex flex-col sm:flex-row sm:items-end justify-between gap-6">
                         <div className="space-y-2">
                             <h1 className="text-3xl sm:text-4xl font-black tracking-tight">Célébrons ensemble</h1>
-                            <p className="text-muted-foreground text-lg font-medium max-w-lg">
+                            <p className="text-muted-foreground max-w-lg">
                                 Donnez vie à votre événement en quelques instants. Chaque détail compte pour créer l&apos;invitation parfaite.
                             </p>
                         </div>
@@ -41,8 +41,9 @@ export default function CreateInvitationPage() {
                         </div>
                     </header>
 
-                    <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-start">
-                        <div className="bg-white dark:bg-neutral-900 rounded-[2.5rem] border border-border/50 shadow-xl shadow-black/5 p-6 sm:p-10 transition-all">
+                    <div className="grid gap-12 lg:grid-cols-2 items-start ">
+
+                        <div className="bg-white dark:bg-neutral-900 rounded-[2.5rem]  border border-border/50 shadow-xl shadow-black/5 p-6 sm:p-10 transition-all">
                             {/* Form Section */}
                             <CreateInvitationForm />
                         </div>
@@ -50,7 +51,7 @@ export default function CreateInvitationPage() {
                         {/* Sticky Desktop Preview */}
                         <div className="hidden lg:block sticky top-24">
                             <div className="space-y-6">
-                                <div className="flex items-center justify-between px-2">
+                                {/* <div className="flex items-center justify-between px-2">
                                     <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Prévisualisation</h3>
                                     <div className="flex items-center gap-2 text-primary font-bold text-xs">
                                         <span className="relative flex h-2 w-2">
@@ -59,8 +60,8 @@ export default function CreateInvitationPage() {
                                         </span>
                                         Mise à jour en temps réel
                                     </div>
-                                </div>
-                                <div className="rounded-[2.8rem] overflow-hidden border border-border/50 shadow-2xl">
+                                </div> */}
+                                <div className=" overflow-hidden shadow-2xl">
                                     <InvitationPreview variant="inline" />
                                 </div>
                             </div>

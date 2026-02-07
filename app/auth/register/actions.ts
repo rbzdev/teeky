@@ -29,13 +29,13 @@ export async function registerAction(payload: RegisterPayload) {
     const userId = randomUUID()
     // DEBUG
     // console.log('Generated userId:', userId)
-    
+
     try {
-        const existing = await prisma.user.findUnique({ where: { email }})
+        const existing = await prisma.user.findUnique({ where: { email } })
         if (existing) return { success: false, error: 'Un compte existe déjà avec cet email' }
 
         const passwordHashed = await hashPassword(password)
-        
+
         const user = await prisma.user.create({
             data: {
                 id: userId,
@@ -47,7 +47,7 @@ export async function registerAction(payload: RegisterPayload) {
         })
 
         console.log('Created user:', user)
-        
+
         return { success: true, user }
     } catch (e) {
         // const message = e instanceof Error ? e.message : ''

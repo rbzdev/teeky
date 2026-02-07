@@ -100,6 +100,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.InvitationScalarFieldEnum = {
   id: 'id',
   hostId: 'hostId',
+  type: 'type',
   title: 'title',
   hostManName: 'hostManName',
   hostWomanName: 'hostWomanName',
@@ -112,6 +113,31 @@ exports.Prisma.InvitationScalarFieldEnum = {
   theme: 'theme',
   visibility: 'visibility',
   status: 'status',
+  venueId: 'venueId',
+  cateringId: 'cateringId',
+  securityId: 'securityId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VenueScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  capacity: 'capacity',
+  price: 'price',
+  images: 'images',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProviderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  description: 'description',
+  price: 'price',
+  rating: 'rating',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -140,6 +166,11 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+exports.ProviderType = exports.$Enums.ProviderType = {
+  CATERING: 'CATERING',
+  SECURITY: 'SECURITY'
+};
+
 exports.InvitationVisibility = exports.$Enums.InvitationVisibility = {
   PRIVATE: 'PRIVATE',
   PUBLIC: 'PUBLIC'
@@ -151,9 +182,20 @@ exports.InvitationStatus = exports.$Enums.InvitationStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.EventType = exports.$Enums.EventType = {
+  MARRIAGE: 'MARRIAGE',
+  DOT: 'DOT',
+  ANNIVERSARY: 'ANNIVERSARY',
+  CONFERENCE: 'CONFERENCE',
+  MEETING: 'MEETING',
+  OTHER: 'OTHER'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Invitation: 'Invitation',
+  Venue: 'Venue',
+  Provider: 'Provider',
   Guest: 'Guest'
 };
 /**
@@ -167,7 +209,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\WORKFLOW\\teeky\\prisma\\prisma\\client",
+      "value": "/Users/venus_corporation/WORKFLOW/teeky/prisma/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -176,7 +218,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -185,7 +227,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\WORKFLOW\\teeky\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/venus_corporation/WORKFLOW/teeky/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -208,13 +250,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// Prisma schema for MongoDB\n// Datasource & generator\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"prisma/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Models\nmodel User {\n  id          String       @id @default(uuid()) @map(\"_id\")\n  email       String       @unique\n  phone       String?      @unique\n  firstName   String\n  lastName    String\n  password    String\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  roles       String[]     @default([])\n  invitations Invitation[]\n}\n\n/// Invitation (event) hosted by a User and having many Guests\nmodel Invitation {\n  id            String               @id @default(uuid()) @map(\"_id\")\n  hostId        String\n  host          User                 @relation(fields: [hostId], references: [id])\n  title         String\n  hostManName   String?\n  hostWomanName String?\n  description   String?\n  location      String?\n  coordinate    String[] // optional semantics handled by empty array\n  slug          String               @unique\n  startsAt      DateTime\n  endsAt        DateTime?\n  theme         String?\n  visibility    InvitationVisibility @default(PRIVATE)\n  status        InvitationStatus     @default(DRAFT)\n  guests        Guest[]\n  createdAt     DateTime             @default(now())\n  updatedAt     DateTime             @updatedAt\n\n  @@index([hostId])\n  @@index([status])\n  @@index([visibility])\n}\n\n/// Guest invited to an Invitation\nmodel Guest {\n  id           String     @id @default(uuid()) @map(\"_id\")\n  invitationId String\n  invitation   Invitation @relation(fields: [invitationId], references: [id])\n  name         String\n  email        String?\n  phone        String?\n  slug         String     @unique\n  status       String\n  token        String     @unique\n  place        String?\n  respondedAt  DateTime?\n  createdAt    DateTime   @default(now())\n  updatedAt    DateTime   @updatedAt\n\n  @@unique([invitationId, phone])\n  @@index([status])\n}\n\n// Enums reflecting domain state machines\nenum InvitationVisibility {\n  PRIVATE\n  PUBLIC\n}\n\nenum InvitationStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n",
-  "inlineSchemaHash": "b97698b064af6731d5b79adae99ac8eeb018c0663cc5a9d593bd19979b250c2b",
+  "inlineSchema": "// Prisma schema for MongoDB\n// Datasource & generator\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"prisma/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mongodb\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Models\nmodel User {\n  id          String       @id @default(uuid()) @map(\"_id\")\n  email       String       @unique\n  phone       String?      @unique\n  firstName   String\n  lastName    String\n  password    String\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n  roles       String[]     @default([])\n  invitations Invitation[]\n}\n\n/// Invitation (event) hosted by a User and having many Guests\nmodel Invitation {\n  id            String               @id @default(uuid()) @map(\"_id\")\n  hostId        String\n  host          User                 @relation(fields: [hostId], references: [id])\n  type          EventType            @default(MARRIAGE)\n  title         String\n  hostManName   String?\n  hostWomanName String?\n  description   String?\n  location      String?\n  coordinate    String[] // optional semantics handled by empty array\n  slug          String               @unique\n  startsAt      DateTime\n  endsAt        DateTime?\n  theme         String?\n  visibility    InvitationVisibility @default(PRIVATE)\n  status        InvitationStatus     @default(DRAFT)\n\n  // Relations to services\n  venueId    String?\n  venue      Venue?    @relation(fields: [venueId], references: [id])\n  cateringId String?\n  catering   Provider? @relation(\"Catering\", fields: [cateringId], references: [id])\n  securityId String?\n  security   Provider? @relation(\"Security\", fields: [securityId], references: [id])\n\n  guests    Guest[]\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([hostId])\n  @@index([status])\n  @@index([visibility])\n  @@index([type])\n}\n\nmodel Venue {\n  id          String       @id @default(uuid()) @map(\"_id\")\n  name        String\n  address     String\n  capacity    Int?\n  price       Float?\n  images      String[]\n  invitations Invitation[]\n  createdAt   DateTime     @default(now())\n  updatedAt   DateTime     @updatedAt\n}\n\nenum ProviderType {\n  CATERING\n  SECURITY\n}\n\nmodel Provider {\n  id                  String       @id @default(uuid()) @map(\"_id\")\n  name                String\n  type                ProviderType\n  description         String?\n  price               Float?\n  rating              Float?\n  cateringInvitations Invitation[] @relation(\"Catering\")\n  securityInvitations Invitation[] @relation(\"Security\")\n  createdAt           DateTime     @default(now())\n  updatedAt           DateTime     @updatedAt\n}\n\n/// Guest invited to an Invitation\nmodel Guest {\n  id           String     @id @default(uuid()) @map(\"_id\")\n  invitationId String\n  invitation   Invitation @relation(fields: [invitationId], references: [id])\n  name         String\n  email        String?\n  phone        String?\n  slug         String     @unique\n  status       String\n  token        String     @unique\n  place        String?\n  respondedAt  DateTime?\n  createdAt    DateTime   @default(now())\n  updatedAt    DateTime   @updatedAt\n\n  @@unique([invitationId, phone])\n  @@index([status])\n}\n\n// Enums reflecting domain state machines\nenum InvitationVisibility {\n  PRIVATE\n  PUBLIC\n}\n\nenum InvitationStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n\nenum EventType {\n  MARRIAGE\n  DOT\n  ANNIVERSARY\n  CONFERENCE\n  MEETING\n  OTHER\n}\n",
+  "inlineSchemaHash": "c561dba1e9ce3a6ebe8a95caa7bf89c62553f097b8da8ef14605af71042d6061",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invitations\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"InvitationToUser\"}],\"dbName\":null},\"Invitation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"hostId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"host\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"InvitationToUser\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hostManName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hostWomanName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"coordinate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"theme\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"visibility\",\"kind\":\"enum\",\"type\":\"InvitationVisibility\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"InvitationStatus\"},{\"name\":\"guests\",\"kind\":\"object\",\"type\":\"Guest\",\"relationName\":\"GuestToInvitation\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Guest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"invitationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invitation\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"GuestToInvitation\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"place\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"respondedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"roles\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invitations\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"InvitationToUser\"}],\"dbName\":null},\"Invitation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"hostId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"host\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"InvitationToUser\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"EventType\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hostManName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hostWomanName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"coordinate\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"theme\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"visibility\",\"kind\":\"enum\",\"type\":\"InvitationVisibility\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"InvitationStatus\"},{\"name\":\"venueId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"venue\",\"kind\":\"object\",\"type\":\"Venue\",\"relationName\":\"InvitationToVenue\"},{\"name\":\"cateringId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"catering\",\"kind\":\"object\",\"type\":\"Provider\",\"relationName\":\"Catering\"},{\"name\":\"securityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"security\",\"kind\":\"object\",\"type\":\"Provider\",\"relationName\":\"Security\"},{\"name\":\"guests\",\"kind\":\"object\",\"type\":\"Guest\",\"relationName\":\"GuestToInvitation\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Venue\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"capacity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"images\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invitations\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"InvitationToVenue\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Provider\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"ProviderType\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"rating\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"cateringInvitations\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"Catering\"},{\"name\":\"securityInvitations\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"Security\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Guest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"_id\"},{\"name\":\"invitationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"invitation\",\"kind\":\"object\",\"type\":\"Invitation\",\"relationName\":\"GuestToInvitation\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"place\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"respondedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

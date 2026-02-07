@@ -35,12 +35,13 @@ export default function Header() {
             <div className="mx-auto max-w-6xl px-4 sm:px-6">
                 <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
                     <AnimatedGroup variant="slideUp" stagger={0.2} className="flex flex-col space-y-8">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 w-fit">
+
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                             </span>
-                            <span className="text-[11px] font-bold tracking-wider text-primary">
+                            <span className="text-[11px] font-bold tracking-wider text-emerald-500">
                                 100% GRATUIT
                             </span>
                         </div>
@@ -49,7 +50,7 @@ export default function Header() {
                             <h1 className="text-4xl sm:text-5xl  font-extrabold tracking-tight leading-[1.1]">
                                 Votre événement <br />
                                 en moins de
-                                <span className="text-primary">
+                                <span className="text-primary ml-1">
                                     5 minutes
                                 </span>
                             </h1>

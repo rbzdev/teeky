@@ -6,6 +6,7 @@ import { useInvitationDraft } from "./invitation-context"
 import { toast } from 'sonner'
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
+import type { CreateInvitationPayload } from "@/lib/types/invitation"
 
 // Components
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
@@ -58,9 +59,10 @@ function ISODate(date: Date, time?: string): string {
 }
 
 const steps = [
+    { title: "Type", icon: "solar:widget-bold" },
     { title: "Hôtes", icon: "solar:users-group-rounded-bold" },
     { title: "Détails", icon: "solar:calendar-date-bold" },
-    { title: "Lieu", icon: "solar:map-point-bold" },
+    { title: "Lieu & Services", icon: "solar:map-point-bold" },
 ]
 
 export default function CreateInvitationForm() {
@@ -143,9 +145,12 @@ export default function CreateInvitationForm() {
             return
         }
 
+
+
         setSubmitting(true)
         try {
-            const payload = {
+            const payload: CreateInvitationPayload = {
+                type: draft.type,
                 hostManName: draft.hostManName,
                 hostWomanName: draft.hostWomanName,
                 description: draft.description || undefined,
@@ -154,7 +159,13 @@ export default function CreateInvitationForm() {
                 coordinateLat: draft.locationLat ?? undefined,
                 coordinateLng: draft.locationLng ?? undefined,
                 theme: draft.theme,
+                venueId: draft.venueId ?? undefined,
+                cateringId: draft.cateringId ?? undefined,
+                securityId: draft.securityId ?? undefined,
             }
+
+            // // DEBUG
+            // console.log("FormDATA for inv creation : ", payload)
 
             const result = await createInvitation(payload)
 
@@ -202,12 +213,12 @@ export default function CreateInvitationForm() {
     }
 
     const nextStep = () => {
-        if (currentStep === 0 && (!draft.hostManName || !draft.hostWomanName)) {
-            toast.error("Veuillez renseigner les noms des hôtes")
+        if (currentStep === 1 && (!draft.hostManName)) {
+            toast.info("Veuillez renseigner un nom d'hôte")
             return
         }
-        if (currentStep === 1 && (!date || dateInvalid)) {
-            toast.error("Veuillez renseigner une date valide")
+        if (currentStep === 2 && (!date || dateInvalid)) {
+            toast.info("Veuillez renseigner une date valide")
             return
         }
         setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))
@@ -216,7 +227,7 @@ export default function CreateInvitationForm() {
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0))
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 ">
             {/* Stepper */}
             <div className="flex items-center justify-between relative px-2 mb-12">
                 <div className="absolute top-1/2 left-0 w-full h-0.5 bg-muted -translate-y-1/2 -z-10" />
@@ -229,7 +240,7 @@ export default function CreateInvitationForm() {
                     <div key={idx} className="flex flex-col items-center gap-3">
                         <div
                             className={cn(
-                                "h-12 w-12 rounded-2xl flex items-center justify-center transition-all duration-500 border-4",
+                                "h-12 w-12 rounded-2xl flex items-center justify-center transition-all duration-500 border-2",
                                 idx <= currentStep
                                     ? "bg-primary border-primary text-white shadow-lg shadow-primary/20 scale-110"
                                     : "bg-background border-muted text-muted-foreground"
@@ -237,8 +248,9 @@ export default function CreateInvitationForm() {
                         >
                             <Icon icon={step.icon} className="text-xl" />
                         </div>
+
                         <span className={cn(
-                            "text-[10px] font-black uppercase tracking-widest transition-colors duration-500",
+                            "text-[10px] transition-all duration-500",
                             idx <= currentStep ? "text-primary" : "text-muted-foreground"
                         )}>
                             {step.title}
@@ -247,7 +259,7 @@ export default function CreateInvitationForm() {
                 ))}
             </div>
 
-            <form onSubmit={e => e.preventDefault()} className="min-h-[300px]">
+            <form onSubmit={e => e.preventDefault()} className="min-h-[300px] flex flex-col justify-between">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentStep}
@@ -258,27 +270,63 @@ export default function CreateInvitationForm() {
                         className="space-y-6"
                     >
                         {currentStep === 0 && (
+                            <div className="space-y-6">
+                                <h3 className="text-sm lg:text-xl font-semibold ">Quel type d&apos;événement organisez-vous ?</h3>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    {[
+                                        { id: 'MARRIAGE', label: 'Mariage', icon: 'solar:heart-bold' },
+                                        { id: 'DOT', label: 'Dot', icon: 'solar:wad-of-money-bold' },
+                                        { id: 'ANNIVERSARY', label: 'Anniversaire', icon: 'fluent-mdl2:birthday-cake' },
+                                        { id: 'CONFERENCE', label: 'Conférence', icon: 'solar:videocamera-record-bold' },
+                                        { id: 'MEETING', label: 'Réunion', icon: 'solar:users-group-two-rounded-bold' },
+                                        { id: 'OTHER', label: 'Autre', icon: 'solar:menu-dots-bold' },
+                                    ].map((type) => (
+                                        <button
+                                            key={type.id}
+                                            onClick={() => update('type', type.id as any)}
+                                            className={cn(
+                                                "flex flex-col items-center justify-center p-6 gap-3 rounded-3xl border-2 transition-all duration-300 cursor-pointer",
+                                                draft.type === type.id
+                                                    ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10 scale-105"
+                                                    : "border-muted bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5"
+                                            )}
+                                        >
+                                            <Icon icon={type.icon} className="text-3xl" />
+                                            <span className="font-bold text-sm">{type.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {currentStep === 1 && (
                             <div className="grid gap-6">
                                 <div className="space-y-4">
-                                    <h3 className="text-xl font-black">Qui sont les hôtes ?</h3>
+                                    <h3 className="text-xl font-semibold">
+                                        {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Qui sont les hôtes ?" : "Qui organise ?"}
+                                    </h3>
                                     <div className="grid gap-4 sm:grid-cols-2">
                                         <div className="space-y-2">
-                                            <Label htmlFor="mr">Monsieur</Label>
+                                            <Label htmlFor="mr">
+                                                {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Monsieur" : "Nom principal"}
+                                            </Label>
                                             <Input
                                                 id="mr"
                                                 required
-                                                placeholder="Ex: Alexandre"
+                                                placeholder={draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Ex: Alexandre" : "Nom"}
                                                 value={draft.hostManName}
                                                 onChange={e => update('hostManName', e.target.value)}
                                                 className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <Label htmlFor="mme">Madame</Label>
+                                            <Label htmlFor="mme">
+                                                {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Madame" : "Co-organisateur (optionnel)"}
+                                            </Label>
                                             <Input
                                                 id="mme"
-                                                required
-                                                placeholder="Ex: Sophie"
+                                                required={draft.type === 'MARRIAGE' || draft.type === 'DOT'}
+                                                placeholder={draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Ex: Sophie" : "Nom"}
                                                 value={draft.hostWomanName}
                                                 onChange={e => update('hostWomanName', e.target.value)}
                                                 className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
@@ -289,9 +337,9 @@ export default function CreateInvitationForm() {
                             </div>
                         )}
 
-                        {currentStep === 1 && (
+                        {currentStep === 2 && (
                             <div className="space-y-6">
-                                <h3 className="text-xl font-black">Quand aura lieu l&apos;événement ?</h3>
+                                <h3 className="text-lg font-semibold">Quand aura lieu l&apos;événement ?</h3>
                                 <div className="grid gap-6 sm:grid-cols-2">
                                     <div className="space-y-2">
                                         <Label htmlFor="dateDisplay">Date</Label>
@@ -353,41 +401,66 @@ export default function CreateInvitationForm() {
                             </div>
                         )}
 
-                        {currentStep === 2 && (
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-black">Où se déroule la fête ?</h3>
-                                <div className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="location">Lieu ou adresse</Label>
-                                        <div className="relative">
-                                            <Input
-                                                id="location"
-                                                placeholder="Ex: Villa des Arts, Paris"
-                                                value={draft.location}
-                                                onChange={e => update('location', e.target.value)}
-                                                className="h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary"
-                                            />
-                                            <button
-                                                onClick={() => setOpenMap(true)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-                                            >
-                                                <Icon icon="solar:map-point-wave-bold" className="size-6" />
-                                            </button>
+                        {currentStep === 3 && (
+                            <div className="space-y-8">
+                                <div className="space-y-6">
+                                    <h3 className="text-lg font-semibold">Où se déroule l&apos;événement ?</h3>
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="location">Lieu ou adresse</Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="location"
+                                                    placeholder="Ex: Villa des Arts, Paris"
+                                                    value={draft.location}
+                                                    onChange={e => update('location', e.target.value)}
+                                                    className="h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary"
+                                                />
+                                                <button
+                                                    onClick={() => setOpenMap(true)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                                                >
+                                                    <Icon icon="solar:map-point-wave-bold" className="size-6" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div
+                                            onClick={() => setOpenMap(true)}
+                                            className="relative h-32 rounded-3xl overflow-hidden border-2 border-dashed border-muted hover:border-primary/50 cursor-pointer group transition-all"
+                                        >
+                                            <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                                                <Icon icon="solar:map-bold" className="text-2xl text-primary" />
+                                                <span className="text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors">
+                                                    {draft.locationLat ? "Position enregistrée" : "Choisir sur la carte"}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div
-                                        onClick={() => setOpenMap(true)}
-                                        className="relative h-48 rounded-3xl overflow-hidden border-2 border-dashed border-muted hover:border-primary/50 cursor-pointer group transition-all"
-                                    >
-                                        <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                                            <div className="h-12 w-12 rounded-full bg-white dark:bg-neutral-800 flex items-center justify-center shadow-lg">
-                                                <Icon icon="solar:map-bold" className="text-2xl text-primary" />
+                                </div>
+
+                                <div className="space-y-6 pt-4 border-t border-border/50">
+                                    <h3 className="text-lg font-semibold">Services additionnels (Bientôt disponible)</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        {[
+                                            { id: 'venue', label: 'Lieu d\'exception', icon: 'solar:home-2-bold' },
+                                            { id: 'catering', label: 'Traiteur & Buffet', icon: 'solar:chef-hat-bold' },
+                                            { id: 'security', label: 'Sécurité & Accueil', icon: 'solar:shield-user-bold' },
+                                            { id: 'transport', label: 'Transport', icon: 'ion:car-sport-sharp' },
+                                        ].map((service) => (
+                                            <div
+                                                key={service.id}
+                                                className="flex items-center p-2 gap-2 rounded-full border bg-muted/5 opacity-60 cursor-not-allowed"
+                                            >
+                                                <div className="p-2 rounded-xl bg-background flex items-center justify-center text-primary shadow-sm">
+                                                    <Icon icon={service.icon} className="text-2xl" />
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="font-semibold text-sm">{service.label}</span>
+                                                    <span className="text-xs text-muted-foreground">Prochainement</span>
+                                                </div>
                                             </div>
-                                            <span className="text-sm font-bold text-muted-foreground group-hover:text-primary transition-colors">
-                                                {draft.locationLat ? "Position enregistrée" : "Choisir sur la carte"}
-                                            </span>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -396,14 +469,15 @@ export default function CreateInvitationForm() {
                 </AnimatePresence>
 
                 {/* Navigation Buttons */}
-                <div className="flex items-center justify-between pt-10 mt-8 border-t border-border/50">
+                <div className="flex items-center justify-between pt-4 mt-8 border-t border-border/50">
                     <Button
                         type="button"
                         variant="ghost"
                         onClick={prevStep}
                         disabled={currentStep === 0 || submitting}
-                        className="rounded-xl font-bold"
+                        className="rounded-xl font-bold hover:bg-primary/5 transition-colors"
                     >
+                        <Icon icon="solar:alt-arrow-left-bold" className="mr-2" />
                         Retour
                     </Button>
 
@@ -412,24 +486,30 @@ export default function CreateInvitationForm() {
                             type="button"
                             onClick={onSubmit}
                             disabled={submitting}
-                            className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 min-w-40"
+                            className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-xl shadow-primary/20 min-w-48 transition-all hover:scale-[1.02] active:scale-[0.98]"
                         >
                             {submitting ? (
                                 <div className="flex items-center gap-2">
                                     <Spinner className="size-4" />
-                                    <span>Création...</span>
+                                    <span>Création en cours...</span>
                                 </div>
                             ) : (
-                                "Finaliser l'invitation"
+                                <div className="flex items-center gap-2">
+                                    <span>Finaliser l&apos;invitation</span>
+                                    <Icon icon="solar:check-read-bold" className="text-xl" />
+                                </div>
                             )}
                         </Button>
                     ) : (
                         <Button
                             type="button"
                             onClick={nextStep}
-                            className="h-12 px-8 rounded-xl bg-foreground text-background hover:bg-foreground/90 font-bold min-w-40"
+                            className="h-12 px-8 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-black hover:opacity-90 font-bold min-w-40 transition-all hover:translate-x-1"
                         >
-                            Suivant
+                            <div className="flex items-center gap-2">
+                                Suivant
+                                <Icon icon="solar:alt-arrow-right-bold" />
+                            </div>
                         </Button>
                     )}
                 </div>

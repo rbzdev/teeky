@@ -128,6 +128,7 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.InvitationScalarFieldEnum = {
   id: 'id',
   hostId: 'hostId',
+  type: 'type',
   title: 'title',
   hostManName: 'hostManName',
   hostWomanName: 'hostWomanName',
@@ -140,6 +141,31 @@ exports.Prisma.InvitationScalarFieldEnum = {
   theme: 'theme',
   visibility: 'visibility',
   status: 'status',
+  venueId: 'venueId',
+  cateringId: 'cateringId',
+  securityId: 'securityId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VenueScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  capacity: 'capacity',
+  price: 'price',
+  images: 'images',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProviderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  type: 'type',
+  description: 'description',
+  price: 'price',
+  rating: 'rating',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -168,6 +194,15 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
+exports.EventType = exports.$Enums.EventType = {
+  MARRIAGE: 'MARRIAGE',
+  DOT: 'DOT',
+  ANNIVERSARY: 'ANNIVERSARY',
+  CONFERENCE: 'CONFERENCE',
+  MEETING: 'MEETING',
+  OTHER: 'OTHER'
+};
+
 exports.InvitationVisibility = exports.$Enums.InvitationVisibility = {
   PRIVATE: 'PRIVATE',
   PUBLIC: 'PUBLIC'
@@ -179,9 +214,16 @@ exports.InvitationStatus = exports.$Enums.InvitationStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.ProviderType = exports.$Enums.ProviderType = {
+  CATERING: 'CATERING',
+  SECURITY: 'SECURITY'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Invitation: 'Invitation',
+  Venue: 'Venue',
+  Provider: 'Provider',
   Guest: 'Guest'
 };
 

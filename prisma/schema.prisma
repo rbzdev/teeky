@@ -31,6 +31,7 @@ model Invitation {
   id            String               @id @default(uuid()) @map("_id")
   hostId        String
   host          User                 @relation(fields: [hostId], references: [id])
+  type          EventType            @default(MARRIAGE)
   title         String
   hostManName   String?
   hostWomanName String?
@@ -43,6 +44,15 @@ model Invitation {
   theme         String?
   visibility    InvitationVisibility @default(PRIVATE)
   status        InvitationStatus     @default(DRAFT)
+  
+  // Relations to services
+  venueId       String?
+  venue         Venue?               @relation(fields: [venueId], references: [id])
+  cateringId    String?
+  catering      Provider?            @relation("Catering", fields: [cateringId], references: [id])
+  securityId    String?
+  security      Provider?            @relation("Security", fields: [securityId], references: [id])
+
   guests        Guest[]
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
@@ -50,6 +60,37 @@ model Invitation {
   @@index([hostId])
   @@index([status])
   @@index([visibility])
+  @@index([type])
+}
+
+model Venue {
+  id          String       @id @default(uuid()) @map("_id")
+  name        String
+  address     String
+  capacity    Int?
+  price       Float?
+  images      String[]
+  invitations Invitation[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum ProviderType {
+  CATERING
+  SECURITY
+}
+
+model Provider {
+  id                  String       @id @default(uuid()) @map("_id")
+  name                String
+  type                ProviderType
+  description         String?
+  price               Float?
+  rating              Float?
+  cateringInvitations Invitation[] @relation("Catering")
+  securityInvitations Invitation[] @relation("Security")
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 }
 
 /// Guest invited to an Invitation
@@ -82,4 +123,13 @@ enum InvitationStatus {
   DRAFT
   ACTIVE
   ARCHIVED
+}
+
+enum EventType {
+  MARRIAGE
+  DOT
+  ANNIVERSARY
+  CONFERENCE
+  MEETING
+  OTHER
 }
