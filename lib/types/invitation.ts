@@ -111,7 +111,7 @@ export interface EventTypeInfo {
 	strongBg: string
 }
 
-export const EVENT_TYPE_METADATA: Record<string, EventTypeInfo> = {
+export const EVENT_TYPE_METADATA: Record<EventType, EventTypeInfo> = {
 	MARRIAGE: {
 		label: 'Mariage',
 		icon: 'solar:heart-bold',
@@ -148,8 +148,8 @@ export const EVENT_TYPE_METADATA: Record<string, EventTypeInfo> = {
 		strongBg: 'bg-emerald-600',
 	},
 	OTHER: {
-		label: 'Événement',
-		icon: 'solar:calendar-bold',
+		label: 'Autre',
+		icon: 'solar:menu-dots-bold',
 		textColor: 'text-slate-500',
 		lightBg: 'bg-slate-50',
 		strongBg: 'bg-slate-600',
