@@ -21,11 +21,11 @@ export async function createInvitation(payload: CreateInvitationPayload) {
 
   const hostId = session?.userId
 
-  const { type, hostManName, hostWomanName, description, location, startsAt, coordinateLat, coordinateLng, theme, venueId, cateringId, securityId } = payload
+  const { type, hostManName, hostWomanName, description, location, startsAt, coordinateLat, coordinateLng, images, price, currency, theme, venueId, cateringId, securityId } = payload
 
   // Generate title based on event type
   let title = ""
-  if (type === 'MARRIAGE' || type === 'DOT') {
+  if (type === 'MARRIAGE') {
     title = [hostManName?.trim(), hostWomanName?.trim()].filter(Boolean).join(" & ") || "Événement"
   } else {
     // For other types, maybe use a generic title or something else
@@ -100,6 +100,7 @@ export async function createInvitation(payload: CreateInvitationPayload) {
         description: description || undefined,
         location: location,
         coordinate: coordinate || [],
+        images: images || [],
         startsAt: starts,
         theme: (theme as InvitationModelKey) || 'classic',
         visibility: "PRIVATE",

@@ -1,23 +1,24 @@
 "use client"
 import React, { useState } from "react"
 import { createInvitation } from "../action"
-import dynamic from 'next/dynamic'
 import { useInvitationDraft } from "./invitation-context"
 import { toast } from 'sonner'
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
-import type { CreateInvitationPayload, EventType } from "@/lib/types/invitation"
+import type { CreateInvitationPayload } from "@/lib/types/invitation"
+import { AVAILABLE_THEMES } from "@/lib/types/invitation"
 
 // Components
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import { Icon } from "@iconify/react"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
 import { Spinner } from "@/components/ui/spinner"
-import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+
+// Sub-steps
+import StepType from "./steps/step-type"
+import StepHosts from "./steps/step-hosts"
+import StepDetails from "./steps/step-details"
+import StepLocation from "./steps/step-location"
 
 // Client-side form logic for date/time composition
 function ISODate(date: Date, time?: string): string {
@@ -73,11 +74,8 @@ export default function CreateInvitationForm() {
     const [dateInvalid, setDateInvalid] = useState(false)
     const [startTime, setStartTime] = useState(draft.startTime)
     const [submitting, setSubmitting] = useState(false)
-    const [openDate, setOpenDate] = useState(false)
-    const [openMap, setOpenMap] = useState(false)
 
     const router = useRouter()
-    const MapDialog = React.useMemo(() => dynamic(() => import('./map-dialog'), { ssr: false }), [])
 
     const DRAFT_KEY = 'invitation:create:draft'
     const DRAFT_TTL = 10 * 60 * 1000
@@ -91,9 +89,13 @@ export default function CreateInvitationForm() {
                 location: draft.location || '',
                 locationLat: draft.locationLat ?? null,
                 locationLng: draft.locationLng ?? null,
+                images: draft.images || [],
                 dateISO: date ? date.toISOString() : null,
                 startTime: startTime || '',
-                theme: draft.theme || 'classic',
+                accessType: draft.accessType || 'FREE',
+                price: draft.price || 0,
+                currency: draft.currency || 'USD',
+                theme: draft.theme || AVAILABLE_THEMES[0].id,
                 savedAt: Date.now(),
             }
             if (typeof window !== 'undefined') {
@@ -125,7 +127,17 @@ export default function CreateInvitationForm() {
             if (parsed.location) update('location', parsed.location)
             if (typeof parsed.locationLat === 'number') update('locationLat', parsed.locationLat)
             if (typeof parsed.locationLng === 'number') update('locationLng', parsed.locationLng)
+            // Handle legacy single image or new images array
+            if (parsed.images && Array.isArray(parsed.images)) {
+                update('images', parsed.images)
+            } else if (parsed.image) {
+                update('images', [parsed.image])
+            }
+
             if (parsed.startTime) { setStartTime(parsed.startTime); update('startTime', parsed.startTime) }
+            if (parsed.accessType) update('accessType', parsed.accessType)
+            if (parsed.price) update('price', parsed.price)
+            if (parsed.currency) update('currency', parsed.currency)
             if (parsed.theme) update('theme', parsed.theme)
             if (parsed.dateISO) {
                 const d = new Date(parsed.dateISO)
@@ -137,7 +149,7 @@ export default function CreateInvitationForm() {
             }
             toast.info('Brouillon restauré')
         } catch { }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     async function onSubmit() {
         if (!date) {
@@ -145,7 +157,10 @@ export default function CreateInvitationForm() {
             return
         }
 
-
+        if (!draft.location) {
+            toast.error("Ajoutez un lieu")
+            return
+        }
 
         setSubmitting(true)
         try {
@@ -158,14 +173,14 @@ export default function CreateInvitationForm() {
                 startsAt: ISODate(date, startTime),
                 coordinateLat: draft.locationLat ?? undefined,
                 coordinateLng: draft.locationLng ?? undefined,
-                theme: draft.theme,
+                images: draft.images || [],
+                price: draft.accessType === 'PAID' ? Number(draft.price) : undefined,
+                currency: draft.accessType === 'PAID' ? draft.currency : undefined,
+                theme: draft.theme || AVAILABLE_THEMES[0].id,
                 venueId: draft.venueId ?? undefined,
                 cateringId: draft.cateringId ?? undefined,
                 securityId: draft.securityId ?? undefined,
             }
-
-            // // DEBUG
-            // console.log("FormDATA for inv creation : ", payload)
 
             const result = await createInvitation(payload)
 
@@ -181,35 +196,10 @@ export default function CreateInvitationForm() {
             }
         } catch (error) {
             toast.error("Une erreur est survenue")
-
             console.error(error)
         } finally {
             setSubmitting(false)
         }
-    }
-
-    function parseDateInput(raw: string): Date | null {
-        const v = raw.trim()
-        if (!v) return null
-        const dmy = /^([0-3]?\d)[\/\-.]([0-1]?\d)[\/\-.](\d{4})$/
-        const ymd = /^(\d{4})[\/\-.]([0-1]?\d)[\/\-.]([0-3]?\d)$/
-        let year, month, day
-        if (dmy.test(v)) {
-            const m = v.match(dmy)!
-            day = parseInt(m[1], 10)
-            month = parseInt(m[2], 10) - 1
-            year = parseInt(m[3], 10)
-        } else if (ymd.test(v)) {
-            const m = v.match(ymd)!
-            year = parseInt(m[1], 10)
-            month = parseInt(m[2], 10) - 1
-            day = parseInt(m[3], 10)
-        } else {
-            const direct = new Date(v)
-            return isNaN(direct.getTime()) ? null : direct
-        }
-        const constructed = new Date(year, month, day)
-        return (constructed.getFullYear() === year && constructed.getMonth() === month && constructed.getDate() === day) ? constructed : null
     }
 
     const nextStep = () => {
@@ -225,6 +215,30 @@ export default function CreateInvitationForm() {
     }
 
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 0))
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("L'image est trop volumineuse (max 5MB)")
+            return
+        }
+
+        const reader = new FileReader()
+        reader.onload = (ev) => {
+            const result = ev.target?.result as string
+            // For now, replace the entire array with the new image (single image logic UI but multi-image backend ready)
+            // Or append? Let's just set as the only image for now based on UI behavior
+            update('images', [result])
+        }
+        reader.readAsDataURL(file)
+    }
+
+    const removeImage = () => {
+        update('images', []) // Clear all for now
+    }
+
 
     return (
         <div className="space-y-8 ">
@@ -269,202 +283,23 @@ export default function CreateInvitationForm() {
                         transition={{ duration: 0.3 }}
                         className="space-y-6"
                     >
-                        {currentStep === 0 && (
-                            <div className="space-y-6">
-                                <h3 className="text-sm lg:text-xl font-semibold ">Quel type d&apos;événement organisez-vous ?</h3>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                    {[
-                                        { id: 'MARRIAGE', label: 'Mariage', icon: 'solar:heart-bold' },
-                                        { id: 'DOT', label: 'Dot', icon: 'solar:wad-of-money-bold' },
-                                        { id: 'ANNIVERSARY', label: 'Anniversaire', icon: 'fluent-mdl2:birthday-cake' },
-                                        { id: 'CONFERENCE', label: 'Conférence', icon: 'solar:videocamera-record-bold' },
-                                        { id: 'MEETING', label: 'Réunion', icon: 'solar:users-group-two-rounded-bold' },
-                                        { id: 'OTHER', label: 'Autre', icon: 'solar:menu-dots-bold' },
-                                    ].map((type) => (
-                                        <button
-                                            key={type.id}
-                                            onClick={() => update('type', type.id as EventType)}
-                                            className={cn(
-                                                "flex flex-col items-center justify-center p-6 gap-3 rounded-3xl border-2 transition-all duration-300 cursor-pointer",
-                                                draft.type === type.id
-                                                    ? "border-primary bg-primary/5 text-primary shadow-lg shadow-primary/10 scale-105"
-                                                    : "border-muted bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5"
-                                            )}
-                                        >
-                                            <Icon icon={type.icon} className="text-3xl" />
-                                            <span className="font-bold text-sm">{type.label}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {currentStep === 1 && (
-                            <div className="grid gap-6">
-                                <div className="space-y-4">
-                                    <h3 className="text-xl font-semibold">
-                                        {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Qui sont les hôtes ?" : "Qui organise ?"}
-                                    </h3>
-                                    <div className="grid gap-4 sm:grid-cols-2">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="mr">
-                                                {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Monsieur" : "Nom principal"}
-                                            </Label>
-                                            <Input
-                                                id="mr"
-                                                required
-                                                placeholder={draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Ex: Alexandre" : "Nom"}
-                                                value={draft.hostManName}
-                                                onChange={e => update('hostManName', e.target.value)}
-                                                className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="mme">
-                                                {draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Madame" : "Co-organisateur (optionnel)"}
-                                            </Label>
-                                            <Input
-                                                id="mme"
-                                                required={draft.type === 'MARRIAGE' || draft.type === 'DOT'}
-                                                placeholder={draft.type === 'MARRIAGE' || draft.type === 'DOT' ? "Ex: Sophie" : "Nom"}
-                                                value={draft.hostWomanName}
-                                                onChange={e => update('hostWomanName', e.target.value)}
-                                                className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary transition-all"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
+                        {currentStep === 0 && <StepType />}
+                        {currentStep === 1 && <StepHosts />}
                         {currentStep === 2 && (
-                            <div className="space-y-6">
-                                <h3 className="text-lg font-semibold">Quand aura lieu l&apos;événement ?</h3>
-                                <div className="grid gap-6 sm:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="dateDisplay">Date</Label>
-                                        <div className="relative">
-                                            <Input
-                                                id="dateDisplay"
-                                                value={dateInput}
-                                                className={cn(
-                                                    "h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary",
-                                                    dateInvalid && "border-destructive focus:ring-destructive"
-                                                )}
-                                                placeholder="JJ/MM/AAAA"
-                                                onChange={(e) => {
-                                                    const v = e.target.value
-                                                    setDateInput(v)
-                                                    if (v.trim().length < 6) return
-                                                    const parsed = parseDateInput(v)
-                                                    if (parsed) { setDate(parsed); update('date', parsed); setDateInvalid(false) } else { setDateInvalid(true) }
-                                                }}
-                                            />
-                                            <Popover open={openDate} onOpenChange={setOpenDate}>
-                                                <PopoverTrigger asChild>
-                                                    <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors">
-                                                        <Icon icon="solar:calendar-bold" className="size-6" />
-                                                    </button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0 rounded-2xl overflow-hidden border-border/50" align="end">
-                                                    <Calendar
-                                                        mode="single"
-                                                        selected={date}
-                                                        onSelect={(d) => { if (d) { setDate(d); update('date', d); setDateInput(d.toLocaleDateString()); setDateInvalid(false) } setOpenDate(false) }}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="startTime">Heure</Label>
-                                        <Input
-                                            type="time"
-                                            id="startTime"
-                                            value={startTime}
-                                            onChange={e => { setStartTime(e.target.value); update('startTime', e.target.value) }}
-                                            className="h-12 rounded-xl border-muted-foreground/20 focus:border-primary"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="description">Message personnalisé</Label>
-                                    <Textarea
-                                        id="description"
-                                        rows={4}
-                                        placeholder="Décrivez votre événement..."
-                                        value={draft.description}
-                                        onChange={e => update('description', e.target.value)}
-                                        className="rounded-2xl border-muted-foreground/20 focus:border-primary resize-none"
-                                    />
-                                </div>
-                            </div>
+                            <StepDetails
+                                date={date}
+                                setDate={setDate}
+                                dateInput={dateInput}
+                                setDateInput={setDateInput}
+                                dateInvalid={dateInvalid}
+                                setDateInvalid={setDateInvalid}
+                                startTime={startTime}
+                                setStartTime={setStartTime}
+                                handleImageUpload={handleImageUpload}
+                                removeImage={removeImage}
+                            />
                         )}
-
-                        {currentStep === 3 && (
-                            <div className="space-y-8">
-                                <div className="space-y-6">
-                                    <h3 className="text-lg font-semibold">Où se déroule l&apos;événement ?</h3>
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="location">Lieu ou adresse</Label>
-                                            <div className="relative">
-                                                <Input
-                                                    id="location"
-                                                    placeholder="Ex: Villa des Arts, Paris"
-                                                    value={draft.location}
-                                                    onChange={e => update('location', e.target.value)}
-                                                    className="h-12 pr-12 rounded-xl border-muted-foreground/20 focus:border-primary"
-                                                />
-                                                <button
-                                                    onClick={() => setOpenMap(true)}
-                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-                                                >
-                                                    <Icon icon="solar:map-point-wave-bold" className="size-6" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div
-                                            onClick={() => setOpenMap(true)}
-                                            className="relative h-32 rounded-3xl overflow-hidden border-2 border-dashed border-muted hover:border-primary/50 cursor-pointer group transition-all"
-                                        >
-                                            <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
-                                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                                                <Icon icon="solar:map-bold" className="text-2xl text-primary" />
-                                                <span className="text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors">
-                                                    {draft.locationLat ? "Position enregistrée" : "Choisir sur la carte"}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-6 pt-4 border-t border-border/50">
-                                    <h3 className="text-lg font-semibold">Services additionnels (Bientôt disponible)</h3>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        {[
-                                            { id: 'venue', label: 'Lieu d\'exception', icon: 'solar:home-2-bold' },
-                                            { id: 'catering', label: 'Traiteur & Buffet', icon: 'solar:chef-hat-bold' },
-                                            { id: 'security', label: 'Sécurité & Accueil', icon: 'solar:shield-user-bold' },
-                                            { id: 'transport', label: 'Transport', icon: 'ion:car-sport-sharp' },
-                                        ].map((service) => (
-                                            <div
-                                                key={service.id}
-                                                className="flex items-center p-2 gap-2 rounded-full border bg-muted/5 opacity-60 cursor-not-allowed"
-                                            >
-                                                <div className="p-2 rounded-xl bg-background flex items-center justify-center text-primary shadow-sm">
-                                                    <Icon icon={service.icon} className="text-2xl" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="font-semibold text-sm">{service.label}</span>
-                                                    <span className="text-xs text-muted-foreground">Prochainement</span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        {currentStep === 3 && <StepLocation />}
                     </motion.div>
                 </AnimatePresence>
 
@@ -514,15 +349,6 @@ export default function CreateInvitationForm() {
                     )}
                 </div>
             </form>
-
-            <MapDialog
-                open={openMap}
-                onOpenChange={setOpenMap}
-                onSelect={({ lat, lng }) => {
-                    update('locationLat', lat)
-                    update('locationLng', lng)
-                }}
-            />
         </div>
     )
 }

@@ -38,12 +38,15 @@ model Invitation {
   description   String?
   location      String?
   coordinate    String[] // optional semantics handled by empty array
+  images        String[]
   slug          String               @unique
   startsAt      DateTime
   endsAt        DateTime?
   theme         String?
   visibility    InvitationVisibility @default(PRIVATE)
   status        InvitationStatus     @default(DRAFT)
+  price         Float?
+  currency      String?              @default("USD")
 
   // Relations to services
   venueId    String?

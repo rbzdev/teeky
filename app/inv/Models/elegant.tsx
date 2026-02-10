@@ -59,6 +59,13 @@ export default function ElegantInvitationModel(props: ElegantInvitationProps) {
                         </p>
                     </div>
 
+                    {(props.images?.[0] || props.image) && (
+                        <div className="relative w-full h-48 sm:h-64 rounded-2xl overflow-hidden shadow-lg border border-primary/10">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={props.images?.[0] || props.image} alt="Event" className="w-full h-full object-cover" />
+                        </div>
+                    )}
+
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
                         <div className="flex flex-col items-center gap-1">
                             <p className="text-[10px] font-black uppercase tracking-widest text-primary/60">Quand</p>
@@ -83,7 +90,7 @@ export default function ElegantInvitationModel(props: ElegantInvitationProps) {
                         Une expérience Teeky &bull; Exclusive
                     </div>
                 </footer> */}
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }

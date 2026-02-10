@@ -23,6 +23,11 @@ export interface InvitationDraft {
 	startTime: string
 	hasEnd: boolean
 	endTime: string
+	// image?: string | null // Deprecated single image
+	images?: string[]
+	accessType: 'FREE' | 'PAID' | 'PRIVATE'
+	price?: number
+	currency?: string
 	// Selected visual model/theme for rendering previews and final invitation
 	theme: InvitationModelKey
 	// Optional services
@@ -47,6 +52,10 @@ export interface CreateInvitationPayload {
 	startsAt: string // ISO date string (timezone-aware)
 	coordinateLat?: number
 	coordinateLng?: number
+	// image?: string
+	images?: string[]
+	price?: number
+	currency?: string
 	theme?: InvitationModelKey
 	venueId?: string
 	cateringId?: string
@@ -62,8 +71,13 @@ export type MinimalistInvitationProps = {
 	description?: string
 	location?: string
 	coordinate?: string[]
+	image?: string
+	images?: string[]
 	// Accept string or Date since server-to-client serialization turns Date into string
 	startsAt: string | Date
+	accessType?: 'FREE' | 'PAID' | 'PRIVATE'
+	price?: number
+	currency?: string
 }
 
 export interface InvitationPreviewProps {
@@ -120,8 +134,8 @@ export const EVENT_TYPE_METADATA: Record<string, EventTypeInfo> = {
 		strongBg: 'bg-rose-600',
 	},
 	DOT: {
-		label: 'Dot',
-		icon: 'solar:wad-of-money-bold',
+		label: 'Billetterie',
+		icon: 'solar:ticket-sale-bold',
 		textColor: 'text-amber-500',
 		lightBg: 'bg-amber-50',
 		strongBg: 'bg-amber-600',
@@ -156,6 +170,13 @@ export const EVENT_TYPE_METADATA: Record<string, EventTypeInfo> = {
 	},
 }
 
+
+export const AVAILABLE_THEMES = [
+	{ id: 'classic', label: 'Classique', icon: 'solar:clapperboard-edit-bold' },
+	{ id: 'elegant', label: 'Élégant', icon: 'solar:crown-minimalistic-bold' },
+	{ id: 'minimalist', label: 'Minimal', icon: 'solar:leaf-bold' },
+]
+
 /**
  * Common logic to extract display names based on event type
  */
@@ -164,7 +185,7 @@ export function getInvitationDisplayNames(props: {
 	hostManName?: string
 	hostWomanName?: string
 }) {
-	const isWeddingRelated = props.type === 'MARRIAGE' || props.type === 'DOT'
+	const isWeddingRelated = props.type === 'MARRIAGE'
 
 	const displayNames = isWeddingRelated
 		? [props.hostManName, props.hostWomanName].filter(Boolean).join(' & ') || 'Organisateur'

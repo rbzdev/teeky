@@ -21,6 +21,14 @@ export default function MinimalistInvitationModel(props: MinimalistInvitationPro
 			<div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
 			<div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
 
+			{(props.images?.[0] || props.image) && (
+				<div className="absolute top-0 inset-x-0 h-[420px] pointer-events-none opacity-40 mix-blend-multiply dark:mix-blend-normal dark:opacity-20 translate-y-[-10%]">
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src={props.images?.[0] || props.image} alt="Event" className="w-full h-full object-cover" />
+					<div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent dark:from-neutral-950/90 dark:via-neutral-950/20" />
+				</div>
+			)}
+
 			<div className="relative p-8 flex-1 flex flex-col gap-10 justify-center">
 				<header className="text-center space-y-6">
 					<div className="flex flex-col items-center gap-3">

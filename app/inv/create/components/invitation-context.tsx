@@ -15,6 +15,7 @@ const defaultDraft: InvitationDraft = {
   startTime: "00:00",
   hasEnd: true,
   endTime: "00:00",
+  accessType: 'FREE',
   theme: 'classic',
 }
 

@@ -4,6 +4,7 @@ import { useInvitationDraft } from "./invitation-context"
 import type { InvitationModelKey } from '@/lib/types/invitation'
 import { cn } from "@/lib/utils"
 import { Icon } from "@iconify/react"
+import { AVAILABLE_THEMES } from '@/lib/types/invitation'
 
 // Invitation model renderer
 import InvitationModelRenderer from "@/app/inv/Models/renderer"
@@ -22,11 +23,7 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
   const { draft, update } = useInvitationDraft()
   const startsAt = React.useMemo(() => composeStartsAt(draft.date, draft.startTime), [draft.date, draft.startTime])
 
-  const themes: { id: InvitationModelKey; label: string; icon: string }[] = [
-    { id: 'classic', label: 'Classique', icon: 'solar:clapperboard-edit-bold' },
-    { id: 'elegant', label: 'Élégant', icon: 'solar:crown-minimalistic-bold' },
-    { id: 'minimalist', label: 'Minimal', icon: 'solar:leaf-bold' },
-  ]
+  const themes = AVAILABLE_THEMES
 
   return (
 
@@ -81,6 +78,10 @@ export default function InvitationPreview({ variant = "inline" }: InvitationPrev
             description={draft.description || "Votre message s'affichera ici..."}
             location={draft.location || "Lieu de l'événement"}
             coordinate={undefined}
+            images={draft.images || undefined}
+            accessType={draft.accessType}
+            price={draft.price}
+            currency={draft.currency}
             startsAt={startsAt}
           />
         </div>

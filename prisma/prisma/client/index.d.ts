@@ -2415,8 +2415,18 @@ export namespace Prisma {
 
   export type AggregateInvitation = {
     _count: InvitationCountAggregateOutputType | null
+    _avg: InvitationAvgAggregateOutputType | null
+    _sum: InvitationSumAggregateOutputType | null
     _min: InvitationMinAggregateOutputType | null
     _max: InvitationMaxAggregateOutputType | null
+  }
+
+  export type InvitationAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type InvitationSumAggregateOutputType = {
+    price: number | null
   }
 
   export type InvitationMinAggregateOutputType = {
@@ -2434,6 +2444,8 @@ export namespace Prisma {
     theme: string | null
     visibility: $Enums.InvitationVisibility | null
     status: $Enums.InvitationStatus | null
+    price: number | null
+    currency: string | null
     venueId: string | null
     cateringId: string | null
     securityId: string | null
@@ -2456,6 +2468,8 @@ export namespace Prisma {
     theme: string | null
     visibility: $Enums.InvitationVisibility | null
     status: $Enums.InvitationStatus | null
+    price: number | null
+    currency: string | null
     venueId: string | null
     cateringId: string | null
     securityId: string | null
@@ -2473,12 +2487,15 @@ export namespace Prisma {
     description: number
     location: number
     coordinate: number
+    images: number
     slug: number
     startsAt: number
     endsAt: number
     theme: number
     visibility: number
     status: number
+    price: number
+    currency: number
     venueId: number
     cateringId: number
     securityId: number
@@ -2487,6 +2504,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type InvitationAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type InvitationSumAggregateInputType = {
+    price?: true
+  }
 
   export type InvitationMinAggregateInputType = {
     id?: true
@@ -2503,6 +2528,8 @@ export namespace Prisma {
     theme?: true
     visibility?: true
     status?: true
+    price?: true
+    currency?: true
     venueId?: true
     cateringId?: true
     securityId?: true
@@ -2525,6 +2552,8 @@ export namespace Prisma {
     theme?: true
     visibility?: true
     status?: true
+    price?: true
+    currency?: true
     venueId?: true
     cateringId?: true
     securityId?: true
@@ -2542,12 +2571,15 @@ export namespace Prisma {
     description?: true
     location?: true
     coordinate?: true
+    images?: true
     slug?: true
     startsAt?: true
     endsAt?: true
     theme?: true
     visibility?: true
     status?: true
+    price?: true
+    currency?: true
     venueId?: true
     cateringId?: true
     securityId?: true
@@ -2594,6 +2626,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: InvitationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InvitationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: InvitationMinAggregateInputType
@@ -2624,6 +2668,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: InvitationCountAggregateInputType | true
+    _avg?: InvitationAvgAggregateInputType
+    _sum?: InvitationSumAggregateInputType
     _min?: InvitationMinAggregateInputType
     _max?: InvitationMaxAggregateInputType
   }
@@ -2638,18 +2684,23 @@ export namespace Prisma {
     description: string | null
     location: string | null
     coordinate: string[]
+    images: string[]
     slug: string
     startsAt: Date
     endsAt: Date | null
     theme: string | null
     visibility: $Enums.InvitationVisibility
     status: $Enums.InvitationStatus
+    price: number | null
+    currency: string | null
     venueId: string | null
     cateringId: string | null
     securityId: string | null
     createdAt: Date
     updatedAt: Date
     _count: InvitationCountAggregateOutputType | null
+    _avg: InvitationAvgAggregateOutputType | null
+    _sum: InvitationSumAggregateOutputType | null
     _min: InvitationMinAggregateOutputType | null
     _max: InvitationMaxAggregateOutputType | null
   }
@@ -2678,12 +2729,15 @@ export namespace Prisma {
     description?: boolean
     location?: boolean
     coordinate?: boolean
+    images?: boolean
     slug?: boolean
     startsAt?: boolean
     endsAt?: boolean
     theme?: boolean
     visibility?: boolean
     status?: boolean
+    price?: boolean
+    currency?: boolean
     venueId?: boolean
     cateringId?: boolean
     securityId?: boolean
@@ -2709,12 +2763,15 @@ export namespace Prisma {
     description?: boolean
     location?: boolean
     coordinate?: boolean
+    images?: boolean
     slug?: boolean
     startsAt?: boolean
     endsAt?: boolean
     theme?: boolean
     visibility?: boolean
     status?: boolean
+    price?: boolean
+    currency?: boolean
     venueId?: boolean
     cateringId?: boolean
     securityId?: boolean
@@ -2722,7 +2779,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "hostId" | "type" | "title" | "hostManName" | "hostWomanName" | "description" | "location" | "coordinate" | "slug" | "startsAt" | "endsAt" | "theme" | "visibility" | "status" | "venueId" | "cateringId" | "securityId" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
+  export type InvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "hostId" | "type" | "title" | "hostManName" | "hostWomanName" | "description" | "location" | "coordinate" | "images" | "slug" | "startsAt" | "endsAt" | "theme" | "visibility" | "status" | "price" | "currency" | "venueId" | "cateringId" | "securityId" | "createdAt" | "updatedAt", ExtArgs["result"]["invitation"]>
   export type InvitationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     host?: boolean | UserDefaultArgs<ExtArgs>
     venue?: boolean | Invitation$venueArgs<ExtArgs>
@@ -2751,12 +2808,15 @@ export namespace Prisma {
       description: string | null
       location: string | null
       coordinate: string[]
+      images: string[]
       slug: string
       startsAt: Date
       endsAt: Date | null
       theme: string | null
       visibility: $Enums.InvitationVisibility
       status: $Enums.InvitationStatus
+      price: number | null
+      currency: string | null
       venueId: string | null
       cateringId: string | null
       securityId: string | null
@@ -3168,12 +3228,15 @@ export namespace Prisma {
     readonly description: FieldRef<"Invitation", 'String'>
     readonly location: FieldRef<"Invitation", 'String'>
     readonly coordinate: FieldRef<"Invitation", 'String[]'>
+    readonly images: FieldRef<"Invitation", 'String[]'>
     readonly slug: FieldRef<"Invitation", 'String'>
     readonly startsAt: FieldRef<"Invitation", 'DateTime'>
     readonly endsAt: FieldRef<"Invitation", 'DateTime'>
     readonly theme: FieldRef<"Invitation", 'String'>
     readonly visibility: FieldRef<"Invitation", 'InvitationVisibility'>
     readonly status: FieldRef<"Invitation", 'InvitationStatus'>
+    readonly price: FieldRef<"Invitation", 'Float'>
+    readonly currency: FieldRef<"Invitation", 'String'>
     readonly venueId: FieldRef<"Invitation", 'String'>
     readonly cateringId: FieldRef<"Invitation", 'String'>
     readonly securityId: FieldRef<"Invitation", 'String'>
@@ -6909,12 +6972,15 @@ export namespace Prisma {
     description: 'description',
     location: 'location',
     coordinate: 'coordinate',
+    images: 'images',
     slug: 'slug',
     startsAt: 'startsAt',
     endsAt: 'endsAt',
     theme: 'theme',
     visibility: 'visibility',
     status: 'status',
+    price: 'price',
+    currency: 'currency',
     venueId: 'venueId',
     cateringId: 'cateringId',
     securityId: 'securityId',
@@ -7063,20 +7129,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -7087,6 +7139,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -7195,12 +7261,15 @@ export namespace Prisma {
     description?: StringNullableFilter<"Invitation"> | string | null
     location?: StringNullableFilter<"Invitation"> | string | null
     coordinate?: StringNullableListFilter<"Invitation">
+    images?: StringNullableListFilter<"Invitation">
     slug?: StringFilter<"Invitation"> | string
     startsAt?: DateTimeFilter<"Invitation"> | Date | string
     endsAt?: DateTimeNullableFilter<"Invitation"> | Date | string | null
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    price?: FloatNullableFilter<"Invitation"> | number | null
+    currency?: StringNullableFilter<"Invitation"> | string | null
     venueId?: StringNullableFilter<"Invitation"> | string | null
     cateringId?: StringNullableFilter<"Invitation"> | string | null
     securityId?: StringNullableFilter<"Invitation"> | string | null
@@ -7223,12 +7292,15 @@ export namespace Prisma {
     description?: SortOrder
     location?: SortOrder
     coordinate?: SortOrder
+    images?: SortOrder
     slug?: SortOrder
     startsAt?: SortOrder
     endsAt?: SortOrder
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
     venueId?: SortOrder
     cateringId?: SortOrder
     securityId?: SortOrder
@@ -7255,11 +7327,14 @@ export namespace Prisma {
     description?: StringNullableFilter<"Invitation"> | string | null
     location?: StringNullableFilter<"Invitation"> | string | null
     coordinate?: StringNullableListFilter<"Invitation">
+    images?: StringNullableListFilter<"Invitation">
     startsAt?: DateTimeFilter<"Invitation"> | Date | string
     endsAt?: DateTimeNullableFilter<"Invitation"> | Date | string | null
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    price?: FloatNullableFilter<"Invitation"> | number | null
+    currency?: StringNullableFilter<"Invitation"> | string | null
     venueId?: StringNullableFilter<"Invitation"> | string | null
     cateringId?: StringNullableFilter<"Invitation"> | string | null
     securityId?: StringNullableFilter<"Invitation"> | string | null
@@ -7282,20 +7357,25 @@ export namespace Prisma {
     description?: SortOrder
     location?: SortOrder
     coordinate?: SortOrder
+    images?: SortOrder
     slug?: SortOrder
     startsAt?: SortOrder
     endsAt?: SortOrder
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
     venueId?: SortOrder
     cateringId?: SortOrder
     securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InvitationCountOrderByAggregateInput
+    _avg?: InvitationAvgOrderByAggregateInput
     _max?: InvitationMaxOrderByAggregateInput
     _min?: InvitationMinOrderByAggregateInput
+    _sum?: InvitationSumOrderByAggregateInput
   }
 
   export type InvitationScalarWhereWithAggregatesInput = {
@@ -7311,12 +7391,15 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     location?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     coordinate?: StringNullableListFilter<"Invitation">
+    images?: StringNullableListFilter<"Invitation">
     slug?: StringWithAggregatesFilter<"Invitation"> | string
     startsAt?: DateTimeWithAggregatesFilter<"Invitation"> | Date | string
     endsAt?: DateTimeNullableWithAggregatesFilter<"Invitation"> | Date | string | null
     theme?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityWithAggregatesFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusWithAggregatesFilter<"Invitation"> | $Enums.InvitationStatus
+    price?: FloatNullableWithAggregatesFilter<"Invitation"> | number | null
+    currency?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     venueId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     cateringId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
     securityId?: StringNullableWithAggregatesFilter<"Invitation"> | string | null
@@ -7655,12 +7738,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
@@ -7680,12 +7766,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     securityId?: string | null
@@ -7702,12 +7791,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
@@ -7726,12 +7818,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7750,12 +7845,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     securityId?: string | null
@@ -7771,12 +7869,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7790,12 +7891,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8239,6 +8343,18 @@ export namespace Prisma {
     not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -8274,17 +8390,24 @@ export namespace Prisma {
     description?: SortOrder
     location?: SortOrder
     coordinate?: SortOrder
+    images?: SortOrder
     slug?: SortOrder
     startsAt?: SortOrder
     endsAt?: SortOrder
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
     venueId?: SortOrder
     cateringId?: SortOrder
     securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InvitationAvgOrderByAggregateInput = {
+    price?: SortOrder
   }
 
   export type InvitationMaxOrderByAggregateInput = {
@@ -8302,6 +8425,8 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
     venueId?: SortOrder
     cateringId?: SortOrder
     securityId?: SortOrder
@@ -8324,11 +8449,17 @@ export namespace Prisma {
     theme?: SortOrder
     visibility?: SortOrder
     status?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
     venueId?: SortOrder
     cateringId?: SortOrder
     securityId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InvitationSumOrderByAggregateInput = {
+    price?: SortOrder
   }
 
   export type EnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -8376,6 +8507,23 @@ export namespace Prisma {
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -8385,18 +8533,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-    isSet?: boolean
-  }
-
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
     isSet?: boolean
   }
 
@@ -8455,23 +8591,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-    isSet?: boolean
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
     isSet?: boolean
   }
 
@@ -8658,6 +8777,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type InvitationCreateimagesInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutInvitationsInput = {
     create?: XOR<UserCreateWithoutInvitationsInput, UserUncheckedCreateWithoutInvitationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutInvitationsInput
@@ -8705,6 +8828,11 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type InvitationUpdateimagesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
     unset?: boolean
@@ -8716,6 +8844,15 @@ export namespace Prisma {
 
   export type EnumInvitationStatusFieldUpdateOperationsInput = {
     set?: $Enums.InvitationStatus
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+    unset?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutInvitationsNestedInput = {
@@ -8803,15 +8940,6 @@ export namespace Prisma {
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-    unset?: boolean
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
     decrement?: number
@@ -9100,6 +9228,18 @@ export namespace Prisma {
     not?: NestedEnumInvitationStatusFilter<$PrismaModel> | $Enums.InvitationStatus
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
   export type NestedEnumEventTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.EventType | EnumEventTypeFieldRefInput<$PrismaModel>
     in?: $Enums.EventType[] | ListEnumEventTypeFieldRefInput<$PrismaModel>
@@ -9145,7 +9285,7 @@ export namespace Prisma {
     _max?: NestedEnumInvitationStatusFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
     notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -9153,7 +9293,12 @@ export namespace Prisma {
     lte?: number | FloatFieldRefInput<$PrismaModel>
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
     isSet?: boolean
   }
 
@@ -9171,23 +9316,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-    isSet?: boolean
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
     isSet?: boolean
   }
 
@@ -9217,12 +9345,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     venue?: VenueCreateNestedOneWithoutInvitationsInput
@@ -9240,12 +9371,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     securityId?: string | null
@@ -9292,12 +9426,15 @@ export namespace Prisma {
     description?: StringNullableFilter<"Invitation"> | string | null
     location?: StringNullableFilter<"Invitation"> | string | null
     coordinate?: StringNullableListFilter<"Invitation">
+    images?: StringNullableListFilter<"Invitation">
     slug?: StringFilter<"Invitation"> | string
     startsAt?: DateTimeFilter<"Invitation"> | Date | string
     endsAt?: DateTimeNullableFilter<"Invitation"> | Date | string | null
     theme?: StringNullableFilter<"Invitation"> | string | null
     visibility?: EnumInvitationVisibilityFilter<"Invitation"> | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFilter<"Invitation"> | $Enums.InvitationStatus
+    price?: FloatNullableFilter<"Invitation"> | number | null
+    currency?: StringNullableFilter<"Invitation"> | string | null
     venueId?: StringNullableFilter<"Invitation"> | string | null
     cateringId?: StringNullableFilter<"Invitation"> | string | null
     securityId?: StringNullableFilter<"Invitation"> | string | null
@@ -9629,12 +9766,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
@@ -9653,12 +9793,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     cateringId?: string | null
     securityId?: string | null
     createdAt?: Date | string
@@ -9700,12 +9843,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
@@ -9724,12 +9870,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     securityId?: string | null
     createdAt?: Date | string
@@ -9755,12 +9904,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
@@ -9779,12 +9931,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     createdAt?: Date | string
@@ -9842,12 +9997,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     host: UserCreateNestedOneWithoutInvitationsInput
@@ -9866,12 +10024,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     securityId?: string | null
@@ -9903,12 +10064,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
@@ -9926,12 +10090,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9948,12 +10115,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     securityId?: string | null
@@ -9969,12 +10139,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     venue?: VenueUpdateOneWithoutInvitationsNestedInput
@@ -9991,12 +10164,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10013,12 +10189,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10089,12 +10268,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     cateringId?: string | null
     securityId?: string | null
     createdAt?: Date | string
@@ -10109,12 +10291,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
@@ -10132,12 +10317,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10154,12 +10342,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10176,12 +10367,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     securityId?: string | null
     createdAt?: Date | string
@@ -10198,12 +10392,15 @@ export namespace Prisma {
     description?: string | null
     location?: string | null
     coordinate?: InvitationCreatecoordinateInput | string[]
+    images?: InvitationCreateimagesInput | string[]
     slug: string
     startsAt: Date | string
     endsAt?: Date | string | null
     theme?: string | null
     visibility?: $Enums.InvitationVisibility
     status?: $Enums.InvitationStatus
+    price?: number | null
+    currency?: string | null
     venueId?: string | null
     cateringId?: string | null
     createdAt?: Date | string
@@ -10218,12 +10415,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
@@ -10241,12 +10441,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10263,12 +10466,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     securityId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10283,12 +10489,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     host?: UserUpdateOneRequiredWithoutInvitationsNestedInput
@@ -10306,12 +10515,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10328,12 +10540,15 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     coordinate?: InvitationUpdatecoordinateInput | string[]
+    images?: InvitationUpdateimagesInput | string[]
     slug?: StringFieldUpdateOperationsInput | string
     startsAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     theme?: NullableStringFieldUpdateOperationsInput | string | null
     visibility?: EnumInvitationVisibilityFieldUpdateOperationsInput | $Enums.InvitationVisibility
     status?: EnumInvitationStatusFieldUpdateOperationsInput | $Enums.InvitationStatus
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    currency?: NullableStringFieldUpdateOperationsInput | string | null
     venueId?: NullableStringFieldUpdateOperationsInput | string | null
     cateringId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
